@@ -11,7 +11,7 @@ extension _NotificationDescriptionExt<T> on Notification<T> {
       case Kind.OnDone:
         return 'done';
       case Kind.OnError:
-        return 'error(${errorAndStackTrace!.error}, ${errorAndStackTrace!.stackTrace})';
+        return 'error(${errorAndStackTrace.error}, ${errorAndStackTrace.stackTrace})';
     }
     throw StateError(toString());
   }

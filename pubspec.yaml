@@ -1,17 +1,17 @@
 name: rxdart_ext
 description: A starting point for Dart libraries or applications.
-# version: 1.0.0
-# homepage: https://www.example.com
+version: 1.0.0
+homepage: https://www.example.com
 
 environment:
-  sdk: '>=2.10.2 <2.11.0'
+  sdk: '>=2.7.0 <3.0.0'
 
 dependencies:
   rxdart:
     git:
       url: https://github.com/ReactiveX/rxdart.git
-      ref: nnbd
+      ref: master
 
 dev_dependencies:
-  pedantic: ^1.10.0-nullsafety
-  test: ^1.16.0-nullsafety.4
+  pedantic: ^1.9.0
+  test: ^1.15.4

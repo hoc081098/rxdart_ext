@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:rxdart/src/utils/forwarding_sink.dart';
 import 'package:rxdart/src/utils/forwarding_stream.dart';
 
-class _MapNotNullSink<T, R> implements ForwardingSink<T, R> {
-  final R? Function(T) _mapper;
+import 'default_sink.dart';
+
+class _MapNotNullSink<T, R> extends DefaultForwardingSink<T, R> {
+  final R Function(T) _mapper;
 
   _MapNotNullSink(this._mapper);
 
@@ -15,25 +16,6 @@ class _MapNotNullSink<T, R> implements ForwardingSink<T, R> {
       sink.add(mapped);
     }
   }
-
-  @override
-  void addError(EventSink<R> sink, dynamic error, [StackTrace? st]) =>
-      sink.addError(error as Object, st);
-
-  @override
-  void close(EventSink<R> sink) => sink.close();
-
-  @override
-  FutureOr onCancel(EventSink<R> sink) {}
-
-  @override
-  void onListen(EventSink<R> sink) {}
-
-  @override
-  void onPause(EventSink<R> sink) {}
-
-  @override
-  void onResume(EventSink<R> sink) {}
 }
 
 /// Map stream and reject null extension
@@ -51,6 +33,6 @@ class _MapNotNullSink<T, R> implements ForwardingSink<T, R> {
 ///       .listen(print); // prints 1, 3
 extension MapNotNullStreamExtension<T> on Stream<T> {
   /// Map stream and reject null
-  Stream<R> mapNotNull<R>(R? Function(T) mapper) =>
+  Stream<R> mapNotNull<R>(R Function(T) mapper) =>
       forwardStream(this, _MapNotNullSink<T, R>(mapper));
 }
