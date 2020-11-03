@@ -20,7 +20,7 @@ abstract class DefaultForwardingSink<T, R> implements ForwardingSink<T, R> {
   void add(EventSink<R> sink, T data);
 
   @override
-  void addError(EventSink<R> sink, dynamic error, [StackTrace st]) =>
+  void addError(EventSink<R> sink, Object error, [StackTrace st]) =>
       sink.addError(error, st);
 
   @override
