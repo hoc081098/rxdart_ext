@@ -1,11 +1,10 @@
 import 'dart:async';
 
-import 'package:rxdart/src/utils/forwarding_stream.dart';
-
 import 'default_sink.dart';
 
-class _MapNotNullSink<T, R> extends DefaultForwardingSink<T, R> {
-  final R Function(T) _mapper;
+class _MapNotNullSink<T, R extends Object> extends ForwardingSink<T, R>
+    with ForwardingSinkMixin<T, R> {
+  final R? Function(T) _mapper;
 
   _MapNotNullSink(this._mapper);
 
@@ -33,6 +32,6 @@ class _MapNotNullSink<T, R> extends DefaultForwardingSink<T, R> {
 ///       .listen(print); // prints 1, 3
 extension MapNotNullStreamExtension<T> on Stream<T> {
   /// Map stream and reject null
-  Stream<R> mapNotNull<R>(R Function(T) mapper) =>
-      forwardStream(this, _MapNotNullSink<T, R>(mapper));
+  Stream<R> mapNotNull<R extends Object>(R? Function(T) mapper) =>
+      forwardStream(this, _MapNotNullSink(mapper));
 }

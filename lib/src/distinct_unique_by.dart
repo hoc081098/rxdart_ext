@@ -19,20 +19,24 @@ extension DistinctUniqueByStreamExtension<T> on Stream<T> {
   /// [Interactive marble diagram](http://rxmarbles.com/#distinct)
   Stream<T> distinctUniqueBy<R>(
     R Function(T) keySelector, {
-    bool Function(R e1, R e2) equals,
-    int Function(R e) hashCode,
-  }) =>
-      distinctUnique(
-        equals: (e1, e2) {
-          final k1 = keySelector(e1);
-          final k2 = keySelector(e2);
-          return equals?.call(k1, k2) ?? (k1 == k2);
-        },
-        hashCode: (e) {
-          final k = keySelector(e);
-          return hashCode?.call(k) ?? k.hashCode;
-        },
-      );
+    bool Function(R e1, R e2)? equals,
+    int Function(R e)? hashCode,
+  }) {
+    final eq = equals ?? _defaultEquals;
+    final hash = hashCode ?? _defaultHashCode;
+
+    return distinctUnique(
+      equals: (e1, e2) => eq(
+        keySelector(e1),
+        keySelector(e2),
+      ),
+      hashCode: (e) => hash(keySelector(e)),
+    );
+  }
+
+  static bool _defaultEquals<T>(T lhs, T rhs) => lhs == rhs;
+
+  static int _defaultHashCode<T>(T o) => o.hashCode;
 }
 
 void main() {

@@ -7,13 +7,13 @@ extension _NotificationDescriptionExt<T> on Notification<T> {
   String get description {
     switch (kind) {
       case Kind.OnData:
-        return 'data($value)';
+        return 'data($requiredData)';
       case Kind.OnDone:
         return 'done';
       case Kind.OnError:
-        return 'error(${errorAndStackTrace.error}, ${errorAndStackTrace.stackTrace})';
+        final error = errorAndStackTrace!;
+        return 'error(${error.error}, ${error.stackTrace})';
     }
-    throw StateError(toString());
   }
 }
 

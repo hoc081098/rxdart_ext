@@ -8,8 +8,8 @@ class _SingleSubscriptionTransformer<T> extends StreamTransformerBase<T, T> {
 
   @override
   Stream<T> bind(Stream<T> stream) {
-    StreamSubscription<T> subscription;
-    StreamController<T> controller;
+    late StreamSubscription<T> subscription;
+    late StreamController<T> controller;
 
     controller = StreamController<T>(
       sync: true,

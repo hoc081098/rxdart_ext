@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:rxdart/src/utils/forwarding_sink.dart';
 
+export 'package:rxdart/src/utils/forwarding_sink.dart' show ForwardingSink;
+export 'package:rxdart/src/utils/forwarding_stream.dart' show forwardStream;
+
 ///
-abstract class DefaultForwardingSink<T, R> implements ForwardingSink<T, R> {
+mixin ForwardingSinkMixin<T, R> on ForwardingSink<T, R> {
   @override
-  FutureOr onCancel(EventSink<R> sink) {}
+  FutureOr<void> onCancel(EventSink<R> sink) {}
 
   @override
   void onPause(EventSink<R> sink) {}
@@ -20,7 +23,7 @@ abstract class DefaultForwardingSink<T, R> implements ForwardingSink<T, R> {
   void add(EventSink<R> sink, T data);
 
   @override
-  void addError(EventSink<R> sink, dynamic error, [StackTrace st]) =>
+  void addError(EventSink<R> sink, Object error, [StackTrace? st]) =>
       sink.addError(error, st);
 
   @override

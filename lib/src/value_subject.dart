@@ -7,7 +7,7 @@ enum _Event { data, error }
 class _DataOrError<T> {
   _Event event;
   T value;
-  ErrorAndStackTrace errorAndStacktrace;
+  ErrorAndStackTrace? errorAndStacktrace;
 
   _DataOrError.data(this.value)
       : event = _Event.data,
@@ -67,8 +67,8 @@ class ValueSubject<T> extends Subject<T> implements ValueStream<T> {
   /// See also [StreamController.broadcast].
   factory ValueSubject(
     T seedValue, {
-    void Function() onListen,
-    void Function() onCancel,
+    void Function()? onListen,
+    void Function()? onCancel,
     bool sync = false,
   }) {
     final controller = StreamController<T>.broadcast(
@@ -87,7 +87,7 @@ class ValueSubject<T> extends Subject<T> implements ValueStream<T> {
   void onAdd(T event) => _dataOrError.onData(event);
 
   @override
-  void onAddError(Object error, [StackTrace stackTrace]) =>
+  void onAddError(Object error, [StackTrace? stackTrace]) =>
       _dataOrError.onError(ErrorAndStackTrace(error, stackTrace));
 
   @override
@@ -97,15 +97,15 @@ class ValueSubject<T> extends Subject<T> implements ValueStream<T> {
   T get value => _dataOrError.value;
 
   @override
-  ErrorAndStackTrace get errorAndStackTrace => _dataOrError.errorAndStacktrace;
+  ErrorAndStackTrace? get errorAndStackTrace => _dataOrError.errorAndStacktrace;
 
   @override
   bool get hasError => _dataOrError.hasError;
 
   @override
   Subject<R> createForwardingSubject<R>({
-    void Function() onListen,
-    void Function() onCancel,
+    void Function()? onListen,
+    void Function()? onCancel,
     bool sync = false,
   }) =>
       PublishSubject(
@@ -150,7 +150,7 @@ class ValueConnectableNotReplayStream<T> extends ConnectableStream<T>
 
   @override
   Stream<T> autoConnect(
-      {void Function(StreamSubscription<T> subscription) connection}) {
+      {void Function(StreamSubscription<T> subscription)? connection}) {
     _checkUsed();
 
     _subject.onListen = () {
@@ -172,7 +172,7 @@ class ValueConnectableNotReplayStream<T> extends ConnectableStream<T>
   @override
   Stream<T> refCount() {
     _checkUsed();
-    ConnectableStreamSubscription<T> subscription;
+    late ConnectableStreamSubscription<T> subscription;
 
     _subject.onListen = () => subscription = _connect();
     _subject.onCancel = () => subscription.cancel();
@@ -181,7 +181,7 @@ class ValueConnectableNotReplayStream<T> extends ConnectableStream<T>
   }
 
   @override
-  ErrorAndStackTrace get errorAndStackTrace => _subject.errorAndStackTrace;
+  ErrorAndStackTrace? get errorAndStackTrace => _subject.errorAndStackTrace;
 
   @override
   bool get hasError => _subject.hasError;
