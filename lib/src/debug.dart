@@ -41,5 +41,6 @@ extension DebugStreamExtension<T> on Stream<T> {
 
 /// TODO
 extension ListenNullStreamExtension<T> on Stream<T> {
-  StreamSubscription<T> listenNull() => listen(null);
+  /// Listen without handlers.
+  StreamSubscription<T> collect() => listen(null);
 }
