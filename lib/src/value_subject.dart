@@ -204,15 +204,15 @@ extension ValueConnectableNotReplayStreamExtensions<T> on Stream<T> {
       publishValueNotReplay(seedValue).refCount();
 }
 
-void main() async {
-  final s = Stream.fromIterable([1, 2, 3, 4]).publishValueNotReplay(0);
-  print(s.value);
-
-  s.listen((event) {
-    print(event);
-    print(s.value);
-  });
-
-  s.connect();
-  await Future<void>.delayed(const Duration(seconds: 2));
-}
+// void main() async {
+//   final s = Stream.fromIterable([1, 2, 3, 4]).publishValueNotReplay(0);
+//   print(s.value);
+//
+//   s.listen((event) {
+//     print(event);
+//     print(s.value);
+//   });
+//
+//   s.connect();
+//   await Future<void>.delayed(const Duration(seconds: 2));
+// }
