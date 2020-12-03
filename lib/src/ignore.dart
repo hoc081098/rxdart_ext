@@ -7,8 +7,6 @@ extension IgnoreElementStreamExtension<T> on Stream<T> {
     return transform<R>(
       StreamTransformer.fromHandlers(
         handleData: (_, sink) {},
-        handleError: (e, s, sink) => sink.addError(e, s),
-        handleDone: (sink) => sink.close(),
       ),
     );
   }
@@ -20,9 +18,7 @@ extension IgnoreErrorsStreamExtension<T> on Stream<T> {
   Stream<T> ignoreErrors() {
     return transform<T>(
       StreamTransformer.fromHandlers(
-        handleData: (data, sink) => sink.add(data),
         handleError: (e, s, sink) {},
-        handleDone: (sink) => sink.close(),
       ),
     );
   }
