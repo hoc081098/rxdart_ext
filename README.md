@@ -1,6 +1,6 @@
 # rxdart_ext
 
-Some extension methods for RxDart
+Some extensions for RxDart
 
 - `debug`
 - `distinctUniqueBy`
