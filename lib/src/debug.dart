@@ -17,13 +17,14 @@ extension _NotificationDescriptionExt<T> on Notification<T> {
   }
 }
 
-///
+/// Prints received events for all listeners on standard output.
 extension DebugStreamExtension<T> on Stream<T> {
-  ///
-  Stream<T> debug([
+  /// Prints received events for all listeners on standard output.
+  /// The [identifier] is printed together with event description to standard output.
+  Stream<T> debug({
     String identifier = 'Debug',
     void Function(String) log = print,
-  ]) {
+  }) {
     void logEvent(String content) =>
         log('${DateTime.now()}: $identifier -> $content');
 
@@ -39,8 +40,43 @@ extension DebugStreamExtension<T> on Stream<T> {
   }
 }
 
-/// TODO
+/// Listen without any handler.
 extension ListenNullStreamExtension<T> on Stream<T> {
-  /// Listen without handlers.
-  StreamSubscription<T> collect() => listen(null);
+  /// Listen without any handler.
+  CollectStreamSubscription<T> collect() =>
+      CollectStreamSubscription(listen(null));
+}
+
+/// A StreamSubscription cannot replace any handler.
+class CollectStreamSubscription<T> extends StreamSubscription<T> {
+  final StreamSubscription<T> _delegate;
+
+  CollectStreamSubscription(this._delegate);
+
+  @override
+  Future<E> asFuture<E>([E? futureValue]) => _delegate.asFuture(futureValue);
+
+  @override
+  Future<void> cancel() => _delegate.cancel();
+
+  @override
+  bool get isPaused => _delegate.isPaused;
+
+  @override
+  void onData(void Function(T data)? handleData) =>
+      throw StateError('Cannot change onData');
+
+  @override
+  void onDone(void Function()? handleDone) =>
+      throw StateError('Cannot change onDone');
+
+  @override
+  void onError(Function? handleError) =>
+      throw StateError('Cannot change onError');
+
+  @override
+  void pause([Future<void>? resumeSignal]) => _delegate.pause(resumeSignal);
+
+  @override
+  void resume() => _delegate.resume();
 }
