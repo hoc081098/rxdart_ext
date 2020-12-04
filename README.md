@@ -2,7 +2,7 @@
 
 Some extensions for RxDart
 
-- `debug`
+- `debug`, `collect`
 - `distinctUniqueBy`
 - `ignoreElements`, `ignoreErrors`
 - `mapNotNull`
