@@ -17,21 +17,33 @@ class _MapNotNullSink<T, R extends Object> extends ForwardingSink<T, R>
   }
 }
 
-/// Map stream and reject null extension
+/// Transforms each element of this stream into a new stream event and reject `null` elements.
 /// ### Example
 ///
 ///     Stream.fromIterable([1, 'two', 3, 'four'])
-///       .mapNotNull((i) => i is int ? i : null)
-///       .listen(print); // prints 1, 3
+///       .mapNotNull((i) => i is int ? i + 1 : null)
+///       .listen(print); // prints 2, 4
 ///
 /// #### as opposed to:
 ///
 ///     Stream.fromIterable([1, 'two', 3, 'four'])
-///       .map((i) => i is int ? i : null)
+///       .map((i) => i is int ? i + 1 : null)
 ///       .where((i) => i != null)
-///       .listen(print); // prints 1, 3
+///       .listen(print); // prints 2, 4
 extension MapNotNullStreamExtension<T> on Stream<T> {
-  /// Map stream and reject null
+  /// Transforms each element of this stream into a new stream event and reject `null` elements.
+  /// ### Example
+  ///
+  ///     Stream.fromIterable([1, 'two', 3, 'four'])
+  ///       .mapNotNull((i) => i is int ? i + 1 : null)
+  ///       .listen(print); // prints 2, 4
+  ///
+  /// #### as opposed to:
+  ///
+  ///     Stream.fromIterable([1, 'two', 3, 'four'])
+  ///       .map((i) => i is int ? i + 1 : null)
+  ///       .where((i) => i != null)
+  ///       .listen(print); // prints 2, 4
   Stream<R> mapNotNull<R extends Object>(R? Function(T) mapper) =>
       forwardStream(this, _MapNotNullSink(mapper));
 }
