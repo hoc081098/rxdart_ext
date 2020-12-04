@@ -8,3 +8,4 @@ Some extensions for RxDart
 - `mapNotNull`
 - `toSingleSubscription`
 - `ValueSubject`, `publishValueNotReplay`, `shareValueNotReplay`
+- TODO
