@@ -47,10 +47,11 @@ extension ListenNullStreamExtension<T> on Stream<T> {
       CollectStreamSubscription(listen(null));
 }
 
-/// A StreamSubscription cannot replace any handler.
+/// A [StreamSubscription] cannot replace any handler.
 class CollectStreamSubscription<T> extends StreamSubscription<T> {
   final StreamSubscription<T> _delegate;
 
+  /// Construct a [CollectStreamSubscription] that delegates all implementation to other [StreamSubscription].
   CollectStreamSubscription(this._delegate);
 
   @override
