@@ -9,4 +9,4 @@ export 'src/distinct_unique_by.dart';
 export 'src/ignore.dart';
 export 'src/map_not_null.dart';
 export 'src/to_single_subscription.dart';
-export 'src/value_subject.dart';
+export 'src/value/value_subject.dart';

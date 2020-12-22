@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 
+import 'not_replay_value_stream.dart';
+
 enum _Event { data, error }
 
 class _DataOrError<T> {
@@ -51,7 +53,7 @@ class _DataOrError<T> {
 ///
 ///     subject.add(2);
 ///     subject.close();
-class ValueSubject<T> extends Subject<T> implements ValueStream<T> {
+class ValueSubject<T> extends Subject<T> implements NotReplayValueStream<T> {
   final _DataOrError<T> _dataOrError;
 
   ValueSubject._(
@@ -113,95 +115,6 @@ class ValueSubject<T> extends Subject<T> implements ValueStream<T> {
         onCancel: onCancel,
         sync: sync,
       );
-}
-
-///
-class ValueConnectableNotReplayStream<T> extends ConnectableStream<T>
-    implements ValueStream<T> {
-  final ValueSubject<T> _subject;
-  final Stream<T> _source;
-  var _used = false;
-
-  ValueConnectableNotReplayStream._(this._source, this._subject)
-      : super(_subject);
-
-  ///
-  factory ValueConnectableNotReplayStream(Stream<T> source, T seedValue,
-          {bool sync = true}) =>
-      ValueConnectableNotReplayStream._(
-          source, ValueSubject(seedValue, sync: sync));
-
-  void _checkUsed() {
-    if (_used) {
-      throw StateError('Cannot reuse this stream. This causes many problems.');
-    }
-    _used = true;
-  }
-
-  ConnectableStreamSubscription<T> _connect() =>
-      ConnectableStreamSubscription<T>(
-        _source.listen(
-          _subject.add,
-          onError: _subject.addError,
-          onDone: _subject.close,
-        ),
-        _subject,
-      );
-
-  @override
-  Stream<T> autoConnect(
-      {void Function(StreamSubscription<T> subscription)? connection}) {
-    _checkUsed();
-
-    _subject.onListen = () {
-      final subscription = _connect();
-      connection?.call(subscription);
-    };
-    _subject.onCancel = null;
-
-    return _subject;
-  }
-
-  @override
-  StreamSubscription<T> connect() {
-    _checkUsed();
-    _subject.onListen = _subject.onCancel = null;
-    return _connect();
-  }
-
-  @override
-  Stream<T> refCount() {
-    _checkUsed();
-    late ConnectableStreamSubscription<T> subscription;
-
-    _subject.onListen = () => subscription = _connect();
-    _subject.onCancel = () => subscription.cancel();
-
-    return _subject;
-  }
-
-  @override
-  ErrorAndStackTrace? get errorAndStackTrace => _subject.errorAndStackTrace;
-
-  @override
-  bool get hasError => _subject.hasError;
-
-  @override
-  bool get hasValue => _subject.hasValue;
-
-  @override
-  T get value => _subject.value;
-}
-
-///
-extension ValueConnectableNotReplayStreamExtensions<T> on Stream<T> {
-  ///
-  ValueConnectableNotReplayStream<T> publishValueNotReplay(T seedValue) =>
-      ValueConnectableNotReplayStream(this, seedValue);
-
-  ///
-  Stream<T> shareValueNotReplay(T seedValue) =>
-      publishValueNotReplay(seedValue).refCount();
 }
 
 // void main() async {
