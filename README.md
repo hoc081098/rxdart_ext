@@ -6,9 +6,10 @@ Some extensions built on top of `RxDart`.
 ![Dart CI](https://github.com/hoc081098/rxdart_ext/workflows/Dart%20CI/badge.svg)
 
 - `debug`, `collect`
+- `ForwardingSinkMixin`
 - `distinctUniqueBy`
 - `ignoreElements`, `ignoreErrors`
 - `mapNotNull`
 - `toSingleSubscription`
-- `ValueSubject`, `publishValueNotReplay`, `shareValueNotReplay`
+- `NotReplayValueStream`, `ValueSubject`, `NotReplayValueConnectableStream`, `publishValueNotReplay`, `shareValueNotReplay`
 - TODO
