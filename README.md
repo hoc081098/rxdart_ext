@@ -1,6 +1,6 @@
 # rxdart_ext
 
-Some extensions for RxDart
+Some extensions built on top of `RxDart`
 
 - `debug`, `collect`
 - `distinctUniqueBy`

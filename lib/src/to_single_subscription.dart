@@ -1,35 +1,23 @@
 import 'dart:async';
 
-/// A transformer that converts a broadcast stream into a single-subscription
-/// stream.
-class _SingleSubscriptionTransformer<T> extends StreamTransformerBase<T, T> {
-  ///
-  const _SingleSubscriptionTransformer();
+/// Converts a broadcast Stream into a single-subscription Stream.
+extension ToSingleSubscriptionStreamExtension<T> on Stream<T> {
+  /// Converts a broadcast Stream into a single-subscription Stream.
+  Stream<T> toSingleSubscriptionStream() {
+    assert(isBroadcast);
 
-  @override
-  Stream<T> bind(Stream<T> stream) {
     late StreamSubscription<T> subscription;
-    late StreamController<T> controller;
 
-    controller = StreamController<T>(
-      sync: true,
-      onListen: () {
-        subscription = stream.listen(
-          controller.add,
-          onError: controller.addError,
-          onDone: controller.close,
-        );
-      },
-      onCancel: () => subscription.cancel(),
-    );
+    final controller = StreamController<T>(sync: true);
+    controller.onListen = () {
+      subscription = listen(
+        controller.add,
+        onError: controller.addError,
+        onDone: controller.close,
+      );
+    };
+    controller.onCancel = () => subscription.cancel();
 
     return controller.stream;
   }
-}
-
-///
-extension ToSingleSubscriptionStreamExtension<T> on Stream<T> {
-  ///
-  Stream<T> toSingleSubscriptionStream() =>
-      transform(_SingleSubscriptionTransformer<T>());
 }
