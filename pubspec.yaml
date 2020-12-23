@@ -1,7 +1,7 @@
 name: rxdart_ext
-description: A starting point for Dart libraries or applications.
-version: 1.0.0
-homepage: https://www.example.com
+description: Some extension methods and classes built on top of RxDart.
+version: 0.0.1
+homepage: https://github.com/hoc081098/rxdart_ext.git
 
 environment:
   sdk: '>=2.12.0-0 <3.0.0'
