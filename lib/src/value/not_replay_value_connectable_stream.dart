@@ -90,30 +90,34 @@ class NotReplayValueConnectableStream<T> extends ConnectableStream<T>
   T get value => _subject.value;
 }
 
-///
+/// Extension that converts a [Stream] into [NotReplayValueConnectableStream] and [NotReplayValueStream].
 extension ValueConnectableNotReplayStreamExtensions<T> on Stream<T> {
   /// Convert the current Stream into a [ConnectableStream] that can be listened
   /// to multiple times. It will not begin emitting items from the original
   /// Stream until the `connect` method is invoked.
   ///
   /// This is useful for converting a single-subscription stream into a
-  /// broadcast Stream.
+  /// broadcast Stream and provides synchronous access to the latest emitted value.
   ///
   /// ### Example
   ///
   /// ```
   /// final source = Stream.fromIterable([1, 2, 3]);
-  /// final connectable = source.publish();
+  /// final connectable = source.publishValueNotReplay(0, sync: true);
   ///
   /// // Does not print anything at first
   /// connectable.listen(print);
+  /// print(connectable.value); // prints 0
   ///
   /// // Start listening to the source Stream. Will cause the previous
   /// // line to start printing 1, 2, 3
   /// final subscription = connectable.connect();
   ///
+  /// await subscription.asFuture<void>();
+  /// print(connectable.value); // prints 3
+  ///
   /// // Stop emitting items from the source stream and close the underlying
-  /// // Subject
+  /// // ValueSubject
   /// subscription.cancel();
   /// ```
   NotReplayValueConnectableStream<T> publishValueNotReplay(T seedValue,
@@ -125,20 +129,24 @@ extension ValueConnectableNotReplayStreamExtensions<T> on Stream<T> {
   /// listened to, and shut down when no listeners remain.
   ///
   /// This is useful for converting a single-subscription stream into a
-  /// broadcast Stream.
+  /// broadcast Stream and provides synchronous access to the latest emitted value.
   ///
   /// ### Example
   ///
   /// ```
   /// // Convert a single-subscription fromIterable stream into a broadcast
   /// // stream
-  /// final stream =  Stream.fromIterable([1, 2, 3]).share();
+  /// final stream =  Stream.fromIterable([1, 2, 3]).shareValueNotReplay(0);
+  /// print(stream.value); // prints 0
   ///
   /// // Start listening to the source Stream. Will start printing 1, 2, 3
   /// final subscription = stream.listen(print);
   ///
+  /// await subscription.asFuture<void>();
+  /// print(stream.value); // prints 3
+  ///
   /// // Stop emitting items from the source stream and close the underlying
-  /// // PublishSubject
+  /// // ValueSubject
   /// subscription.cancel();
   /// ```
   NotReplayValueStream<T> shareValueNotReplay(T seedValue) =>

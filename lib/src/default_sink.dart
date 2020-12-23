@@ -5,7 +5,7 @@ import 'package:rxdart/src/utils/forwarding_sink.dart';
 export 'package:rxdart/src/utils/forwarding_sink.dart' show ForwardingSink;
 export 'package:rxdart/src/utils/forwarding_stream.dart' show forwardStream;
 
-///
+/// This [ForwardingSink] mixin implements all [ForwardingSink] members except [add].
 mixin ForwardingSinkMixin<T, R> on ForwardingSink<T, R> {
   @override
   FutureOr<void> onCancel(EventSink<R> sink) {}
