@@ -7,7 +7,7 @@ extension _NotificationDescriptionExt<T> on Notification<T> {
   String get description {
     switch (kind) {
       case Kind.OnData:
-        return 'data($requiredData)';
+        return 'data($requireData)';
       case Kind.OnDone:
         return 'done';
       case Kind.OnError:

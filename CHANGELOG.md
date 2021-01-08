@@ -1,3 +1,7 @@
+## 0.0.1-nullsafety.2 - Jan 08, 2021
+
+-   Update dependency: `rxdart: ^0.26.0-nullsafety.1`.
+
 ## 0.0.1-nullsafety.1 - Dec 24, 2020
 
 -   Fix missing exports.

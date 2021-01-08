@@ -281,7 +281,7 @@ void main() {
       void test(int expectedValue) {
         expect(subject.value, expectedValue);
         expect(subject.hasValue, isTrue);
-        expect(subject.errorAndStackTrace?.error, isNull);
+        expect(subject.error, isNull);
         expect(subject.hasError, isFalse);
       }
 
@@ -297,9 +297,9 @@ void main() {
       final subject = ValueSubject<int>(0);
 
       void test(int expectedError) {
-        expect(subject.value, 0);
+        expect(subject.value, null);
         expect(subject.hasValue, isFalse);
-        expect(subject.errorAndStackTrace?.error, expectedError);
+        expect(subject.requireError, expectedError);
         expect(subject.hasError, isTrue);
       }
 

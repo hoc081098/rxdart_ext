@@ -1,33 +1,25 @@
 import 'dart:async';
 
-import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/rxdart.dart'
+    show ErrorAndStackTrace, PublishSubject, Subject, ValueWrapper;
 
 import 'not_replay_value_stream.dart';
 
-enum _Event { data, error }
-
 class _DataOrError<T> {
-  _Event event;
-  T value;
+  ValueWrapper<T>? value;
   ErrorAndStackTrace? errorAndStacktrace;
 
-  _DataOrError.data(this.value)
-      : event = _Event.data,
-        errorAndStacktrace = null;
+  _DataOrError.data(T seedValue) : value = ValueWrapper(seedValue);
 
   void onError(ErrorAndStackTrace errorAndStacktrace) {
     this.errorAndStacktrace = errorAndStacktrace;
-    event = _Event.error;
+    value = null;
   }
 
   void onData(T value) {
-    this.value = value;
-    event = _Event.data;
+    this.value = ValueWrapper(value);
+    errorAndStacktrace = null;
   }
-
-  bool get hasValue => event == _Event.data;
-
-  bool get hasError => event == _Event.error;
 }
 
 /// A special [StreamController] that captures the latest item that has been
@@ -93,16 +85,10 @@ class ValueSubject<T> extends Subject<T> implements NotReplayValueStream<T> {
       _dataOrError.onError(ErrorAndStackTrace(error, stackTrace));
 
   @override
-  bool get hasValue => _dataOrError.hasValue;
-
-  @override
-  T get value => _dataOrError.value;
+  ValueWrapper<T>? get valueWrapper => _dataOrError.value;
 
   @override
   ErrorAndStackTrace? get errorAndStackTrace => _dataOrError.errorAndStacktrace;
-
-  @override
-  bool get hasError => _dataOrError.hasError;
 
   @override
   Subject<R> createForwardingSubject<R>({

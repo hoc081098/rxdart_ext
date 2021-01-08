@@ -1,7 +1,11 @@
 import 'dart:async';
 
 import 'package:rxdart/rxdart.dart'
-    show ConnectableStream, ConnectableStreamSubscription, ErrorAndStackTrace;
+    show
+        ConnectableStream,
+        ConnectableStreamSubscription,
+        ErrorAndStackTrace,
+        ValueWrapper;
 
 import 'not_replay_value_stream.dart';
 import 'value_subject.dart';
@@ -81,13 +85,7 @@ class NotReplayValueConnectableStream<T> extends ConnectableStream<T>
   ErrorAndStackTrace? get errorAndStackTrace => _subject.errorAndStackTrace;
 
   @override
-  bool get hasError => _subject.hasError;
-
-  @override
-  bool get hasValue => _subject.hasValue;
-
-  @override
-  T get value => _subject.value;
+  ValueWrapper<T>? get valueWrapper => _subject.valueWrapper;
 }
 
 /// Extension that converts a [Stream] into [NotReplayValueConnectableStream] and [NotReplayValueStream].
