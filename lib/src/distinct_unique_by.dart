@@ -1,5 +1,7 @@
 import 'package:rxdart/rxdart.dart';
 
+import 'utils.dart';
+
 /// WARNING: More commonly known as distinct in other Rx implementations.
 ///
 /// Creates a Stream where data events are skipped if they have already
@@ -36,8 +38,8 @@ extension DistinctUniqueByStreamExtension<T> on Stream<T> {
     bool Function(R e1, R e2)? equals,
     int Function(R e)? hashCode,
   }) {
-    final eq = equals ?? _defaultEquals;
-    final hash = hashCode ?? _defaultHashCode;
+    final eq = equals ?? defaultEquals;
+    final hash = hashCode ?? defaultHashCode;
 
     return distinctUnique(
       equals: (e1, e2) => eq(
@@ -47,8 +49,4 @@ extension DistinctUniqueByStreamExtension<T> on Stream<T> {
       hashCode: (e) => hash(keySelector(e)),
     );
   }
-
-  static bool _defaultEquals<T>(T lhs, T rhs) => lhs == rhs;
-
-  static int _defaultHashCode<T>(T o) => o.hashCode;
 }
