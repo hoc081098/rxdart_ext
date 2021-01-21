@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
 
@@ -172,6 +174,8 @@ void main() {
 
   test('collect', () {
     final streamSubscription = Stream.value(1).collect();
+    expect(streamSubscription, isA<StreamSubscription<void>>());
+
     expect(
       () => streamSubscription.onData((data) {}),
       throwsStateError,

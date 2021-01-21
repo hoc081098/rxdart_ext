@@ -1,8 +1,8 @@
 import 'utils.dart';
 
-/// TODO
+/// Skips data events if their key are equal to the key of the previous data event.
 extension DistinctByExtension<T> on Stream<T> {
-  /// TODO
+  /// Skips data events if their key are equal to the key of the previous data event.
   Stream<T> distinctBy<R>(
     R Function(T) keySelector, {
     bool Function(R e1, R e2)? equals,

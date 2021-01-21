@@ -43,13 +43,13 @@ extension DebugStreamExtension<T> on Stream<T> {
 /// Listen without any handler.
 extension ListenNullStreamExtension<T> on Stream<T> {
   /// Listen without any handler.
-  CollectStreamSubscription<T> collect() =>
+  CollectStreamSubscription collect() =>
       CollectStreamSubscription(listen(null));
 }
 
 /// A [StreamSubscription] cannot replace any handler.
-class CollectStreamSubscription<T> extends StreamSubscription<T> {
-  final StreamSubscription<T> _delegate;
+class CollectStreamSubscription implements StreamSubscription<Never> {
+  final StreamSubscription _delegate;
 
   /// Construct a [CollectStreamSubscription] that delegates all implementation to other [StreamSubscription].
   CollectStreamSubscription(this._delegate);
@@ -64,15 +64,15 @@ class CollectStreamSubscription<T> extends StreamSubscription<T> {
   bool get isPaused => _delegate.isPaused;
 
   @override
-  void onData(void Function(T data)? handleData) =>
+  Never onData(void Function(Never data)? handleData) =>
       throw StateError('Cannot change onData');
 
   @override
-  void onDone(void Function()? handleDone) =>
+  Never onDone(void Function()? handleDone) =>
       throw StateError('Cannot change onDone');
 
   @override
-  void onError(Function? handleError) =>
+  Never onError(Function? handleError) =>
       throw StateError('Cannot change onError');
 
   @override
