@@ -9,8 +9,8 @@ Some extension methods and classes built on top of `RxDart` - `RxDart` extension
 - `debug`, `collect`
 - `ForwardingSinkMixin`
 - `distinctUniqueBy`
+- `distinctBy`
 - `ignoreElements`, `ignoreErrors`
 - `mapNotNull`
 - `toSingleSubscription`
 - `NotReplayValueStream`, `ValueSubject`, `NotReplayValueConnectableStream`, `publishValueNotReplay`, `shareValueNotReplay`
-- TODO

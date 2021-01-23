@@ -1,3 +1,7 @@
+## 0.0.1-nullsafety.4 - Jan 23, 2021
+
+-   Now, return type of `collect`  is `StreamSubscription<T>`.
+
 ## 0.0.1-nullsafety.3 - Jan 21, 2021
 
 -   Added `distinctBy`.

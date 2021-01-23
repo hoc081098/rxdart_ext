@@ -28,8 +28,8 @@ extension DebugStreamExtension<T> on Stream<T> {
     void logEvent(String content) =>
         log('${DateTime.now()}: $identifier -> $content');
 
-    return transform(
-      DoStreamTransformer(
+    return transform<T>(
+      DoStreamTransformer<T>(
         onEach: (notification) => logEvent('Event ${notification.description}'),
         onListen: () => logEvent('Listened'),
         onCancel: () => logEvent('Cancelled'),
@@ -43,13 +43,12 @@ extension DebugStreamExtension<T> on Stream<T> {
 /// Listen without any handler.
 extension ListenNullStreamExtension<T> on Stream<T> {
   /// Listen without any handler.
-  CollectStreamSubscription collect() =>
-      CollectStreamSubscription(listen(null));
+  StreamSubscription<T> collect() => CollectStreamSubscription<T>(listen(null));
 }
 
 /// A [StreamSubscription] cannot replace any handler.
-class CollectStreamSubscription implements StreamSubscription<Never> {
-  final StreamSubscription _delegate;
+class CollectStreamSubscription<T> implements StreamSubscription<T> {
+  final StreamSubscription<T> _delegate;
 
   /// Construct a [CollectStreamSubscription] that delegates all implementation to other [StreamSubscription].
   CollectStreamSubscription(this._delegate);
@@ -64,7 +63,7 @@ class CollectStreamSubscription implements StreamSubscription<Never> {
   bool get isPaused => _delegate.isPaused;
 
   @override
-  Never onData(void Function(Never data)? handleData) =>
+  Never onData(void Function(T data)? handleData) =>
       throw StateError('Cannot change onData');
 
   @override
