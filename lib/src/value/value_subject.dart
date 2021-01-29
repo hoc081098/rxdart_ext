@@ -201,12 +201,14 @@ class ValueStreamController<T> implements StreamController<T> {
   NotReplayValueStream<T> get stream => _ValueStreamControllerStream(this);
 }
 
-class _ValueStreamControllerStream<T> extends StreamView<T>
+class _ValueStreamControllerStream<T> extends Stream<T>
     implements NotReplayValueStream<T> {
   final ValueStreamController<T> controller;
 
-  _ValueStreamControllerStream(this.controller)
-      : super(controller._delegate.stream);
+  _ValueStreamControllerStream(this.controller);
+
+  @override
+  bool get isBroadcast => false;
 
   @override
   ErrorAndStackTrace? get errorAndStackTrace =>
@@ -214,4 +216,43 @@ class _ValueStreamControllerStream<T> extends StreamView<T>
 
   @override
   ValueWrapper<T>? get valueWrapper => controller._dataOrError.value;
+
+  @override
+  StreamSubscription<T> listen(
+    void Function(T event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) =>
+      controller._delegate.stream.listen(
+        onData,
+        onError: onError,
+        onDone: onDone,
+        cancelOnError: cancelOnError,
+      );
+}
+
+/// TODO
+extension ToNotReplayValueStreamExtension<T> on Stream<T> {
+  /// TODO
+  NotReplayValueStream<T> toNotReplayValueStream(T value) {
+    final controller = ValueStreamController(value, sync: true);
+    late StreamSubscription<T> subscription;
+
+    controller.onListen = () {
+      subscription = listen(
+        controller.add,
+        onError: controller.addError,
+        onDone: controller.close,
+      );
+
+      if (!isBroadcast) {
+        controller.onPause = subscription.pause;
+        controller.onResume = subscription.resume;
+      }
+    };
+    controller.onCancel = () => subscription.cancel();
+
+    return controller.stream;
+  }
 }
