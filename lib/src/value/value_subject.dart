@@ -108,10 +108,10 @@ class ValueSubject<T> extends Subject<T> implements NotReplayValueStream<T> {
 
 /// TODO
 class ValueStreamController<T> implements StreamController<T> {
-  final StreamController<T> _controller;
+  final StreamController<T> _delegate;
   final _DataOrError<T> _dataOrError;
 
-  ValueStreamController._(this._controller, this._dataOrError);
+  ValueStreamController._(this._delegate, this._dataOrError);
 
   /// TODO
   factory ValueStreamController(
@@ -136,66 +136,66 @@ class ValueStreamController<T> implements StreamController<T> {
   }
 
   @override
-  FutureOr<void> Function()? get onCancel => _controller.onCancel;
+  FutureOr<void> Function()? get onCancel => _delegate.onCancel;
 
   @override
   set onCancel(FutureOr<void> Function()? onCancelHandler) =>
-      _controller.onCancel = onCancelHandler;
+      _delegate.onCancel = onCancelHandler;
 
   @override
-  void Function()? get onListen => _controller.onListen;
+  void Function()? get onListen => _delegate.onListen;
 
   @override
   set onListen(void Function()? onListenHandler) =>
-      _controller.onListen = onListenHandler;
+      _delegate.onListen = onListenHandler;
 
   @override
-  void Function()? get onPause => _controller.onPause;
+  void Function()? get onPause => _delegate.onPause;
 
   @override
   set onPause(void Function()? onPauseHandler) =>
-      _controller.onPause = onPauseHandler;
+      _delegate.onPause = onPauseHandler;
 
   @override
-  void Function()? get onResume => _controller.onResume;
+  void Function()? get onResume => _delegate.onResume;
 
   @override
   set onResume(void Function()? onResumeHandler) =>
-      _controller.onResume = onResumeHandler;
+      _delegate.onResume = onResumeHandler;
 
   @override
   void add(T event) {
     _dataOrError.onData(event);
-    _controller.add(event);
+    _delegate.add(event);
   }
 
   @override
   void addError(Object error, [StackTrace? stackTrace]) {
     _dataOrError.onError(ErrorAndStackTrace(error, stackTrace));
-    _controller.addError(error, stackTrace);
+    _delegate.addError(error, stackTrace);
   }
 
   @override
   Future<void> addStream(Stream<T> source, {bool? cancelOnError}) =>
-      _controller.addStream(source, cancelOnError: cancelOnError);
+      _delegate.addStream(source, cancelOnError: cancelOnError);
 
   @override
-  Future<void> close() => _controller.close();
+  Future<void> close() => _delegate.close();
 
   @override
-  Future<void> get done => _controller.done;
+  Future<void> get done => _delegate.done;
 
   @override
-  bool get hasListener => _controller.hasListener;
+  bool get hasListener => _delegate.hasListener;
 
   @override
-  bool get isClosed => _controller.isClosed;
+  bool get isClosed => _delegate.isClosed;
 
   @override
-  bool get isPaused => _controller.isPaused;
+  bool get isPaused => _delegate.isPaused;
 
   @override
-  StreamSink<T> get sink => _controller.sink;
+  StreamSink<T> get sink => _delegate.sink;
 
   @override
   NotReplayValueStream<T> get stream => _ValueStreamControllerStream(this);
@@ -205,7 +205,8 @@ class _ValueStreamControllerStream<T> extends StreamView<T>
     implements NotReplayValueStream<T> {
   final ValueStreamController<T> controller;
 
-  _ValueStreamControllerStream(this.controller) : super(controller.stream);
+  _ValueStreamControllerStream(this.controller)
+      : super(controller._delegate.stream);
 
   @override
   ErrorAndStackTrace? get errorAndStackTrace =>
