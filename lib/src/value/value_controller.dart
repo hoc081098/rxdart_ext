@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart' show ErrorAndStackTrace, ValueWrapper;
 
 import 'not_replay_value_stream.dart';
@@ -20,6 +21,11 @@ class ValueStreamController<T> implements StreamController<T> {
   final StreamEvent<T> _dataOrError;
 
   ValueStreamController._(this._delegate, this._dataOrError);
+
+  /// For testing.
+  @visibleForTesting
+  ValueStreamController.mock(StreamController<T> mockController, T value)
+      : this._(mockController, StreamEvent.data(value));
 
   /// TODO
   factory ValueStreamController(
