@@ -5,7 +5,16 @@ import 'package:rxdart/rxdart.dart' show ErrorAndStackTrace, ValueWrapper;
 import 'not_replay_value_stream.dart';
 import 'stream_event.dart';
 
-/// TODO
+/// A controller with a [stream] that supports only one single subscriber.
+///
+/// This controller allows sending data, error and done events on
+/// its [stream].
+/// This class can be used to create a simple stream that others
+/// can listen on, and to push events to that stream.
+///
+/// It's possible to check whether the stream is paused or not, and whether
+/// it has subscribers or not, as well as getting a callback when either of
+/// these change.
 class ValueStreamController<T> implements StreamController<T> {
   final StreamController<T> _delegate;
   final StreamEvent<T> _dataOrError;
@@ -97,7 +106,8 @@ class ValueStreamController<T> implements StreamController<T> {
   StreamSink<T> get sink => _delegate.sink;
 
   @override
-  NotReplayValueStream<T> get stream => _ValueStreamControllerStream(this);
+  late final NotReplayValueStream<T> stream =
+      _ValueStreamControllerStream(this);
 }
 
 class _ValueStreamControllerStream<T> extends Stream<T>
@@ -131,9 +141,9 @@ class _ValueStreamControllerStream<T> extends Stream<T>
       );
 }
 
-/// TODO
+/// Convert this [Stream] to a single-subscription [NotReplayValueStream].
 extension ToNotReplayValueStreamExtension<T> on Stream<T> {
-  /// TODO
+  /// Convert this [Stream] to a single-subscription [NotReplayValueStream].
   NotReplayValueStream<T> toNotReplayValueStream(T value) {
     final controller = ValueStreamController(value, sync: true);
     late StreamSubscription<T> subscription;
