@@ -4,23 +4,7 @@ import 'package:rxdart/rxdart.dart'
     show ErrorAndStackTrace, PublishSubject, Subject, ValueWrapper;
 
 import 'not_replay_value_stream.dart';
-
-class _DataOrError<T> {
-  ValueWrapper<T>? value;
-  ErrorAndStackTrace? errorAndStacktrace;
-
-  _DataOrError.data(T seedValue) : value = ValueWrapper(seedValue);
-
-  void onError(ErrorAndStackTrace errorAndStacktrace) {
-    this.errorAndStacktrace = errorAndStacktrace;
-    value = null;
-  }
-
-  void onData(T value) {
-    this.value = ValueWrapper(value);
-    errorAndStacktrace = null;
-  }
-}
+import 'stream_event.dart';
 
 /// A special [StreamController] that captures the latest item that has been
 /// added to the controller.
@@ -46,7 +30,7 @@ class _DataOrError<T> {
 ///     subject.add(2);
 ///     subject.close();
 class ValueSubject<T> extends Subject<T> implements NotReplayValueStream<T> {
-  final _DataOrError<T> _dataOrError;
+  final StreamEvent<T> _dataOrError;
 
   ValueSubject._(
     StreamController<T> controller,
@@ -73,7 +57,7 @@ class ValueSubject<T> extends Subject<T> implements NotReplayValueStream<T> {
 
     return ValueSubject._(
       controller,
-      _DataOrError.data(seedValue),
+      StreamEvent.data(seedValue),
     );
   }
 
@@ -85,10 +69,10 @@ class ValueSubject<T> extends Subject<T> implements NotReplayValueStream<T> {
       _dataOrError.onError(ErrorAndStackTrace(error, stackTrace));
 
   @override
-  ValueWrapper<T>? get valueWrapper => _dataOrError.value;
+  ValueWrapper<T>? get valueWrapper => _dataOrError.valueWrapper;
 
   @override
-  ErrorAndStackTrace? get errorAndStackTrace => _dataOrError.errorAndStacktrace;
+  ErrorAndStackTrace? get errorAndStackTrace => _dataOrError.errorAndStackTrace;
 
   @override
   Subject<R> createForwardingSubject<R>({
@@ -101,4 +85,7 @@ class ValueSubject<T> extends Subject<T> implements NotReplayValueStream<T> {
         onCancel: onCancel,
         sync: sync,
       );
+
+  @override
+  NotReplayValueStream<T> get stream => this;
 }
