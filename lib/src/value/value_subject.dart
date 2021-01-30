@@ -69,10 +69,10 @@ class ValueSubject<T> extends Subject<T> implements NotReplayValueStream<T> {
       _dataOrError.onError(ErrorAndStackTrace(error, stackTrace));
 
   @override
-  ValueWrapper<T>? get valueWrapper => _dataOrError.value;
+  ValueWrapper<T>? get valueWrapper => _dataOrError.valueWrapper;
 
   @override
-  ErrorAndStackTrace? get errorAndStackTrace => _dataOrError.errorAndStacktrace;
+  ErrorAndStackTrace? get errorAndStackTrace => _dataOrError.errorAndStackTrace;
 
   @override
   Subject<R> createForwardingSubject<R>({

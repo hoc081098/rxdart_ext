@@ -7,6 +7,8 @@ import 'not_replay_value_stream.dart';
 import 'stream_event.dart';
 
 /// A controller with a [stream] that supports only one single subscriber.
+/// The [stream] of this controller is a single-subscription [NotReplayValueStream] that provides
+/// synchronous access to the last emitted item.
 ///
 /// This controller allows sending data, error and done events on
 /// its [stream].
@@ -27,7 +29,12 @@ class ValueStreamController<T> implements StreamController<T> {
   ValueStreamController.mock(StreamController<T> mockController, T value)
       : this._(mockController, StreamEvent.data(value));
 
-  /// TODO
+  /// Constructs a [ValueStreamController], optionally pass handlers for
+  /// [onListen], [onCancel] and a flag to handle events [sync].
+  ///
+  /// [seedValue] becomes the current [value] of Controller's Stream.
+  ///
+  /// See also [StreamController] constructor.
   factory ValueStreamController(
     T seedValue, {
     void Function()? onListen,
@@ -111,6 +118,8 @@ class ValueStreamController<T> implements StreamController<T> {
   @override
   StreamSink<T> get sink => _delegate.sink;
 
+  /// The stream that this controller is controlling.
+  /// It is a single-subscription [NotReplayValueStream].
   @override
   late final NotReplayValueStream<T> stream =
       _ValueStreamControllerStream(this);
@@ -127,10 +136,10 @@ class _ValueStreamControllerStream<T> extends Stream<T>
 
   @override
   ErrorAndStackTrace? get errorAndStackTrace =>
-      controller._dataOrError.errorAndStacktrace;
+      controller._dataOrError.errorAndStackTrace;
 
   @override
-  ValueWrapper<T>? get valueWrapper => controller._dataOrError.value;
+  ValueWrapper<T>? get valueWrapper => controller._dataOrError.valueWrapper;
 
   @override
   StreamSubscription<T> listen(
