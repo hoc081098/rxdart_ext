@@ -72,6 +72,73 @@ void main() {
         valueController.onResume = onResumeHandler;
         verify(mockController.onResume = onResumeHandler);
       });
+
+      test('add', () {
+        when(mockController.add(1)).thenReturn(null);
+        valueController.add(1);
+        verify(mockController.add(1)).called(1);
+      });
+
+      test('addError', () {
+        final st = StackTrace.current;
+        when(mockController.addError(1, st)).thenReturn(null);
+        valueController.addError(1, st);
+        verify(mockController.addError(1, st)).called(1);
+      });
+
+      test('close', () {
+        when(mockController.close())
+            .thenAnswer((_) => Future<void>.value(null));
+        expect(valueController.close(), completes);
+        verify(mockController.close()).called(1);
+      });
+
+      test('addStream', () {
+        final stream = Stream.value(1);
+        when(mockController.addStream(stream,
+                cancelOnError: anyNamed('cancelOnError')))
+            .thenAnswer((_) => Future<void>.value(null));
+
+        expect(
+            valueController.addStream(stream, cancelOnError: true), completes);
+
+        verify(mockController.addStream(stream,
+                cancelOnError: anyNamed('cancelOnError')))
+            .called(1);
+      });
+
+      test('done', () {
+        when(mockController.done).thenAnswer((_) => Future<void>.value(null));
+        expect(valueController.done, completes);
+        verify(mockController.done).called(1);
+      });
+
+      test('hasListener', () {
+        when(mockController.hasListener).thenReturn(true);
+        expect(valueController.hasListener, true);
+        verify(mockController.hasListener).called(1);
+      });
+
+      test('isClose', () {
+        when(mockController.isClosed).thenReturn(false);
+        expect(valueController.isClosed, false);
+        verify(mockController.isClosed).called(1);
+      });
+
+      test('isPaused', () {
+        when(mockController.isPaused).thenReturn(false);
+        expect(valueController.isPaused, false);
+        verify(mockController.isPaused).called(1);
+      });
+
+      test('sink', () {
+        final sink = StreamController<int>().sink;
+        when(mockController.sink).thenReturn(sink);
+        expect(valueController.sink, sink);
+        verify(mockController.sink).called(1);
+      });
     });
   });
+
+  group('toNotReplayValueStream', () {});
 }
