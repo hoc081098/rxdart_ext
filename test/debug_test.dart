@@ -212,6 +212,33 @@ void main() {
         ]),
       );
     });
+
+    test('pause resume', () async {
+      const logs = [
+        ': DEBUG -> Listened',
+        ': DEBUG -> Paused',
+        ': DEBUG -> Resumed',
+        ': DEBUG -> Event data(1)',
+        ': DEBUG -> Event done',
+        ': DEBUG -> Cancelled',
+      ];
+
+      var i = 0;
+      final subscription = Stream.value(1)
+          .debug(
+            log: (v) {
+              expect(v.endsWith(logs[i++]), isTrue);
+              expect(v.startsWith(dateTimeToStringRegex), isTrue);
+            },
+            identifier: 'DEBUG',
+          )
+          .listen(null);
+      subscription.onData((data) => expect(data, 1));
+
+      subscription.pause();
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+      subscription.resume();
+    });
   });
 
   group('collect', () {
