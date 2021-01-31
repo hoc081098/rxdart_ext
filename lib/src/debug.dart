@@ -115,7 +115,7 @@ extension DebugStreamExtension<T> on Stream<T> {
 }
 
 /// Listen without any handler.
-extension ListenNullStreamExtension<T> on Stream<T> {
+extension CollectStreamExtension<T> on Stream<T> {
   /// Listen without any handler.
   StreamSubscription<T> collect() =>
       _CollectStreamSubscription<T>(listen(null));

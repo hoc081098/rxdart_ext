@@ -268,10 +268,15 @@ void main() {
           controller.add(1);
 
           final subscription = controller.stream.listen(null);
-          subscription.onData((data) {
-            expect(data, 1);
-            subscription.cancel();
-          });
+          subscription.onData(
+            expectAsync1(
+              (data) {
+                expect(data, 1);
+                subscription.cancel();
+              },
+              count: 1,
+            ),
+          );
 
           subscription.pause();
           subscription.resume();
@@ -282,10 +287,15 @@ void main() {
           controller.add(1);
 
           final subscription = controller.stream.listen(null);
-          subscription.onData((data) {
-            expect(data, 1);
-            subscription.cancel();
-          });
+          subscription.onData(
+            expectAsync1(
+              (data) {
+                expect(data, 1);
+                subscription.cancel();
+              },
+              count: 1,
+            ),
+          );
 
           subscription.pause();
           subscription.resume();
@@ -334,10 +344,15 @@ void main() {
       expect(stream.value, 0);
 
       final subscription = stream.listen(null);
-      subscription.onData((data) {
-        expect(data, 1);
-        subscription.cancel();
-      });
+      subscription.onData(
+        expectAsync1(
+          (data) {
+            expect(data, 1);
+            subscription.cancel();
+          },
+          count: 1,
+        ),
+      );
 
       subscription.pause();
       subscription.resume();
