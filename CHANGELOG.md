@@ -1,3 +1,7 @@
+## 0.0.1-nullsafety.6 - Jan 31, 2021
+
+-   Enhance `debug` operator: prints current stacktrace, including location, line and member if not provide the identifier (ie. it is `null`).
+
 ## 0.0.1-nullsafety.5 - Jan 31, 2021
 
 -   Added `ValueStreamController`: like a single-subscription `StreamController` except
