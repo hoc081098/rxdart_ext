@@ -176,6 +176,42 @@ void main() {
         );
       }
     });
+
+    test('trimOutput', () {
+      const logs = [
+        ': DEBUG -> Listened',
+        ': DEBUG -> Event data(This is a long ...ed for test purpose)',
+        ': DEBUG -> Event data(2)',
+        ': DEBUG -> Event error(Exception, )',
+        ': DEBUG -> Event data(3)',
+        ': DEBUG -> Event done',
+        ': DEBUG -> Cancelled',
+      ];
+      var i = 0;
+
+      expect(
+        Rx.concat<String>([
+          Stream.fromIterable(
+              ['This is a long string value, used for test purpose', '2']),
+          Stream.error(Exception(), StackTrace.empty),
+          Stream.value('3'),
+        ]).debug(
+          log: (v) {
+            expect(v.endsWith(logs[i++]), isTrue);
+            expect(v.startsWith(dateTimeToStringRegex), isTrue);
+          },
+          identifier: 'DEBUG',
+          trimOutput: true,
+        ),
+        emitsInOrder(<dynamic>[
+          'This is a long string value, used for test purpose',
+          '2',
+          emitsError(isException),
+          '3',
+          emitsDone,
+        ]),
+      );
+    });
   });
 
   test('collect', () {
