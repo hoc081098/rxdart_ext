@@ -106,15 +106,16 @@ extension DebugStreamExtension<T> on Stream<T> {
 /// Listen without any handler.
 extension ListenNullStreamExtension<T> on Stream<T> {
   /// Listen without any handler.
-  StreamSubscription<T> collect() => CollectStreamSubscription<T>(listen(null));
+  StreamSubscription<T> collect() =>
+      _CollectStreamSubscription<T>(listen(null));
 }
 
 /// A [StreamSubscription] cannot replace any handler.
-class CollectStreamSubscription<T> implements StreamSubscription<T> {
+class _CollectStreamSubscription<T> implements StreamSubscription<T> {
   final StreamSubscription<T> _delegate;
 
-  /// Construct a [CollectStreamSubscription] that delegates all implementation to other [StreamSubscription].
-  CollectStreamSubscription(this._delegate);
+  /// Construct a [_CollectStreamSubscription] that delegates all implementation to other [StreamSubscription].
+  _CollectStreamSubscription(this._delegate);
 
   @override
   Future<E> asFuture<E>([E? futureValue]) => _delegate.asFuture(futureValue);

@@ -214,22 +214,46 @@ void main() {
     });
   });
 
-  test('collect', () {
-    final streamSubscription = Stream.value(1).collect();
-    expect(streamSubscription, isA<StreamSubscription<void>>());
-    expect(streamSubscription, isA<StreamSubscription<int>>());
+  group('collect', () {
+    test(
+        'returns a StreamSubscription, any handlers of this subscription cannot be replaced',
+        () {
+      final streamSubscription = Stream.value(1).collect();
+      expect(streamSubscription, isA<StreamSubscription<void>>());
+      expect(streamSubscription, isA<StreamSubscription<int>>());
 
-    expect(
-      () => streamSubscription.onData((data) {}),
-      throwsStateError,
-    );
-    expect(
-      () => streamSubscription.onError((Object e, StackTrace s) {}),
-      throwsStateError,
-    );
-    expect(
-      () => streamSubscription.onDone(() {}),
-      throwsStateError,
-    );
+      expect(
+        () => streamSubscription.onData((data) {}),
+        throwsStateError,
+      );
+      expect(
+        () => streamSubscription.onError((Object e, StackTrace s) {}),
+        throwsStateError,
+      );
+      expect(
+        () => streamSubscription.onDone(() {}),
+        throwsStateError,
+      );
+    });
+
+    test('pause resume isPaused', () {
+      final subscription = Stream.value(1).collect();
+
+      subscription.pause();
+      expect(subscription.isPaused, isTrue);
+
+      subscription.resume();
+      expect(subscription.isPaused, isFalse);
+    });
+
+    test('asFuture', () {
+      final subscription = Stream.value(1).collect();
+      expect(subscription.asFuture<void>(), completes);
+    });
+
+    test('cancel', () {
+      Stream.value(1).doOnData((v) => expect(true, isFalse)).collect()
+        ..cancel();
+    });
   });
 }
