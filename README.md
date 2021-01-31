@@ -13,4 +13,11 @@ Some extension methods and classes built on top of `RxDart` - `RxDart` extension
 - `ignoreElements`, `ignoreErrors`
 - `mapNotNull`
 - `toSingleSubscription`
-- `NotReplayValueStream`, `ValueSubject`, `NotReplayValueConnectableStream`, `publishValueNotReplay`, `shareValueNotReplay`
+- `NotReplayValueStream`
+    -   Broadcast
+        -   `ValueSubject`
+        -   `NotReplayValueConnectableStream`, `publishValueNotReplay`, `shareValueNotReplay`
+    -   Single-subscription
+        -   `ValueStreamController`
+        -   `toNotReplayValueStream`
+    
