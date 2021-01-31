@@ -294,5 +294,53 @@ void main() {
     });
   });
 
-  group('toNotReplayValueStream', () {});
+  group('toNotReplayValueStream', () {
+    test('forward all events from origin Stream', () {
+      final valueStream = Rx.concat<int>([
+        Stream.fromIterable([1, 2, 3]),
+        Stream.error(Exception()),
+        Stream.value(4),
+      ]).toNotReplayValueStream(0);
+
+      expect(valueStream.value, 0);
+      var i = 1;
+      valueStream.listen(
+        expectAsync1(
+          (data) {
+            expect(data, i);
+
+            expect(valueStream.value, i);
+            expect(valueStream.error, isNull);
+
+            i++;
+          },
+          count: 4,
+        ),
+        onError: expectAsync1(
+          (e) {
+            expect(e, isException);
+
+            expect(valueStream.value, isNull);
+            expect(valueStream.error, e);
+          },
+          count: 1,
+        ),
+        onDone: expectAsync0(() {}, count: 1),
+      );
+    });
+
+    test('pause resume', () {
+      final stream = Stream.value(1).toNotReplayValueStream(0);
+      expect(stream.value, 0);
+
+      final subscription = stream.listen(null);
+      subscription.onData((data) {
+        expect(data, 1);
+        subscription.cancel();
+      });
+
+      subscription.pause();
+      subscription.resume();
+    });
+  });
 }
