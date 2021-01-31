@@ -1,3 +1,9 @@
+## 0.0.1-nullsafety.5 - Jan 31, 2021
+
+-   Added `ValueStreamController`: like a single-subscription `StreamController` except
+    the stream of this controller is a single-subscription `NotReplayValueStream`.
+-   Added `toNotReplayValueStream` extension: converts a `Stream` to a single-subscription `NotReplayValueStream`.
+
 ## 0.0.1-nullsafety.4 - Jan 23, 2021
 
 -   Now, return type of `collect`  is `StreamSubscription<T>`.
