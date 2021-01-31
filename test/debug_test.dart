@@ -11,11 +11,13 @@ void main() {
     test('log all events', () {
       // single
       {
+        const identifier = 'debug_test.dart:26 (main.<fn>.<fn>)';
+
         const logs = [
-          ': Debug -> Listened',
-          ': Debug -> Event data(1)',
-          ': Debug -> Event done',
-          ': Debug -> Cancelled',
+          ': $identifier -> Listened',
+          ': $identifier -> Event data(1)',
+          ': $identifier -> Event done',
+          ': $identifier -> Cancelled',
         ];
 
         var i = 0;
@@ -33,13 +35,15 @@ void main() {
 
       // many
       {
+        const identifier = 'debug_test.dart:51 (main.<fn>.<fn>)';
+
         const logs = [
-          ': Debug -> Listened',
-          ': Debug -> Event data(1)',
-          ': Debug -> Event data(2)',
-          ': Debug -> Event data(3)',
-          ': Debug -> Event done',
-          ': Debug -> Cancelled',
+          ': $identifier -> Listened',
+          ': $identifier -> Event data(1)',
+          ': $identifier -> Event data(2)',
+          ': $identifier -> Event data(3)',
+          ': $identifier -> Event done',
+          ': $identifier -> Cancelled',
         ];
         var i = 0;
 
@@ -56,14 +60,16 @@ void main() {
 
       // many with error
       {
+        const identifier = 'debug_test.dart:81 (main.<fn>.<fn>)';
+
         const logs = [
-          ': Debug -> Listened',
-          ': Debug -> Event data(1)',
-          ': Debug -> Event data(2)',
-          ': Debug -> Event error(Exception, )',
-          ': Debug -> Event data(3)',
-          ': Debug -> Event done',
-          ': Debug -> Cancelled',
+          ': $identifier -> Listened',
+          ': $identifier -> Event data(1)',
+          ': $identifier -> Event data(2)',
+          ': $identifier -> Event error(Exception, )',
+          ': $identifier -> Event data(3)',
+          ': $identifier -> Event done',
+          ': $identifier -> Cancelled',
         ];
         var i = 0;
 
