@@ -1,9 +1,14 @@
 import 'dart:async';
+import 'dart:math' as math;
 
+import 'package:path/path.dart' as path;
 import 'package:rxdart/rxdart.dart'
     show DoStreamTransformer, Kind, Notification;
+import 'package:stack_trace/stack_trace.dart';
 
 extension _NotificationDescriptionExt<T> on Notification<T> {
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
   String get description {
     switch (kind) {
       case Kind.OnData:
@@ -17,20 +22,78 @@ extension _NotificationDescriptionExt<T> on Notification<T> {
   }
 }
 
+extension on Frame {
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  String get formatted {
+    final trimmedFile = path.basename(uri.toString());
+    return '$trimmedFile:$line ($member)';
+  }
+}
+
+extension on String {
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  String take(int n) {
+    if (n < 0) {
+      throw ArgumentError.value(
+        n,
+        'n',
+        'Requested character count is less than zero.',
+      );
+    }
+    return substring(0, math.min(n, length));
+  }
+
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  String takeLast(int n) {
+    if (n < 0) {
+      throw ArgumentError.value(
+        n,
+        'n',
+        'Requested character count is less than zero.',
+      );
+    }
+    return substring(length - math.min(n, length));
+  }
+}
+
 /// Prints received events for all listeners on standard output.
 extension DebugStreamExtension<T> on Stream<T> {
   /// Prints received events for all listeners on standard output.
   /// The [identifier] is printed together with event description to standard output.
   Stream<T> debug({
-    String identifier = 'Debug',
-    void Function(String) log = print,
+    String? identifier,
+    void Function(String)? log = print,
+    bool trimOutput = false,
   }) {
+    if (log == null) {
+      // logging is disabled
+      return this;
+    }
+
+    identifier ??= Trace.current(1).frames.first.formatted;
+
+    @pragma('vm:prefer-inline')
+    @pragma('dart2js:tryInline')
     void logEvent(String content) =>
         log('${DateTime.now()}: $identifier -> $content');
 
     return transform<T>(
       DoStreamTransformer<T>(
-        onEach: (notification) => logEvent('Event ${notification.description}'),
+        onEach: (notification) {
+          const maxEventTextLength = 40;
+
+          final description = notification.description;
+          final descriptionNormalized = description.length >
+                      maxEventTextLength &&
+                  trimOutput
+              ? '${description.take(maxEventTextLength ~/ 2)}...${description.takeLast(maxEventTextLength ~/ 2)}'
+              : description;
+
+          logEvent('Event $descriptionNormalized');
+        },
         onListen: () => logEvent('Listened'),
         onCancel: () => logEvent('Cancelled'),
         onPause: () => logEvent('Paused'),
