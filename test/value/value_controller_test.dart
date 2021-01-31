@@ -12,15 +12,15 @@ import 'value_controller.mocks.dart';
 @GenerateMocks([StreamController])
 void main() {
   group('ValueController', () {
-    late MockStreamController<int> mockController;
-    late ValueStreamController<int> valueController;
-
-    setUp(() {
-      mockController = MockStreamController<int>();
-      valueController = ValueStreamController.mock(mockController, 0);
-    });
-
     group('delegate to StreamController', () {
+      late MockStreamController<int> mockController;
+      late ValueStreamController<int> valueController;
+
+      setUp(() {
+        mockController = MockStreamController<int>();
+        valueController = ValueStreamController.mock(mockController, 0);
+      });
+
       test('get onListen', () {
         when(mockController.onListen).thenReturn(null);
         valueController.onListen;
@@ -136,6 +136,160 @@ void main() {
         when(mockController.sink).thenReturn(sink);
         expect(valueController.sink, sink);
         verify(mockController.sink).called(1);
+      });
+    });
+
+    group('stream', () {
+      test('allows access to latest value', () {
+        {
+          final controller = ValueStreamController(1, sync: true);
+          expect(controller.stream.value, 1);
+
+          for (var i = 0; i < 10; i++) {
+            controller.add(i);
+            expect(controller.stream.requireValue, i);
+            expect(controller.stream.error, isNull);
+          }
+        }
+
+        {
+          final controller = ValueStreamController(1);
+          expect(controller.stream.value, 1);
+
+          for (var i = 0; i < 10; i++) {
+            controller.add(i);
+            expect(controller.stream.requireValue, i);
+            expect(controller.stream.error, isNull);
+          }
+        }
+      });
+
+      test('allows access to latest error', () {
+        {
+          final controller = ValueStreamController(1, sync: true);
+          expect(controller.stream.value, 1);
+
+          for (var i = 0; i < 10; i++) {
+            final st = StackTrace.fromString(i.toString());
+            controller.addError(i, st);
+
+            expect(controller.stream.requireError, i);
+            expect(controller.stream.errorAndStackTrace!.stackTrace, st);
+
+            expect(controller.stream.value, isNull);
+          }
+        }
+
+        {
+          final controller = ValueStreamController(1);
+          expect(controller.stream.value, 1);
+
+          for (var i = 0; i < 10; i++) {
+            final st = StackTrace.fromString(i.toString());
+            controller.addError(i, st);
+
+            expect(controller.stream.requireError, i);
+            expect(controller.stream.errorAndStackTrace!.stackTrace, st);
+
+            expect(controller.stream.value, isNull);
+          }
+        }
+      });
+
+      test("likes normal StreamController's Stream", () {
+        {
+          final controller = ValueStreamController(1, sync: true);
+
+          expect(
+            controller.stream,
+            emitsInOrder(<Object>[
+              2,
+              3,
+              4,
+              emitsError(isException),
+              5,
+              emitsDone,
+            ]),
+          );
+
+          controller.add(2);
+          controller.add(3);
+          controller.add(4);
+          controller.addError(Exception());
+          controller.add(5);
+          controller.close();
+        }
+
+        {
+          final controller = ValueStreamController(1);
+
+          expect(
+            controller.stream,
+            emitsInOrder(<Object>[
+              2,
+              3,
+              4,
+              emitsError(isException),
+              5,
+              emitsDone,
+            ]),
+          );
+
+          controller.add(2);
+          controller.add(3);
+          controller.add(4);
+          controller.addError(Exception());
+          controller.add(5);
+          controller.close();
+        }
+      });
+
+      test('is single-subscription Stream', () {
+        final controller = ValueStreamController(1);
+        expect(controller.stream.isBroadcast, isFalse);
+
+        controller.stream.collect();
+        expect(() => controller.stream.collect(), throwsStateError);
+      });
+
+      test('asBroadcastStream', () {
+        final controller = ValueStreamController(1);
+        final broadcastStream = controller.stream.asBroadcastStream();
+
+        broadcastStream.collect();
+        broadcastStream.collect();
+
+        expect(true, isTrue);
+      });
+
+      test('pause resume', () {
+        {
+          final controller = ValueStreamController(1);
+          controller.add(1);
+
+          final subscription = controller.stream.listen(null);
+          subscription.onData((data) {
+            expect(data, 1);
+            subscription.cancel();
+          });
+
+          subscription.pause();
+          subscription.resume();
+        }
+
+        {
+          final controller = ValueStreamController(1, sync: true);
+          controller.add(1);
+
+          final subscription = controller.stream.listen(null);
+          subscription.onData((data) {
+            expect(data, 1);
+            subscription.cancel();
+          });
+
+          subscription.pause();
+          subscription.resume();
+        }
       });
     });
   });
