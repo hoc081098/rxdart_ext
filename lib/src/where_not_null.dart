@@ -16,7 +16,7 @@ class _WhereNotNullStreamSink<T extends Object>
 /// Extends the Stream class with the ability to convert the source Stream
 /// to a Stream which emits all the non-`null` elements
 /// of this Stream, in their original emission order.
-extension WhereNotNullExtension<T extends Object> on Stream<T?> {
+extension WhereNotNullStreamExtension<T extends Object> on Stream<T?> {
   /// Returns a Stream which emits all the non-`null` elements
   /// of this Stream, in their original emission order.
   ///
