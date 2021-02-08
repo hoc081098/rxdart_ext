@@ -1,3 +1,11 @@
+## 0.0.1-nullsafety.7 - Feb 8, 2021
+
+-   Add `whereNotNull`.
+-   Update `ignoreElements` and `ignoreErrors`.
+-   Update `ForwardingSinkMixin`.
+-   Rename `ListenNullStreamExtension` to `CollectStreamExtension`.
+-   Update docs.
+
 ## 0.0.1-nullsafety.6 - Jan 31, 2021
 
 -   Enhance `debug` operator: prints current stacktrace, including location, line and member if not provide the identifier (ie. it is `null`).
