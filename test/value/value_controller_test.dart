@@ -5,7 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
 
-import 'value_controller.mocks.dart';
+import 'value_controller_test.mocks.dart';
 
 // ignore_for_file: close_sinks
 
