@@ -2,48 +2,41 @@ import 'dart:async';
 
 import 'default_sink.dart';
 
-class _MapNotNullSink<T, R extends Object> extends ForwardingSink<T, R>
-    with ForwardingSinkMixin<T, R> {
-  final R? Function(T) _mapper;
+class _MapNotNullSink<T, R extends Object>
+    with ForwardingSinkMixin<T, R>
+    implements ForwardingSink<T, R> {
+  final R? Function(T) transform;
 
-  _MapNotNullSink(this._mapper);
+  _MapNotNullSink(this.transform);
 
   @override
   void add(EventSink<R> sink, T data) {
-    final mapped = _mapper(data);
-    if (mapped != null) {
-      sink.add(mapped);
+    final value = transform(data);
+    if (value != null) {
+      sink.add(value);
     }
   }
 }
 
-/// Transforms each element of this stream into a new stream event and reject `null` elements.
-/// ### Example
-///
-///     Stream.fromIterable([1, 'two', 3, 'four'])
-///       .mapNotNull((i) => i is int ? i + 1 : null)
-///       .listen(print); // prints 2, 4
-///
-/// #### as opposed to:
-///
-///     Stream.fromIterable([1, 'two', 3, 'four'])
-///       .map((i) => i is int ? i + 1 : null)
-///       .where((i) => i != null)
-///       .listen(print); // prints 2, 4
-extension MapNotNullStreamExtension<T> on Stream<T> {
-  /// Transforms each element of this stream into a new stream event and reject `null` elements.
+/// Extends the Stream class with the ability to convert the source Stream
+/// to a Stream containing only the non-`null` results
+/// of applying the given [transform] function to each element of this Stream.
+extension MapNotNullExtension<T> on Stream<T> {
+  /// Returns a Stream containing only the non-`null` results
+  /// of applying the given [transform] function to each element of this Stream.
+  ///
   /// ### Example
   ///
-  ///     Stream.fromIterable([1, 'two', 3, 'four'])
-  ///       .mapNotNull((i) => i is int ? i + 1 : null)
-  ///       .listen(print); // prints 2, 4
+  ///     Stream.fromIterable(['1', 'two', '3', 'four'])
+  ///       .mapNotNull(int.tryParse)
+  ///       .listen(print); // prints 1, 3
   ///
-  /// #### as opposed to:
+  ///     // equivalent to:
   ///
-  ///     Stream.fromIterable([1, 'two', 3, 'four'])
-  ///       .map((i) => i is int ? i + 1 : null)
-  ///       .where((i) => i != null)
-  ///       .listen(print); // prints 2, 4
-  Stream<R> mapNotNull<R extends Object>(R? Function(T) mapper) =>
-      forwardStream(this, _MapNotNullSink(mapper));
+  ///     Stream.fromIterable(['1', 'two', '3', 'four'])
+  ///       .map(int.tryParse)
+  ///       .whereType<int>()
+  ///       .listen(print); // prints 1, 3
+  Stream<R> mapNotNull<R extends Object>(R? Function(T) transform) =>
+      forwardStream(this, _MapNotNullSink(transform));
 }

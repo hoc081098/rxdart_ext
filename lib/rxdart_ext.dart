@@ -14,3 +14,4 @@ export 'src/value/not_replay_value_connectable_stream.dart';
 export 'src/value/not_replay_value_stream.dart';
 export 'src/value/value_controller.dart';
 export 'src/value/value_subject.dart';
+export 'src/where_not_null.dart';
