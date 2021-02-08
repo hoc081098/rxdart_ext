@@ -6,6 +6,8 @@ import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: unnecessary_parenthesis
 
+// ignore_for_file: extra_positional_arguments_could_be_named
+
 class _FakeStreamSink<S> extends _i1.Fake implements _i2.StreamSink<S> {}
 
 /// A class which mocks [StreamController].
