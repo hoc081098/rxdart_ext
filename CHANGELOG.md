@@ -1,3 +1,7 @@
+## Next release
+
+-   Add `doOn` extension.
+
 ## 0.0.1-nullsafety.7 - Feb 8, 2021
 
 -   Add `whereNotNull`.
