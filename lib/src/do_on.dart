@@ -32,12 +32,3 @@ extension DoOnStreamExtensions<T> on Stream<T> {
         ),
       );
 }
-
-void main() {
-  Stream.fromIterable([1, 2, 3, 4])
-      .doOn(
-        data: print,
-        error: (e, s) => print(e),
-      )
-      .listen((event) {});
-}
