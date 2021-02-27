@@ -1,6 +1,7 @@
-## Next release
+## 0.0.1 - Feb 28, 2021
 
 -   Add `doOn` extension.
+-   Update dependencies to latest version.
 
 ## 0.0.1-nullsafety.7 - Feb 8, 2021
 
