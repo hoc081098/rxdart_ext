@@ -33,7 +33,7 @@ jobs:
         run: pub run test/rxdart_ext_test.dart
 
       - name: Start Observatory
-        run: dart --disable-service-auth-codes --enable-vm-service=8111 --pause-isolates-on-exit test/rxdart_ext_test.dart &
+        run: dart --disable-service-auth-codes --enable-vm-service=8111 --pause-isolates-on-exit --enable-asserts test/rxdart_ext_test.dart &
 
       - name: Collect coverage
         run: nohup pub global run coverage:collect_coverage --port=8111 --out=coverage.json --wait-paused --resume-isolates
