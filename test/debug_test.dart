@@ -279,8 +279,7 @@ void main() {
     });
 
     test('cancel', () {
-      Stream.value(1).doOnData((v) => expect(true, isFalse)).collect()
-        ..cancel();
+      Stream.value(1).doOnData((v) => expect(true, isFalse)).collect().cancel();
     });
   });
 }

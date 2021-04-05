@@ -54,7 +54,7 @@ void main() {
           Stream<int>.fromIterable(<int>[1, 2, 3]).publishValueNotReplay(0);
 
       expect(stream.requireValue, 0);
-      stream.connect()..cancel(); // ignore: unawaited_futures
+      stream.connect().cancel(); // ignore: unawaited_futures
 
       expect(stream, neverEmits(anything));
       expect(stream.requireValue, 0);
