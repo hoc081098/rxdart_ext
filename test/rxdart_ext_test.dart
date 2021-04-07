@@ -5,6 +5,7 @@ import 'do_on_test.dart' as do_on_test;
 import 'ignore_test.dart' as ignore_test;
 import 'map_not_null_test.dart' as map_not_null_test;
 import 'to_single_subscription_test.dart' as to_single_subscription_test;
+import 'void_test.dart' as void_test;
 import 'where_not_null_test.dart' as where_not_null_test;
 
 import 'value/not_replay_value_connectable_stream_tests.dart'
@@ -20,6 +21,7 @@ void main() {
   ignore_test.main();
   map_not_null_test.main();
   to_single_subscription_test.main();
+  void_test.main();
   where_not_null_test.main();
 
   not_replay_value_connectable_stream_tests.main();
