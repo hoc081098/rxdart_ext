@@ -5,6 +5,15 @@ import 'package:rxdart/rxdart.dart';
 
 // ignore_for_file: public_member_api_docs
 
+class APIContractViolationError extends Error {
+  final String message;
+
+  APIContractViolationError(this.message);
+
+  @override
+  String toString() => 'APIContractViolationError: $message';
+}
+
 @sealed
 class Single<T> extends Stream<T> {
   final Stream<T> _stream;
@@ -50,7 +59,7 @@ class Single<T> extends Stream<T> {
     subscription.onData((event) {
       if (hasValue) {
         subscription.cancel();
-        throw StateError('Single contains only single value');
+        throw APIContractViolationError('Single contains only single value');
       } else {
         hasValue = true;
       }
