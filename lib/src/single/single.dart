@@ -21,6 +21,8 @@ class Single<T> extends Stream<T> {
 
   Single._safe(this._stream) : _isSafe = true;
 
+  Single._unsafe(this._stream) : _isSafe = false;
+
   @override
   bool get isBroadcast => _stream.isBroadcast;
 
@@ -56,15 +58,23 @@ class Single<T> extends Stream<T> {
     }
 
     var hasValue = false;
-    subscription.onData((event) {
-      if (hasValue) {
-        subscription.cancel();
-        throw APIContractViolationError('Single contains only single value');
-      } else {
-        hasValue = true;
-      }
-      onData?.call(event);
-    });
+    subscription
+      ..onData((event) {
+        if (hasValue) {
+          subscription.cancel();
+          throw APIContractViolationError('Has more one element');
+        } else {
+          hasValue = true;
+        }
+        onData?.call(event);
+      })
+      ..onDone(() {
+        if (!hasValue) {
+          throw APIContractViolationError('Has no element');
+        } else {
+          onDone?.call();
+        }
+      });
 
     return subscription;
   }
@@ -83,6 +93,13 @@ class Single<T> extends Stream<T> {
       Single._safe(_stream.map(convert));
 }
 
+extension StreamToSingle<T> on Stream<T> {
+  Single<T> singleOrError() {
+    final self = this;
+    return self is Single<T> ? self : Single._unsafe(self);
+  }
+}
+
 class Repo {
   Single<String> getSomething() => Single.fromCallable(
         () => Future.delayed(
@@ -93,6 +110,8 @@ class Repo {
 }
 
 void main() {
+  Stream<void>.fromIterable([1, 2, 3]).singleOrError().listen(print);
+
   Repo().getSomething().listen(print);
   Stream.value(1)
       .exhaustMap(
