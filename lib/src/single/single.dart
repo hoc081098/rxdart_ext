@@ -62,7 +62,8 @@ class Single<T> extends Stream<T> {
       ..onData((event) {
         if (hasValue) {
           subscription.cancel();
-          throw APIContractViolationError('Has more one element');
+          throw APIContractViolationError(
+              'Stream contains more than one element.');
         } else {
           hasValue = true;
         }
@@ -70,7 +71,8 @@ class Single<T> extends Stream<T> {
       })
       ..onDone(() {
         if (!hasValue) {
-          throw APIContractViolationError('Has no element');
+          throw APIContractViolationError(
+              "Stream doesn't contain any elements.");
         } else {
           onDone?.call();
         }
@@ -94,27 +96,9 @@ class Single<T> extends Stream<T> {
 }
 
 extension StreamToSingle<T> on Stream<T> {
+  /// Throws [APIContractViolationError] if this Stream does not emit exactly one element before successfully completing.
   Single<T> singleOrError() {
     final self = this;
     return self is Single<T> ? self : Single._unsafe(self);
   }
-}
-
-class Repo {
-  Single<String> getSomething() => Single.fromCallable(
-        () => Future.delayed(
-          const Duration(seconds: 2),
-          () => 'something',
-        ),
-      );
-}
-
-void main() {
-  Stream<void>.fromIterable([1, 2, 3]).singleOrError().listen(print);
-
-  Repo().getSomething().listen(print);
-  Stream.value(1)
-      .exhaustMap(
-          (value) => Repo().getSomething().map((event) => '$event $value'))
-      .listen(print);
 }
