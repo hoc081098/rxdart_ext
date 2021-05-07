@@ -1,4 +1,4 @@
-## 0.1.0 - TODO
+## 0.1.0 - May 7, 2021
 
 -   Support `rxdart: ^0.27.0`.
 -   Add `asVoid`.
