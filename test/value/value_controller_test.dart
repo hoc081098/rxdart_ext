@@ -147,7 +147,7 @@ void main() {
 
           for (var i = 0; i < 10; i++) {
             controller.add(i);
-            expect(controller.stream.requireValue, i);
+            expect(controller.stream.error, i);
             expect(controller.stream.error, isNull);
           }
         }
@@ -158,7 +158,7 @@ void main() {
 
           for (var i = 0; i < 10; i++) {
             controller.add(i);
-            expect(controller.stream.requireValue, i);
+            expect(controller.stream.error, i);
             expect(controller.stream.error, isNull);
           }
         }
@@ -173,8 +173,8 @@ void main() {
             final st = StackTrace.fromString(i.toString());
             controller.addError(i, st);
 
-            expect(controller.stream.requireError, i);
-            expect(controller.stream.errorAndStackTrace!.stackTrace, st);
+            expect(controller.stream.error, i);
+            expect(controller.stream.stackTrace, st);
 
             expect(controller.stream.value, isNull);
           }
@@ -188,8 +188,8 @@ void main() {
             final st = StackTrace.fromString(i.toString());
             controller.addError(i, st);
 
-            expect(controller.stream.requireError, i);
-            expect(controller.stream.errorAndStackTrace!.stackTrace, st);
+            expect(controller.stream.error, i);
+            expect(controller.stream.stackTrace, st);
 
             expect(controller.stream.value, isNull);
           }

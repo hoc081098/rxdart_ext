@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:rxdart/rxdart.dart'
-    show ErrorAndStackTrace, PublishSubject, Subject, ValueWrapper;
+    show ErrorAndStackTrace, PublishSubject, Subject, ValueStreamError;
+import 'package:rxdart_ext/src/value/not_replay_value_stream_mixin.dart';
 
 import 'not_replay_value_stream.dart';
 import 'stream_event.dart';
@@ -29,7 +30,9 @@ import 'stream_event.dart';
 ///
 ///     subject.add(2);
 ///     subject.close();
-class ValueSubject<T> extends Subject<T> implements NotReplayValueStream<T> {
+class ValueSubject<T> extends Subject<T>
+    with NotReplayValueStreamMixin<T>
+    implements NotReplayValueStream<T> {
   final StreamEvent<T> _dataOrError;
 
   ValueSubject._(
@@ -69,18 +72,12 @@ class ValueSubject<T> extends Subject<T> implements NotReplayValueStream<T> {
       _dataOrError.onError(ErrorAndStackTrace(error, stackTrace));
 
   @override
-  ValueWrapper<T>? get valueWrapper => _dataOrError.valueWrapper;
-
-  @override
-  ErrorAndStackTrace? get errorAndStackTrace => _dataOrError.errorAndStackTrace;
-
-  @override
   Subject<R> createForwardingSubject<R>({
     void Function()? onListen,
     void Function()? onCancel,
     bool sync = false,
   }) =>
-      PublishSubject(
+      PublishSubject<R>(
         onListen: onListen,
         onCancel: onCancel,
         sync: sync,
@@ -88,4 +85,7 @@ class ValueSubject<T> extends Subject<T> implements NotReplayValueStream<T> {
 
   @override
   NotReplayValueStream<T> get stream => this;
+
+  @override
+  StreamEvent<T> get event => _dataOrError;
 }

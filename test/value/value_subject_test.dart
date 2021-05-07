@@ -299,7 +299,7 @@ void main() {
       void test(int expectedError) {
         expect(subject.value, null);
         expect(subject.hasValue, isFalse);
-        expect(subject.requireError, expectedError);
+        expect(subject.error, expectedError);
         expect(subject.hasError, isTrue);
       }
 

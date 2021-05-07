@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart' show ErrorAndStackTrace, ValueWrapper;
+import 'package:rxdart/rxdart.dart'
+    show ErrorAndStackTrace, ValueStreamError, ValueWrapper;
+import 'package:rxdart_ext/src/value/not_replay_value_stream_mixin.dart';
 
 import 'not_replay_value_stream.dart';
 import 'stream_event.dart';
@@ -126,6 +128,7 @@ class ValueStreamController<T> implements StreamController<T> {
 }
 
 class _ValueStreamControllerStream<T> extends Stream<T>
+    with NotReplayValueStreamMixin<T>
     implements NotReplayValueStream<T> {
   final ValueStreamController<T> controller;
 
@@ -133,13 +136,6 @@ class _ValueStreamControllerStream<T> extends Stream<T>
 
   @override
   bool get isBroadcast => false;
-
-  @override
-  ErrorAndStackTrace? get errorAndStackTrace =>
-      controller._dataOrError.errorAndStackTrace;
-
-  @override
-  ValueWrapper<T>? get valueWrapper => controller._dataOrError.valueWrapper;
 
   @override
   StreamSubscription<T> listen(
@@ -154,6 +150,9 @@ class _ValueStreamControllerStream<T> extends Stream<T>
         onDone: onDone,
         cancelOnError: cancelOnError,
       );
+
+  @override
+  StreamEvent<T> get event => controller._dataOrError;
 }
 
 /// Convert this [Stream] to a single-subscription [NotReplayValueStream].

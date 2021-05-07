@@ -1,3 +1,7 @@
+## 0.1.0 - TODO
+
+-   Support `rxdart: ^0.27.0`.
+
 ## 0.0.1 - Feb 28, 2021
 
 -   Add `doOn` extension.
