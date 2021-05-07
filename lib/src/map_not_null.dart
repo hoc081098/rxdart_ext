@@ -21,7 +21,7 @@ class _MapNotNullSink<T, R extends Object>
 /// Extends the Stream class with the ability to convert the source Stream
 /// to a Stream containing only the non-`null` results
 /// of applying the given [transform] function to each element of this Stream.
-extension MapNotNullExtension<T> on Stream<T> {
+extension MapNotNullStreamExtension<T> on Stream<T> {
   /// Returns a Stream containing only the non-`null` results
   /// of applying the given [transform] function to each element of this Stream.
   ///
