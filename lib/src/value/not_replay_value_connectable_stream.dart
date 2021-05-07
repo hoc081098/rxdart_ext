@@ -1,13 +1,11 @@
 import 'dart:async';
 
 import 'package:rxdart/rxdart.dart'
-    show
-        ConnectableStream,
-        ConnectableStreamSubscription,
-        ErrorAndStackTrace,
-        ValueWrapper;
+    show ConnectableStream, ConnectableStreamSubscription;
 
 import 'not_replay_value_stream.dart';
+import 'not_replay_value_stream_mixin.dart';
+import 'stream_event.dart';
 import 'value_subject.dart';
 
 /// A [ConnectableStream] that converts a single-subscription Stream into
@@ -15,6 +13,7 @@ import 'value_subject.dart';
 ///
 /// See [NotReplayValueStream].
 class NotReplayValueConnectableStream<T> extends ConnectableStream<T>
+    with NotReplayValueStreamMixin<T>
     implements NotReplayValueStream<T> {
   final ValueSubject<T> _subject;
   final Stream<T> _source;
@@ -39,15 +38,14 @@ class NotReplayValueConnectableStream<T> extends ConnectableStream<T>
     _used = true;
   }
 
-  ConnectableStreamSubscription<T> _connect() =>
-      ConnectableStreamSubscription<T>(
-        _source.listen(
-          _subject.add,
-          onError: _subject.addError,
-          onDone: _subject.close,
-        ),
-        _subject,
-      );
+  late final _connection = ConnectableStreamSubscription<T>(
+    _source.listen(
+      _subject.add,
+      onError: _subject.addError,
+      onDone: _subject.close,
+    ),
+    _subject,
+  );
 
   @override
   NotReplayValueStream<T> autoConnect(
@@ -55,7 +53,7 @@ class NotReplayValueConnectableStream<T> extends ConnectableStream<T>
     _checkUsed();
 
     _subject.onListen = () {
-      final subscription = _connect();
+      final subscription = _connection;
       connection?.call(subscription);
     };
     _subject.onCancel = null;
@@ -67,25 +65,22 @@ class NotReplayValueConnectableStream<T> extends ConnectableStream<T>
   StreamSubscription<T> connect() {
     _checkUsed();
     _subject.onListen = _subject.onCancel = null;
-    return _connect();
+    return _connection;
   }
 
   @override
   NotReplayValueStream<T> refCount() {
     _checkUsed();
-    late ConnectableStreamSubscription<T> subscription;
+    ConnectableStreamSubscription<T>? subscription;
 
-    _subject.onListen = () => subscription = _connect();
-    _subject.onCancel = () => subscription.cancel();
+    _subject.onListen = () => subscription = _connection;
+    _subject.onCancel = () => subscription?.cancel();
 
     return _subject;
   }
 
   @override
-  ErrorAndStackTrace? get errorAndStackTrace => _subject.errorAndStackTrace;
-
-  @override
-  ValueWrapper<T>? get valueWrapper => _subject.valueWrapper;
+  StreamEvent<T> get event => _subject.event;
 }
 
 /// Extension that converts a [Stream] into [NotReplayValueConnectableStream] and [NotReplayValueStream].

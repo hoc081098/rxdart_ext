@@ -29,7 +29,7 @@ void main() {
       final stream = MockStream(Stream.fromIterable(const [1, 2, 3]));
       final connectableStream = NotReplayValueConnectableStream(stream, 0);
 
-      expect(connectableStream.requireValue, 0);
+      expect(connectableStream.value, 0);
 
       expect(stream.listenCount, 0);
       connectableStream.connect();
@@ -42,22 +42,22 @@ void main() {
         0,
       );
 
-      expect(stream.requireValue, 0);
+      expect(stream.value, 0);
       stream.connect();
 
       await expectLater(stream, emitsInOrder(<int>[1, 2, 3]));
-      expect(stream.requireValue, 3);
+      expect(stream.value, 3);
     });
 
     test('stops emitting after the connection is cancelled', () async {
       final stream =
           Stream<int>.fromIterable(<int>[1, 2, 3]).publishValueNotReplay(0);
 
-      expect(stream.requireValue, 0);
+      expect(stream.value, 0);
       stream.connect().cancel(); // ignore: unawaited_futures
 
       expect(stream, neverEmits(anything));
-      expect(stream.requireValue, 0);
+      expect(stream.value, 0);
     });
 
     test('multicasts a single-subscription stream', () async {
@@ -66,7 +66,7 @@ void main() {
         0,
       ).autoConnect();
 
-      expect(stream.requireValue, 0);
+      expect(stream.value, 0);
 
       expect(stream, emitsInOrder(<int>[1, 2, 3]));
       expect(stream, emitsInOrder(<int>[1, 2, 3]));
@@ -80,7 +80,7 @@ void main() {
       final stream =
           Stream.fromIterable(const [1, 2, 3]).publishValueNotReplay(0);
 
-      expect(stream.requireValue, 0);
+      expect(stream.value, 0);
       stream.connect();
 
       expect(stream, emitsInOrder(<int>[1, 2, 3]));
@@ -94,7 +94,7 @@ void main() {
     test('refcount automatically connects', () async {
       final stream =
           Stream.fromIterable(const [1, 2, 3]).shareValueNotReplay(0);
-      expect(stream.requireValue, 0);
+      expect(stream.value, 0);
 
       expect(stream, emitsInOrder(const <int>[1, 2, 3]));
       expect(stream, emitsInOrder(const <int>[1, 2, 3]));
@@ -109,9 +109,9 @@ void main() {
           .publishValueNotReplay(0)
           .autoConnect(connection: (subscription) => subscription.cancel());
 
-      expect(stream.requireValue, 0);
+      expect(stream.value, 0);
       expect(await stream.isEmpty, true);
-      expect(stream.requireValue, 0);
+      expect(stream.value, 0);
     });
 
     test('refCount cancels source subscription when no listeners remain',
