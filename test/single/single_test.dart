@@ -11,13 +11,26 @@ class Repo {
 }
 
 void main() {
-  test('singleOrError', () {
-    Stream<void>.fromIterable([1, 2, 3]).singleOrError().listen(print);
+  test('singleOrError', () async {
+    final s = PublishSubject<int>();
 
-    // Repo().getSomething().listen(print);
-    // Stream.value(1)
-    //     .exhaustMap(
-    //         (value) => Repo().getSomething().map((event) => '$event $value'))
-    //     .listen(print);
+    s.singleOrError().debug(identifier: '1 >>>>').collect();
+    s.add(1);
+    s.singleOrError().debug(identifier: '2 >>>>').collect();
+    s.add(2);
+    s.close();
+
+    Stream<void>.fromIterable([1, 2, 3])
+        .singleOrError()
+        .onErrorResumeNext(Stream.empty())
+        .listen(print);
+
+    Repo().getSomething().listen(print);
+    Stream.value(1)
+        .exhaustMap(
+            (value) => Repo().getSomething().map((event) => '$event $value'))
+        .listen(print);
+
+    await Future<void>.delayed(const Duration(seconds: 5));
   });
 }

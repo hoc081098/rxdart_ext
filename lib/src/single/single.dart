@@ -1,85 +1,38 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/rxdart.dart' show Rx;
 
-// ignore_for_file: public_member_api_docs
+import '../error/api_contract_violation_error.dart';
 
-class APIContractViolationError extends Error {
-  final String message;
-
-  APIContractViolationError(this.message);
-
-  @override
-  String toString() => 'APIContractViolationError: $message';
-}
-
+/// TODO
 @sealed
-class Single<T> extends Stream<T> {
+class Single<T> extends StreamView<T> {
   final Stream<T> _stream;
-  final bool _isSafe;
 
-  Single._safe(this._stream) : _isSafe = true;
+  Single._safe(Stream<T> source)
+      : _stream = source,
+        super(source);
 
-  Single._unsafe(this._stream) : _isSafe = false;
+  factory Single._unsafe(Stream<T> source) =>
+      Single._safe(_buildStream(source));
 
-  @override
-  bool get isBroadcast => _stream.isBroadcast;
-
+  /// TODO
   factory Single.value(T value) => Single._safe(Stream.value(value));
 
+  /// TODO
   factory Single.fromCallable(FutureOr<T> Function() callable,
           {bool reusable = false}) =>
       Single._safe(Rx.fromCallable<T>(callable, reusable: reusable));
 
+  /// TODO
   factory Single.timer(T value, Duration duration) =>
       Single._safe(Rx.timer(value, duration));
 
+  /// TODO
   factory Single.defer(Single<T> Function() streamFactory,
           {bool reusable = false}) =>
       Single._safe(Rx.defer(streamFactory, reusable: reusable));
-
-  @override
-  StreamSubscription<T> listen(
-    void Function(T event)? onData, {
-    Function? onError,
-    void Function()? onDone,
-    bool? cancelOnError,
-  }) {
-    final subscription = _stream.listen(
-      null,
-      onError: onError,
-      onDone: onDone,
-      cancelOnError: cancelOnError,
-    );
-
-    if (_isSafe) {
-      return subscription..onData(onData);
-    }
-
-    var hasValue = false;
-    subscription
-      ..onData((event) {
-        if (hasValue) {
-          subscription.cancel();
-          throw APIContractViolationError(
-              'Stream contains more than one element.');
-        } else {
-          hasValue = true;
-        }
-        onData?.call(event);
-      })
-      ..onDone(() {
-        if (!hasValue) {
-          throw APIContractViolationError(
-              "Stream doesn't contain any elements.");
-        } else {
-          onDone?.call();
-        }
-      });
-
-    return subscription;
-  }
 
   @override
   Single<T> distinct([bool Function(T previous, T next)? equals]) => this;
@@ -93,8 +46,58 @@ class Single<T> extends Stream<T> {
   @override
   Single<S> map<S>(S Function(T event) convert) =>
       Single._safe(_stream.map(convert));
+
+  static Stream<T> _buildStream<T>(Stream<T> source) {
+    final controller = source.isBroadcast
+        ? StreamController<T>.broadcast(sync: true)
+        : StreamController<T>(sync: true);
+    StreamSubscription<T>? subscription;
+
+    controller.onListen = () {
+      var hasValue = false;
+
+      subscription = source.listen(
+        (data) {
+          if (hasValue) {
+            subscription!.cancel();
+            subscription = null;
+
+            controller.addError(APIContractViolationError(
+                'Stream contains more than one element.'));
+            controller.close();
+            return;
+          }
+
+          hasValue = true;
+          controller.add(data);
+        },
+        onError: controller.addError,
+        onDone: () {
+          if (!hasValue) {
+            controller.addError(APIContractViolationError(
+                "Stream doesn't contain any elements."));
+          }
+          controller.close();
+        },
+      );
+
+      if (!source.isBroadcast) {
+        controller
+          ..onPause = subscription!.pause
+          ..onResume = subscription!.resume;
+      }
+    };
+    controller.onCancel = () {
+      final toCancel = subscription;
+      subscription = null;
+      return toCancel?.cancel();
+    };
+
+    return controller.stream;
+  }
 }
 
+/// TODO
 extension StreamToSingle<T> on Stream<T> {
   /// Throws [APIContractViolationError] if this Stream does not emit exactly one element before successfully completing.
   Single<T> singleOrError() {
