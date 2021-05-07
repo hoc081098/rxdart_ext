@@ -5,7 +5,7 @@ import 'package:rxdart/rxdart.dart' show Rx;
 
 import '../error/api_contract_violation_error.dart';
 
-/// TODO
+/// A Stream which emits a single data event before completing.
 @sealed
 class Single<T> extends StreamView<T> {
   final Stream<T> _stream;
@@ -17,7 +17,7 @@ class Single<T> extends StreamView<T> {
   factory Single._unsafe(Stream<T> source) =>
       Single._safe(_buildStream(source));
 
-  /// TODO
+  /// Creates a [Single] which emits a single data event of [value] before completing.
   factory Single.value(T value) => Single._safe(Stream.value(value));
 
   /// TODO
