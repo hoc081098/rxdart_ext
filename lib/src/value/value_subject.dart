@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:rxdart/rxdart.dart'
-    show ErrorAndStackTrace, PublishSubject, Subject, ValueStreamError;
-import 'package:rxdart_ext/src/value/not_replay_value_stream_mixin.dart';
+    show ErrorAndStackTrace, PublishSubject, Subject;
 
 import 'not_replay_value_stream.dart';
+import 'not_replay_value_stream_mixin.dart';
 import 'stream_event.dart';
 
 /// A special [StreamController] that captures the latest item that has been

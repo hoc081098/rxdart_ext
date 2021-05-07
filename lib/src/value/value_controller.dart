@@ -1,11 +1,10 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart'
-    show ErrorAndStackTrace, ValueStreamError, ValueWrapper;
-import 'package:rxdart_ext/src/value/not_replay_value_stream_mixin.dart';
+import 'package:rxdart/rxdart.dart' show ErrorAndStackTrace;
 
 import 'not_replay_value_stream.dart';
+import 'not_replay_value_stream_mixin.dart';
 import 'stream_event.dart';
 
 /// A controller with a [stream] that supports only one single subscriber.

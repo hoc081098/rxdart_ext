@@ -26,7 +26,7 @@ extension DoOnStreamExtensions<T> on Stream<T> {
           onPause: pause,
           onResume: resume,
           onData: data,
-          onError: error == null ? null : (e, s) => error(e, s!),
+          onError: error,
           onDone: done,
           onEach: each,
         ),
