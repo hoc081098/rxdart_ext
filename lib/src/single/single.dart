@@ -6,6 +6,7 @@ import 'package:rxdart/rxdart.dart';
 import '../error/api_contract_violation_error.dart';
 
 /// A Stream which emits a single data event or single error event before completing.
+///
 /// ```text
 /// Success case: ------(*)-------------------------|---
 ///                    data                        done
@@ -27,6 +28,7 @@ class Single<T> extends StreamView<T> {
   /// Creates a [Single] which emits a single data event of [value] before completing.
   factory Single.value(T value) => Single._safe(Stream.value(value));
 
+  /// Creates a [Single] which emits a single error event before completing.
   factory Single.error(Object error, [StackTrace? stackTrace]) =>
       Single._safe(Stream.error(error, stackTrace));
 
