@@ -1,4 +1,3 @@
-
 class APIContractViolationError extends Error {
   final String message;
 
