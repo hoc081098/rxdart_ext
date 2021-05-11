@@ -26,22 +26,47 @@ class Single<T> extends StreamView<T> {
       Single._safe(_buildStream(source));
 
   /// Creates a [Single] which emits a single data event of [value] before completing.
+  ///
+  /// See [Stream.value].
   factory Single.value(T value) => Single._safe(Stream.value(value));
 
   /// Creates a [Single] which emits a single error event before completing.
+  ///
+  /// See [Stream.error].
   factory Single.error(Object error, [StackTrace? stackTrace]) =>
       Single._safe(Stream.error(error, stackTrace));
 
-  /// TODO
+  /// Creates a [Single] that, when listening to it, calls a function you specify
+  /// and then emits the value returned from that function.
+  ///
+  /// If result from invoking [callable] function:
+  /// - Is a [Future]: when the future completes, this [Single] will fire one event, either
+  ///   data or error, and then close with a done-event.
+  /// - Is a [T]: this [Single] emits a single data event and then completes with a done event.
+  ///
+  /// By default, this [Single] is a single-subscription Stream. However, it's possible
+  /// to make it reusable.
+  ///
+  /// [ReactiveX doc](http://reactivex.io/documentation/operators/from.html).
+  ///
+  /// See [Rx.fromCallable] and [FromCallableStream].
   factory Single.fromCallable(FutureOr<T> Function() callable,
           {bool reusable = false}) =>
       Single._safe(Rx.fromCallable<T>(callable, reusable: reusable));
 
-  /// TODO
+  /// Creates a [Single] which emits the given value after a specified amount of time.
+  ///
+  /// See [Rx.timer] and [TimerStream].
   factory Single.timer(T value, Duration duration) =>
       Single._safe(Rx.timer(value, duration));
 
-  /// TODO
+  /// The defer factory waits until an observer subscribes to it, and then it
+  /// creates a [Single] with the given factory function.
+  ///
+  /// By default, this [Single] is a single-subscription Stream. However, it's possible
+  /// to make it reusable.
+  ///
+  /// See [Rx.defer] and [DeferStream].
   factory Single.defer(Single<T> Function() streamFactory,
           {bool reusable = false}) =>
       Single._safe(Rx.defer(streamFactory, reusable: reusable));
