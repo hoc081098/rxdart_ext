@@ -1,3 +1,4 @@
+import 'package:dart_either/dart_either.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
 
@@ -10,9 +11,23 @@ class Repo {
       );
 }
 
+Future<void> singleRule<T>(Single<T> single, Either<Object, T> e) {
+  return expectLater(
+    single,
+    emitsInOrder(<dynamic>[
+      e.fold((e) => emitsError(e), (v) => emits(v)),
+      emitsDone,
+    ]),
+  );
+}
+
 void main() {
   test('singleOrError', () async {
-    Single<int>.error(1).flatMapSingle((i) => Single<void>.error(i + 1)).debug().collect();
+    await singleRule(Single.value(1), Either.right(1));
+    await singleRule(
+      Single<int>.error(Exception()),
+      Either<Object, int>.left(isA<Exception>()),
+    );
 
     return;
 
