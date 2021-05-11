@@ -158,6 +158,6 @@ extension StreamToSingle<T> on Stream<T> {
   /// Throws [APIContractViolationError] if this Stream does not emit exactly one element before successfully completing.
   Single<T> singleOrError() {
     final self = this;
-    return self is Single<T> ? self : Single._safe(self);
+    return self is Single<T> ? self : Single._unsafe(self);
   }
 }
