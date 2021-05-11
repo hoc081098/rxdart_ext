@@ -84,6 +84,10 @@ class Single<T> extends StreamView<T> {
   Single<S> map<S>(S Function(T event) convert) =>
       Single._safe(_stream.map(convert));
 
+  @override
+  Single<E> asyncMap<E>(FutureOr<E> Function(T event) convert) =>
+      Single._safe(_stream.asyncMap(convert));
+
   static Stream<T> _buildStream<T>(Stream<T> source) {
     final controller = source.isBroadcast
         ? StreamController<T>.broadcast(sync: true)
@@ -173,13 +177,28 @@ extension on Object? {
   bool get _isNotNull => !_isNull;
 }
 
-extension FlatMapSingleExtensions<T> on Single<T> {
+extension FlatMapSingleExtension<T> on Single<T> {
   Single<R> flatMapSingle<R>(Single<R> Function(T) transform) =>
       Single._safe(flatMap(transform));
 }
 
+extension AsyncExpandSingleExtension<T> on Single<T> {
+  Single<R> asyncExpandSingle<R>(Single<R> Function(T) transform) =>
+      Single._safe(asyncExpand(transform));
+}
+
+extension SwitchMapSingleExtension<T> on Single<T> {
+  Single<R> switchMapSingle<R>(Single<R> Function(T) transform) =>
+      Single._safe(switchMap(transform));
+}
+
+extension ExhaustMapSingleExtension<T> on Single<T> {
+  Single<R> exhaustMapSingle<R>(Single<R> Function(T) transform) =>
+      Single._safe(ExhaustMapStreamTransformer(transform).bind(this));
+}
+
 /// TODO
-extension StreamToSingle<T> on Stream<T> {
+extension ToSingleStreamExtension<T> on Stream<T> {
   /// Throws [APIContractViolationError] if this Stream does not emit exactly one element before successfully completing.
   Single<T> singleOrError() {
     final self = this;

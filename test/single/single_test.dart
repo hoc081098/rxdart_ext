@@ -21,12 +21,50 @@ Future<void> singleRule<T>(Single<T> single, Either<Object, T> e) {
   );
 }
 
+final _left = Either<Object, Never>.left(isA<Exception>());
+
 void main() {
   test('singleOrError', () async {
-    await singleRule(Single.value(1), Either.right(1));
+    await singleRule(
+      Single.value(1),
+      Either.right(1),
+    );
     await singleRule(
       Single<int>.error(Exception()),
-      Either<Object, int>.left(isA<Exception>()),
+      _left,
+    );
+
+    await singleRule(
+      Single.value(1).map((event) => event.toString()),
+      Either.right('1'),
+    );
+    await singleRule(
+      Single.value(1).map((event) => throw Exception()),
+      _left,
+    );
+
+    await singleRule(
+      Single.value(1).asyncMap((event) => event.toString()),
+      Either.right('1'),
+    );
+    await singleRule(
+      Single.value(1).asyncMap((event) => throw Exception()),
+      _left,
+    );
+
+    await singleRule(
+      Single.value(1).asyncMap((event) async {
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+        return event.toString();
+      }),
+      Either.right('1'),
+    );
+    await singleRule(
+      Single.value(1).asyncMap((event) async {
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+        throw Exception();
+      }),
+      _left,
     );
 
     return;
