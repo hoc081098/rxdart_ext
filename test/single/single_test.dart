@@ -11,7 +11,7 @@ class Repo {
       );
 }
 
-Future<void> singleRule<T>(Single<T> single, Either<Object, T> e) {
+Future<void> singleRule<T>(Stream<T> single, Either<Object, T> e) {
   return expectLater(
     single,
     emitsInOrder(<dynamic>[
