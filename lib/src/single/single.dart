@@ -75,12 +75,6 @@ class Single<T> extends StreamView<T> {
   Single<T> distinct([bool Function(T previous, T next)? equals]) => this;
 
   @override
-  Future<bool> get isEmpty => Future.value(false);
-
-  @override
-  Future<int> get length => Future.value(1);
-
-  @override
   Single<S> map<S>(S Function(T event) convert) =>
       Single._safe(_stream.map(convert));
 
