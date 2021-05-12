@@ -75,13 +75,50 @@ void main() {
 
     test('singleOrError', () async {
       await singleRule(
+        Single.value(1).singleOrError(),
+        Either.right(1),
+      );
+
+      // data -> data
+      await singleRule(
+        Stream.fromIterable([1, 2, 3]).singleOrError(),
+        _APIContractViolationError('Stream contains more than one data event.'),
+      );
+
+      // data -> error
+      await singleRule(
         Rx.concat<int?>([
           Rx.timer(1, const Duration(milliseconds: 100)),
           Stream<int>.error(Exception())
               .delay(const Duration(milliseconds: 100)),
           Rx.timer(null, const Duration(milliseconds: 100)),
         ]).singleOrError(),
-        _APIContractViolationError('Stream contains both data and error.'),
+        _APIContractViolationError(
+            'Stream contains both data and error event.'),
+      );
+
+      // error -> data
+      await singleRule(
+        Rx.concat<int?>([
+          Stream<int>.error(Exception())
+              .delay(const Duration(milliseconds: 100)),
+          Rx.timer(1, const Duration(milliseconds: 100)),
+          Rx.timer(null, const Duration(milliseconds: 100)),
+        ]).singleOrError(),
+        _APIContractViolationError(
+            'Stream contains both data and error event.'),
+      );
+
+      // error -> error
+      await singleRule(
+        Rx.concat<int?>([
+          Stream<int>.error(Exception())
+              .delay(const Duration(milliseconds: 100)),
+          Stream<int>.error(Exception())
+              .delay(const Duration(milliseconds: 100)),
+        ]).singleOrError(),
+        _APIContractViolationError(
+            'Stream contains more than one error event.'),
       );
     });
 

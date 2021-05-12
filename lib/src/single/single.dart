@@ -16,14 +16,16 @@ import '../error/api_contract_violation_error.dart';
 /// ```
 @sealed
 class Single<T> extends StreamView<T> {
+  /// Underline source Stream.
   final Stream<T> _stream;
 
   Single._safe(Stream<T> source)
       : _stream = source,
+        assert(source is! Single<T>),
         super(source);
 
   factory Single._unsafe(Stream<T> source) =>
-      Single._safe(_buildStream(source));
+      source is Single<T> ? source : Single._safe(_buildStream(source));
 
   /// Creates a [Single] which emits a single data event of [value] before completing.
   ///
@@ -96,13 +98,13 @@ class Single<T> extends StreamView<T> {
         (data) {
           if (value._isNotNull) {
             controller.addError(APIContractViolationError(
-                'Stream contains more than one element.'));
+                'Stream contains more than one data event.'));
             controller.close();
             return;
           }
           if (error != null) {
             controller.addError(APIContractViolationError(
-                'Stream contains both data and error.'));
+                'Stream contains both data and error event.'));
             controller.close();
             return;
           }
@@ -112,13 +114,13 @@ class Single<T> extends StreamView<T> {
         onError: (Object e, StackTrace s) {
           if (error != null) {
             controller.addError(APIContractViolationError(
-                'Stream contains more than one error.'));
+                'Stream contains more than one error event.'));
             controller.close();
             return;
           }
           if (value._isNotNull) {
             controller.addError(APIContractViolationError(
-                'Stream contains both data and error.'));
+                'Stream contains both data and error event.'));
             controller.close();
             return;
           }
@@ -128,13 +130,13 @@ class Single<T> extends StreamView<T> {
         onDone: () {
           if (value._isNotNull && error != null) {
             controller.addError(APIContractViolationError(
-                'Stream contains both data and error.'));
+                'Stream contains both data and error event.'));
             controller.close();
             return;
           }
           if (value._isNull && error == null) {
             controller.addError(APIContractViolationError(
-                "Stream doesn't contains any data or error."));
+                "Stream doesn't contains any data or error event."));
             controller.close();
           }
 
@@ -172,8 +174,12 @@ class _NULL {
 }
 
 extension on Object? {
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
   bool get _isNull => identical(this, _null);
 
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
   bool get _isNotNull => !_isNull;
 }
 
@@ -208,8 +214,5 @@ extension ExhaustMapSingleExtension<T> on Single<T> {
 /// TODO
 extension ToSingleStreamExtension<T> on Stream<T> {
   /// Throws [APIContractViolationError] if this Stream does not emit exactly one element before successfully completing.
-  Single<T> singleOrError() {
-    final self = this;
-    return self is Single<T> ? self : Single._unsafe(self);
-  }
+  Single<T> singleOrError() => Single._unsafe(this);
 }
