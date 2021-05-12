@@ -20,7 +20,7 @@ final _APIContractViolationError = (String s) => Either<Object, Never>.left(
 
 void main() {
   group('Single', () {
-    test('singleRule', () async {
+    test('construct', () async {
       // Single.value
       await singleRule(
         Single.value(1),
@@ -32,7 +32,9 @@ void main() {
         Single<int>.error(Exception()),
         _left,
       );
+    });
 
+    test('override', () async {
       // Single.map.success
       await singleRule(
         Single.value(1).map((event) => event.toString()),
