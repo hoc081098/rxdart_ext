@@ -32,6 +32,27 @@ void main() {
         Single<int>.error(Exception()),
         _left,
       );
+
+      // Single.fromCallable.sync.success
+      await singleRule(
+        Single.fromCallable(() => 1),
+        Either.right(1),
+      );
+      // Single.fromCallable.sync.failure
+      await singleRule(
+        Single.fromCallable(() => throw Exception()),
+        _left,
+      );
+      // Single.fromCallable.async.success
+      await singleRule(
+        Single.fromCallable(() async => 1),
+        Either.right(1),
+      );
+      // Single.fromCallable.async.failure
+      await singleRule(
+        Single.fromCallable(() async => throw Exception()),
+        _left,
+      );
     });
 
     test('override', () async {
