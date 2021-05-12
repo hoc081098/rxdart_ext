@@ -56,6 +56,17 @@ void main() {
     });
 
     test('override', () async {
+      // Single.distinct.success
+      await singleRule(
+        Single.value(1).distinct(),
+        Either.right(1),
+      );
+      // Single.distinct.failure
+      await singleRule(
+        Single<void>.error(Exception()).distinct(),
+        _left,
+      );
+
       // Single.map.success
       await singleRule(
         Single.value(1).map((event) => event.toString()),
