@@ -183,36 +183,39 @@ extension on Object? {
   bool get _isNotNull => !_isNull;
 }
 
-/// TODO
+/// Provides [flatMapSingle] extension for [Single].
 extension FlatMapSingleExtension<T> on Single<T> {
-  /// TODO
+  /// Likes [flatMap], but returns a [Single].
   Single<R> flatMapSingle<R>(Single<R> Function(T) transform) =>
       Single._safe(flatMap(transform));
 }
 
-/// TODO
+/// Provides [asyncExpandSingle] extension for [Single].
 extension AsyncExpandSingleExtension<T> on Single<T> {
-  /// TODO
+  /// Likes [asyncExpand], but returns a [Single].
   Single<R> asyncExpandSingle<R>(Single<R> Function(T) transform) =>
       Single._safe(asyncExpand(transform));
 }
 
-/// TODO
+/// Provides [switchMapSingle] extension for [Single].
 extension SwitchMapSingleExtension<T> on Single<T> {
-  /// TODO
+  /// Likes [switchMap], but returns a [Single].
   Single<R> switchMapSingle<R>(Single<R> Function(T) transform) =>
       Single._safe(switchMap(transform));
 }
 
-/// TODO
+/// Provides [exhaustMapSingle] extension for [Single].
 extension ExhaustMapSingleExtension<T> on Single<T> {
-  /// TODO
+  /// Likes [exhaustMap], but returns a [Single].
   Single<R> exhaustMapSingle<R>(Single<R> Function(T) transform) =>
-      Single._safe(ExhaustMapStreamTransformer(transform).bind(this));
+      Single._safe(exhaustMap(transform));
 }
 
-/// TODO
+/// Provides [singleOrError] extension for [Stream].
 extension ToSingleStreamExtension<T> on Stream<T> {
-  /// Throws [APIContractViolationError] if this Stream does not emit exactly one element before successfully completing.
+  /// Converts this [Stream] into a [Single].
+  ///
+  /// The returned [Single] emits a [APIContractViolationError]
+  /// if this [Stream] does not emit exactly one data event or one error event before successfully completing.
   Single<T> singleOrError() => Single._unsafe(this);
 }
