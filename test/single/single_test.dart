@@ -168,6 +168,7 @@ void main() {
         Single.value(1).singleOrError(),
         Either.right(1),
       );
+      broadcastRule(Single.value(1).singleOrError(), false);
 
       // Stream.singleOrError
       final c = StreamController<int>();
@@ -183,6 +184,14 @@ void main() {
         Stream.value(1).singleOrError(),
         Either.right(1),
       );
+      broadcastRule(Stream.value(1).singleOrError(), false);
+
+      // single error
+      await singleRule(
+        Stream<void>.error(Exception()).singleOrError(),
+        _left,
+      );
+      broadcastRule(Stream<void>.error(Exception()).singleOrError(), false);
 
       // empty
       await singleRule(
@@ -190,12 +199,26 @@ void main() {
         _APIContractViolationError(
             "Stream doesn't contains any data or error event."),
       );
+      broadcastRule(Stream<int>.empty().singleOrError(), true);
+
+      // broadcast stream
+      final cb = StreamController<int>.broadcast(sync: true);
+      cb.onListen = () {
+        scheduleMicrotask(() {
+          cb.add(1);
+          cb.close();
+        });
+      };
+      final _s = cb.stream.singleOrError();
+      await singleRule(_s, Either.right(1));
+      broadcastRule(_s, true);
 
       // data -> data
       await singleRule(
         Stream.fromIterable([1, 2, 3]).singleOrError(),
         _APIContractViolationError('Stream contains more than one data event.'),
       );
+      broadcastRule(Stream.fromIterable([1, 2, 3]).singleOrError(), false);
 
       // data -> error
       await singleRule(
