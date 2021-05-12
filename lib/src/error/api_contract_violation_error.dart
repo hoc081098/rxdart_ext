@@ -1,9 +1,9 @@
-/// TODO
+/// Generic error thrown on API contract violations.
 class APIContractViolationError extends Error {
-  /// TODO
+  /// Error message.
   final String message;
 
-  /// TODO
+  /// Construct error with message.
   APIContractViolationError(this.message);
 
   @override
