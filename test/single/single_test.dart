@@ -5,7 +5,7 @@ import 'package:pedantic/pedantic.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
 
-Future<void> singleRule<T>(Stream<T> single, Either<Object, T> e) {
+Future<void> singleRule<T>(Single<T> single, Either<Object, T> e) {
   return expectLater(
     single,
     emitsInOrder(<dynamic>[
@@ -109,14 +109,33 @@ void main() {
     });
 
     test('singleOrError', () async {
+      // Single.singleOrError
       await singleRule(
         Single.value(1).singleOrError(),
         Either.right(1),
       );
+
+      // Stream.singleOrError
       final c = StreamController<int>();
       c.add(1);
       unawaited(c.close());
-      await singleRule(c.stream, Either.right(1));
+      await singleRule(
+        c.stream.singleOrError(),
+        Either.right(1),
+      );
+
+      // single data
+      await singleRule(
+        Stream.value(1).singleOrError(),
+        Either.right(1),
+      );
+
+      // empty
+      await singleRule(
+        Stream<int>.empty().singleOrError(),
+        _APIContractViolationError(
+            "Stream doesn't contains any data or error event."),
+      );
 
       // data -> data
       await singleRule(

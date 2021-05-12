@@ -128,16 +128,11 @@ class Single<T> extends StreamView<T> {
           error = ErrorAndStackTrace(e, s);
         },
         onDone: () {
-          if (value._isNotNull && error != null) {
-            controller.addError(APIContractViolationError(
-                'Stream contains both data and error event.'));
-            controller.close();
-            return;
-          }
           if (value._isNull && error == null) {
             controller.addError(APIContractViolationError(
                 "Stream doesn't contains any data or error event."));
             controller.close();
+            return;
           }
 
           if (error != null) {
