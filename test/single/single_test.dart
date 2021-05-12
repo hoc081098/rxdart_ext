@@ -5,6 +5,20 @@ import 'package:pedantic/pedantic.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
 
+void broadcastRule<T>(Single<T> single, bool isBroadcast) {
+  final ignoreError = (Object e) {};
+
+  if (isBroadcast) {
+    expect(single.isBroadcast, true);
+    single.listen(null, onError: ignoreError);
+    single.listen(null, onError: ignoreError);
+  } else {
+    expect(single.isBroadcast, false);
+    single.listen(null, onError: ignoreError);
+    expect(() => single.listen(null, onError: ignoreError), throwsStateError);
+  }
+}
+
 Future<void> singleRule<T>(Single<T> single, Either<Object, T> e) {
   return expectLater(
     single,
@@ -27,31 +41,71 @@ void main() {
         Single.value(1),
         Either.right(1),
       );
+      broadcastRule(Single.value(1), false);
 
       // Single.error
       await singleRule(
         Single<int>.error(Exception()),
         _left,
       );
+      broadcastRule(Single<int>.error(Exception()), false);
 
       // Single.fromCallable.sync.success
       await singleRule(
         Single.fromCallable(() => 1),
         Either.right(1),
       );
+      broadcastRule(Single.fromCallable(() => 1), false);
+      await singleRule(
+        Single.fromCallable(() => 1, reusable: true),
+        Either.right(1),
+      );
+      broadcastRule(Single.fromCallable(() => 1, reusable: true), true);
       // Single.fromCallable.sync.failure
       await singleRule(
         Single.fromCallable(() => throw Exception()),
         _left,
       );
+      broadcastRule(Single.fromCallable(() => throw Exception()), false);
+      await singleRule(
+        Single.fromCallable(() => throw Exception(), reusable: true),
+        _left,
+      );
+      broadcastRule(
+          Single.fromCallable(() => throw Exception(), reusable: true), true);
       // Single.fromCallable.async.success
       await singleRule(
         Single.fromCallable(() async => 1),
         Either.right(1),
       );
+      broadcastRule(Single.fromCallable(() async => 1), false);
+      await singleRule(
+        Single.fromCallable(() async => 1, reusable: true),
+        Either.right(1),
+      );
+      broadcastRule(Single.fromCallable(() async => 1, reusable: true), true);
       // Single.fromCallable.async.failure
       await singleRule(
         Single.fromCallable(() async => throw Exception()),
+        _left,
+      );
+      broadcastRule(Single.fromCallable(() async => throw Exception()), false);
+      await singleRule(
+        Single.fromCallable(() async => throw Exception(), reusable: true),
+        _left,
+      );
+      broadcastRule(
+          Single.fromCallable(() async => throw Exception(), reusable: true),
+          true);
+
+      // Single.defer.success
+      await singleRule(
+        Single.defer(() => Single.value(1)),
+        Either.right(1),
+      );
+      // Single.defer.failure
+      await singleRule(
+        Single<String>.defer(() => Single.error(Exception())),
         _left,
       );
     });
