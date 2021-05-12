@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dart_either/dart_either.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
 
@@ -112,6 +113,10 @@ void main() {
         Single.value(1).singleOrError(),
         Either.right(1),
       );
+      final c = StreamController<int>();
+      c.add(1);
+      unawaited(c.close());
+      await singleRule(c.stream, Either.right(1));
 
       // data -> data
       await singleRule(
