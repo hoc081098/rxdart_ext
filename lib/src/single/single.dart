@@ -101,11 +101,14 @@ class Single<T> extends StreamView<T> {
       subscription = source.listen(
         (data) {
           if (value._isNotNull) {
-            subscription!.cancel();
-            subscription = null;
-
             controller.addError(APIContractViolationError(
                 'Stream contains more than one element.'));
+            controller.close();
+            return;
+          }
+          if (error != null) {
+            controller.addError(APIContractViolationError(
+                'Stream contains both data and error.'));
             controller.close();
             return;
           }
@@ -114,11 +117,14 @@ class Single<T> extends StreamView<T> {
         },
         onError: (Object e, StackTrace s) {
           if (error != null) {
-            subscription!.cancel();
-            subscription = null;
-
             controller.addError(APIContractViolationError(
                 'Stream contains more than one error.'));
+            controller.close();
+            return;
+          }
+          if (value._isNotNull) {
+            controller.addError(APIContractViolationError(
+                'Stream contains both data and error.'));
             controller.close();
             return;
           }
@@ -177,22 +183,30 @@ extension on Object? {
   bool get _isNotNull => !_isNull;
 }
 
+/// TODO
 extension FlatMapSingleExtension<T> on Single<T> {
+  /// TODO
   Single<R> flatMapSingle<R>(Single<R> Function(T) transform) =>
       Single._safe(flatMap(transform));
 }
 
+/// TODO
 extension AsyncExpandSingleExtension<T> on Single<T> {
+  /// TODO
   Single<R> asyncExpandSingle<R>(Single<R> Function(T) transform) =>
       Single._safe(asyncExpand(transform));
 }
 
+/// TODO
 extension SwitchMapSingleExtension<T> on Single<T> {
+  /// TODO
   Single<R> switchMapSingle<R>(Single<R> Function(T) transform) =>
       Single._safe(switchMap(transform));
 }
 
+/// TODO
 extension ExhaustMapSingleExtension<T> on Single<T> {
+  /// TODO
   Single<R> exhaustMapSingle<R>(Single<R> Function(T) transform) =>
       Single._safe(ExhaustMapStreamTransformer(transform).bind(this));
 }

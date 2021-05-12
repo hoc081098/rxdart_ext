@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dart_either/dart_either.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
@@ -13,6 +15,8 @@ Future<void> singleRule<T>(Stream<T> single, Either<Object, T> e) {
 }
 
 final _left = Either<Object, Never>.left(isA<Exception>());
+final _APIContractViolationError = (String s) => Either<Object, Never>.left(
+    isA<APIContractViolationError>().having((o) => o.message, 'message', s));
 
 void main() {
   group('Single', () {
@@ -65,6 +69,50 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 100));
           throw Exception();
         }),
+        _left,
+      );
+    });
+
+    test('singleOrError', () async {
+      await singleRule(
+        Rx.concat<int?>([
+          Rx.timer(1, const Duration(milliseconds: 100)),
+          Stream<int>.error(Exception())
+              .delay(const Duration(milliseconds: 100)),
+          Rx.timer(null, const Duration(milliseconds: 100)),
+        ]).singleOrError(),
+        _APIContractViolationError('Stream contains both data and error.'),
+      );
+    });
+
+    test('flatMapSingle', () async {
+      // success -> success
+      await singleRule(
+        Single.value(1).flatMapSingle((i) => Single.value(i + 1)),
+        Either.right(2),
+      );
+      // success -> success
+      await singleRule(
+        Single.value(1).flatMapSingle(
+            (i) => Single.timer(i + 1, const Duration(milliseconds: 100))),
+        Either.right(2),
+      );
+
+      // failure -> success
+      await singleRule(
+        Single<int>.error(Exception())
+            .flatMapSingle((i) => Single.value(i + 1)),
+        _left,
+      );
+      // failure -> failure
+      await singleRule(
+        Single<int>.error(Exception())
+            .flatMapSingle((i) => Single<int>.error(Exception())),
+        _left,
+      );
+      // success -> failure
+      await singleRule(
+        Single.value(22).flatMapSingle((i) => Single<int>.error(Exception())),
         _left,
       );
     });
