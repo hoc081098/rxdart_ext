@@ -13,6 +13,8 @@ import 'value/not_replay_value_connectable_stream_tests.dart'
 import 'value/value_controller_test.dart' as value_controller_test;
 import 'value/value_subject_test.dart' as value_subject_test;
 
+import 'single/single_test.dart' as single_test;
+
 void main() {
   debug_test.main();
   distinct_by_test.main();
@@ -27,4 +29,6 @@ void main() {
   not_replay_value_connectable_stream_tests.main();
   value_controller_test.main();
   value_subject_test.main();
+
+  single_test.main();
 }
