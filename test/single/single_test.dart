@@ -35,79 +35,164 @@ final _APIContractViolationError = (String s) => Either<Object, Never>.left(
 
 void main() {
   group('Single', () {
-    test('construct', () async {
-      // Single.value
-      await singleRule(
-        Single.value(1),
-        Either.right(1),
-      );
-      broadcastRule(Single.value(1), false);
+    group('construct', () {
+      test('Single.value', () async {
+        await singleRule(
+          Single.value(1),
+          Either.right(1),
+        );
+        broadcastRule(Single.value(1), false);
+      });
 
-      // Single.error
-      await singleRule(
-        Single<int>.error(Exception()),
-        _left,
-      );
-      broadcastRule(Single<int>.error(Exception()), false);
+      test('Single.error', () async {
+        await singleRule(
+          Single<int>.error(Exception()),
+          _left,
+        );
+        broadcastRule(Single<int>.error(Exception()), false);
+      });
 
-      // Single.fromCallable.sync.success
-      await singleRule(
-        Single.fromCallable(() => 1),
-        Either.right(1),
-      );
-      broadcastRule(Single.fromCallable(() => 1), false);
-      await singleRule(
-        Single.fromCallable(() => 1, reusable: true),
-        Either.right(1),
-      );
-      broadcastRule(Single.fromCallable(() => 1, reusable: true), true);
-      // Single.fromCallable.sync.failure
-      await singleRule(
-        Single.fromCallable(() => throw Exception()),
-        _left,
-      );
-      broadcastRule(Single.fromCallable(() => throw Exception()), false);
-      await singleRule(
-        Single.fromCallable(() => throw Exception(), reusable: true),
-        _left,
-      );
-      broadcastRule(
-          Single.fromCallable(() => throw Exception(), reusable: true), true);
-      // Single.fromCallable.async.success
-      await singleRule(
-        Single.fromCallable(() async => 1),
-        Either.right(1),
-      );
-      broadcastRule(Single.fromCallable(() async => 1), false);
-      await singleRule(
-        Single.fromCallable(() async => 1, reusable: true),
-        Either.right(1),
-      );
-      broadcastRule(Single.fromCallable(() async => 1, reusable: true), true);
-      // Single.fromCallable.async.failure
-      await singleRule(
-        Single.fromCallable(() async => throw Exception()),
-        _left,
-      );
-      broadcastRule(Single.fromCallable(() async => throw Exception()), false);
-      await singleRule(
-        Single.fromCallable(() async => throw Exception(), reusable: true),
-        _left,
-      );
-      broadcastRule(
-          Single.fromCallable(() async => throw Exception(), reusable: true),
-          true);
+      group('Single.fromCallable', () {
+        group('.sync', () {
+          test('.success', () async {
+            await singleRule(
+              Single.fromCallable(() => 1),
+              Either.right(1),
+            );
+            broadcastRule(Single.fromCallable(() => 1), false);
 
-      // Single.defer.success
-      await singleRule(
-        Single.defer(() => Single.value(1)),
-        Either.right(1),
-      );
-      // Single.defer.failure
-      await singleRule(
-        Single<String>.defer(() => Single.error(Exception())),
-        _left,
-      );
+            await singleRule(
+              Single.fromCallable(() => 1, reusable: true),
+              Either.right(1),
+            );
+            broadcastRule(Single.fromCallable(() => 1, reusable: true), true);
+          });
+
+          test('failure', () async {
+            await singleRule(
+              Single.fromCallable(() => throw Exception()),
+              _left,
+            );
+            broadcastRule(Single.fromCallable(() => throw Exception()), false);
+            await singleRule(
+              Single.fromCallable(() => throw Exception(), reusable: true),
+              _left,
+            );
+            broadcastRule(
+                Single.fromCallable(() => throw Exception(), reusable: true),
+                true);
+          });
+        });
+
+        group('.async', () {
+          test('.success', () async {
+            await singleRule(
+              Single.fromCallable(() async => 1),
+              Either.right(1),
+            );
+            broadcastRule(Single.fromCallable(() async => 1), false);
+
+            await singleRule(
+              Single.fromCallable(() async => 1, reusable: true),
+              Either.right(1),
+            );
+            broadcastRule(
+                Single.fromCallable(() async => 1, reusable: true), true);
+          });
+
+          test('.failure', () async {
+            await singleRule(
+              Single.fromCallable(() async => throw Exception()),
+              _left,
+            );
+            broadcastRule(
+                Single.fromCallable(() async => throw Exception()), false);
+
+            await singleRule(
+              Single.fromCallable(() async => throw Exception(),
+                  reusable: true),
+              _left,
+            );
+            broadcastRule(
+                Single.fromCallable(() async => throw Exception(),
+                    reusable: true),
+                true);
+          });
+        });
+      });
+
+      group('Single.defer', () {
+        test('.success', () async {
+          await singleRule(
+            Single.defer(() => Single.value(1)),
+            Either.right(1),
+          );
+          broadcastRule(Single.defer(() => Single.value(1)), false);
+
+          await singleRule(
+            Single.defer(() => Single.value(1), reusable: true),
+            Either.right(1),
+          );
+          broadcastRule(
+              Single.defer(() => Single.value(1), reusable: true), true);
+        });
+
+        test('.failure', () async {
+          await singleRule(
+            Single<String>.defer(() => Single.error(Exception())),
+            _left,
+          );
+          broadcastRule(
+              Single<String>.defer(() => Single.error(Exception())), false);
+
+          await singleRule(
+            Single<String>.defer(() => Single.error(Exception()),
+                reusable: true),
+            _left,
+          );
+          broadcastRule(
+              Single<String>.defer(() => Single.error(Exception()),
+                  reusable: true),
+              true);
+        });
+      });
+
+      group('Single.fromFuture', () {
+        test('.success', () async {
+          await singleRule(
+            Single.fromFuture(Future.value(1)),
+            Either.right(1),
+          );
+          broadcastRule(Single.fromFuture(Future.value(1)), false);
+
+          await singleRule(
+            Single.fromFuture(
+                Future.delayed(Duration(milliseconds: 100), () => 1)),
+            Either.right(1),
+          );
+          broadcastRule(
+              Single.fromFuture(
+                  Future.delayed(Duration(milliseconds: 100), () => 1)),
+              false);
+        });
+
+        test('.failure', () async {
+          await singleRule(
+              Single<int>.fromFuture(Future.error(Exception())), _left);
+          broadcastRule(
+              Single<int>.fromFuture(Future.error(Exception())), false);
+
+          await singleRule(
+            Single.fromFuture(Future.delayed(
+                Duration(milliseconds: 100), () => throw Exception())),
+            _left,
+          );
+          broadcastRule(
+              Single.fromFuture(Future.delayed(
+                  Duration(milliseconds: 100), () => throw Exception())),
+              false);
+        });
+      });
     });
 
     test('override', () async {

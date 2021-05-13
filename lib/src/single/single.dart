@@ -5,7 +5,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../error/api_contract_violation_error.dart';
 
-/// A Stream which emits a single data event or single error event before completing.
+/// A Stream which emits single event, either data or error, and then close with a done-event.
 ///
 /// ```text
 /// Success case: ------(*)-------------------------|---
@@ -37,6 +37,23 @@ class Single<T> extends StreamView<T> {
   /// See [Stream.error].
   factory Single.error(Object error, [StackTrace? stackTrace]) =>
       Single._safe(Stream.error(error, stackTrace));
+
+  /// Creates a new single-subscription [Single] from the future.
+  ///
+  /// When the future completes, the [Single] will fire one event, either
+  /// data or error, and then close with a done-event.
+  ///
+  /// ## Marble
+  ///
+  /// ```text
+  /// future: ----------a|
+  /// result : ---------a|
+  ///
+  /// future: ----------x|
+  /// result : ---------x|
+  /// ```
+  factory Single.fromFuture(Future<T> future) =>
+      Single._safe(Stream.fromFuture(future));
 
   /// Creates a [Single] that, when listening to it, calls a function you specify
   /// and then emits the value returned from that function.
@@ -72,6 +89,33 @@ class Single<T> extends StreamView<T> {
   factory Single.defer(Single<T> Function() streamFactory,
           {bool reusable = false}) =>
       Single._safe(Rx.defer(streamFactory, reusable: reusable));
+
+  /// Merges the specified [Single]s into one [Single] sequence using the given
+  /// [zipper] function whenever all of the [Single] sequences have produced
+  /// an element.
+  ///
+  /// ## Marble
+  ///
+  /// ```text
+  /// singleA: ----------a-----------|
+  /// singleB: ---------------b----------|
+  /// result : ---------------ab-----|
+  ///
+  /// singleA: ----------x-----------|
+  /// singleB: ---------------b----------|
+  /// result : ----------x-----------|
+  /// result : ----------x|               (cancelOnError=true)
+  /// ```
+  ///
+  /// [Interactive marble diagram](http://rxmarbles.com/#zip)
+  ///
+  /// See [Rx.zip2] and [ZipStream].
+  static Single<T> zip2<A, B, T>(
+    Single<A> singleA,
+    Single<B> singleB,
+    T Function(A, B) zipper,
+  ) =>
+      Single._safe(Rx.zip2(singleA, singleB, zipper));
 
   @override
   Single<T> distinct([bool Function(T previous, T next)? equals]) => this;
@@ -213,4 +257,21 @@ extension ToSingleStreamExtension<T> on Stream<T> {
   /// The returned [Single] emits a [APIContractViolationError]
   /// if this [Stream] does not emit exactly one data event or one error event before successfully completing.
   Single<T> singleOrError() => Single._unsafe(this);
+}
+
+/// Provides [asSingle] extension for [Future].
+extension AsSingleStreamExtension<T> on Future<T> {
+  /// Converts this [Future] into a [Single].
+  ///
+  /// See [Single.fromFuture].
+  Single<T> asSingle() => Single.fromFuture(this);
+}
+
+/// Provides [asSingle] extension for a Function that returns a [FutureOr].
+extension AsSingleFunctionExtension<T> on FutureOr<T> Function() {
+  /// Converts this [Function] into a [Single].
+  ///
+  /// See [Single.fromCallable].
+  Single<T> asSingle({bool reusable = false}) =>
+      Single.fromCallable(this, reusable: reusable);
 }
