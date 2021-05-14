@@ -195,151 +195,202 @@ void main() {
       });
     });
 
-    test('override', () async {
-      // Single.distinct.success
-      await singleRule(
-        Single.value(1).distinct(),
-        Either.right(1),
-      );
-      // Single.distinct.failure
-      await singleRule(
-        Single<void>.error(Exception()).distinct(),
-        _left,
-      );
+    group('override', () {
+      group('.distinct', () {
+        test('.success', () async {
+          await singleRule(
+            Single.value(1).distinct(),
+            Either.right(1),
+          );
+        });
 
-      // Single.map.success
-      await singleRule(
-        Single.value(1).map((event) => event.toString()),
-        Either.right('1'),
-      );
-      // Single.map.failure
-      await singleRule(
-        Single.value(1).map((event) => throw Exception()),
-        _left,
-      );
+        test('.failure', () async {
+          await singleRule(
+            Single<void>.error(Exception()).distinct(),
+            _left,
+          );
+        });
+      });
 
-      // Single.asyncMap.sync.success
-      await singleRule(
-        Single.value(1).asyncMap((event) => event.toString()),
-        Either.right('1'),
-      );
-      // Single.asyncMap.sync.failure
-      await singleRule(
-        Single.value(1).asyncMap((event) => throw Exception()),
-        _left,
-      );
+      group('.map', () {
+        test('.success', () async {
+          await singleRule(
+            Single.value(1).map((event) => event.toString()),
+            Either.right('1'),
+          );
+        });
 
-      // Single.asyncMap.async.success
-      await singleRule(
-        Single.value(1).asyncMap((event) async {
-          await Future<void>.delayed(const Duration(milliseconds: 100));
-          return event.toString();
-        }),
-        Either.right('1'),
-      );
-      // Single.asyncMap.async.failure
-      await singleRule(
-        Single.value(1).asyncMap((event) async {
-          await Future<void>.delayed(const Duration(milliseconds: 100));
-          throw Exception();
-        }),
-        _left,
-      );
+        test('.failure', () async {
+          await singleRule(
+            Single.value(1).map((event) => throw Exception()),
+            _left,
+          );
+        });
+      });
+
+      group('.asyncMap', () {
+        group('.sync', () {
+          test('.success', () async {
+            await singleRule(
+              Single.value(1).asyncMap((event) => event.toString()),
+              Either.right('1'),
+            );
+          });
+
+          test('.failure', () async {
+            await singleRule(
+              Single.value(1).asyncMap((event) => throw Exception()),
+              _left,
+            );
+          });
+        });
+
+        group('.async', () {
+          test('.success', () async {
+            await singleRule(
+              Single.value(1).asyncMap((event) async {
+                await Future<void>.delayed(const Duration(milliseconds: 100));
+                return event.toString();
+              }),
+              Either.right('1'),
+            );
+          });
+
+          test('.failure', () async {
+            await singleRule(
+              Single.value(1).asyncMap((event) async {
+                await Future<void>.delayed(const Duration(milliseconds: 100));
+                throw Exception();
+              }),
+              _left,
+            );
+          });
+        });
+      });
     });
 
-    test('singleOrError', () async {
-      // Single.singleOrError
-      await singleRule(
-        Single.value(1).singleOrError(),
-        Either.right(1),
-      );
-      broadcastRule(Single.value(1).singleOrError(), false);
+    group('singleOrError', () {
+      test('returns itself', () async {
+        await singleRule(
+          Single.value(1).singleOrError(),
+          Either.right(1),
+        );
 
-      // Stream.singleOrError
-      final c = StreamController<int>();
-      c.add(1);
-      unawaited(c.close());
-      await singleRule(
-        c.stream.singleOrError(),
-        Either.right(1),
-      );
+        final s = Single.value(1);
+        expect(identical(s, s.singleOrError()), true);
+        broadcastRule(s.singleOrError(), false);
+      });
 
-      // single data
-      await singleRule(
-        Stream.value(1).singleOrError(),
-        Either.right(1),
-      );
-      broadcastRule(Stream.value(1).singleOrError(), false);
+      test('from Stream of Controller', () async {
+        Stream<int> buildStream() {
+          final c = StreamController<int>();
+          c.add(1);
+          unawaited(c.close());
 
-      // single error
-      await singleRule(
-        Stream<void>.error(Exception()).singleOrError(),
-        _left,
-      );
-      broadcastRule(Stream<void>.error(Exception()).singleOrError(), false);
+          return c.stream;
+        }
 
-      // empty
-      await singleRule(
-        Stream<int>.empty().singleOrError(),
-        _APIContractViolationError(
-            "Stream doesn't contains any data or error event."),
-      );
-      broadcastRule(Stream<int>.empty().singleOrError(), true);
+        await singleRule(
+          buildStream().singleOrError(),
+          Either.right(1),
+        );
+        broadcastRule(buildStream().singleOrError(), false);
+      });
 
-      // broadcast stream
-      final cb = StreamController<int>.broadcast(sync: true);
-      cb.onListen = () {
-        scheduleMicrotask(() {
-          cb.add(1);
-          cb.close();
-        });
-      };
-      final _s = cb.stream.singleOrError();
-      await singleRule(_s, Either.right(1));
-      broadcastRule(_s, true);
+      test('from Stream.value', () async {
+        await singleRule(
+          Stream.value(1).singleOrError(),
+          Either.right(1),
+        );
+        broadcastRule(Stream.value(1).singleOrError(), false);
+      });
 
-      // data -> data
-      await singleRule(
-        Stream.fromIterable([1, 2, 3]).singleOrError(),
-        _APIContractViolationError('Stream contains more than one data event.'),
-      );
-      broadcastRule(Stream.fromIterable([1, 2, 3]).singleOrError(), false);
+      test('from Stream.error', () async {
+        await singleRule(
+          Stream<void>.error(Exception()).singleOrError(),
+          _left,
+        );
+        broadcastRule(Stream<void>.error(Exception()).singleOrError(), false);
+      });
 
-      // data -> error
-      await singleRule(
-        Rx.concat<int?>([
-          Rx.timer(1, const Duration(milliseconds: 100)),
-          Stream<int>.error(Exception())
-              .delay(const Duration(milliseconds: 100)),
-          Rx.timer(null, const Duration(milliseconds: 100)),
-        ]).singleOrError(),
-        _APIContractViolationError(
-            'Stream contains both data and error event.'),
-      );
+      test('from Stream.empty', () async {
+        await singleRule(
+          Stream<int>.empty().singleOrError(),
+          _APIContractViolationError(
+              "Stream doesn't contains any data or error event."),
+        );
+        broadcastRule(Stream<int>.empty().singleOrError(), true);
+      });
 
-      // error -> data
-      await singleRule(
-        Rx.concat<int?>([
-          Stream<int>.error(Exception())
-              .delay(const Duration(milliseconds: 100)),
-          Rx.timer(1, const Duration(milliseconds: 100)),
-          Rx.timer(null, const Duration(milliseconds: 100)),
-        ]).singleOrError(),
-        _APIContractViolationError(
-            'Stream contains both data and error event.'),
-      );
+      test('from a Broadcast Stream', () async {
+        final cb = StreamController<int>.broadcast(sync: true);
+        cb.onListen = () {
+          scheduleMicrotask(() {
+            cb.add(1);
+            cb.close();
+          });
+        };
+        final _s = cb.stream.singleOrError();
+        await singleRule(_s, Either.right(1));
+        broadcastRule(_s, true);
+      });
 
-      // error -> error
-      await singleRule(
-        Rx.concat<int?>([
-          Stream<int>.error(Exception())
-              .delay(const Duration(milliseconds: 100)),
-          Stream<int>.error(Exception())
-              .delay(const Duration(milliseconds: 100)),
-        ]).singleOrError(),
-        _APIContractViolationError(
-            'Stream contains more than one error event.'),
-      );
+      test('from multiple data events Stream (data -> data)', () async {
+        await singleRule(
+          Stream.fromIterable([1, 2, 3]).singleOrError(),
+          _APIContractViolationError(
+              'Stream contains more than one data event.'),
+        );
+        broadcastRule(Stream.fromIterable([1, 2, 3]).singleOrError(), false);
+      });
+
+      test('from both data and error events Stream (data -> error)', () async {
+        final buildSingle = () => Rx.concat<int?>([
+              Rx.timer(1, const Duration(milliseconds: 100)),
+              Stream<int>.error(Exception())
+                  .delay(const Duration(milliseconds: 100)),
+              Rx.timer(null, const Duration(milliseconds: 100)),
+            ]).singleOrError();
+
+        await singleRule(
+          buildSingle(),
+          _APIContractViolationError(
+              'Stream contains both data and error event.'),
+        );
+        broadcastRule(buildSingle(), false);
+      });
+
+      test('from both data and error events Stream (error -> data)', () async {
+        final buildSingle = () => Rx.concat<int?>([
+              Stream<int>.error(Exception())
+                  .delay(const Duration(milliseconds: 100)),
+              Rx.timer(1, const Duration(milliseconds: 100)),
+              Rx.timer(null, const Duration(milliseconds: 100)),
+            ]).singleOrError();
+
+        await singleRule(
+          buildSingle(),
+          _APIContractViolationError(
+              'Stream contains both data and error event.'),
+        );
+        broadcastRule(buildSingle(), false);
+      });
+
+      test('from multiple error events Stream (error -> error)', () async {
+        final buildSingle = () => Rx.concat<int?>([
+              Stream<int>.error(Exception())
+                  .delay(const Duration(milliseconds: 100)),
+              Stream<int>.error(Exception())
+                  .delay(const Duration(milliseconds: 100)),
+            ]).singleOrError();
+
+        await singleRule(
+          buildSingle(),
+          _APIContractViolationError(
+              'Stream contains more than one error event.'),
+        );
+        broadcastRule(buildSingle(), false);
+      });
     });
 
     test('flatMapSingle', () async {
