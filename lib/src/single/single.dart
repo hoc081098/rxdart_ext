@@ -105,6 +105,10 @@ class Single<T> extends StreamView<T> {
   /// singleB: ---------------b----------|
   /// result : ----------x-----------|
   /// result : ----------x|               (cancelOnError=true)
+  ///
+  /// singleA: ----------x-----------|
+  /// singleB: ---------------x----------|
+  /// result : ----------x|
   /// ```
   ///
   /// [Interactive marble diagram](http://rxmarbles.com/#zip)
@@ -114,8 +118,30 @@ class Single<T> extends StreamView<T> {
     Single<A> singleA,
     Single<B> singleB,
     T Function(A, B) zipper,
-  ) =>
-      Single._safe(Rx.zip2(singleA, singleB, zipper));
+  ) {
+    final controller = StreamController<T>(sync: true);
+    StreamSubscription<T>? subscription;
+
+    controller.onListen = () {
+      subscription = Rx.zip2(singleA, singleB, zipper).listen(
+        controller.add,
+        onError: (Object e, StackTrace s) {
+          controller.addError(e, s);
+          controller.close();
+        },
+        onDone: controller.close,
+      );
+    };
+    controller.onPause = () => subscription!.pause();
+    controller.onResume = () => subscription!.resume();
+    controller.onCancel = () {
+      final toCancel = subscription;
+      subscription = null;
+      return toCancel?.cancel();
+    };
+
+    return Single._safe(controller.stream);
+  }
 
   @override
   Single<T> distinct([bool Function(T previous, T next)? equals]) => this;
@@ -274,4 +300,24 @@ extension AsSingleFunctionExtension<T> on FutureOr<T> Function() {
   /// See [Single.fromCallable].
   Single<T> asSingle({bool reusable = false}) =>
       Single.fromCallable(this, reusable: reusable);
+}
+
+/// Extends the Single class with the ability to delay events being emitted
+extension DelaySingleExtension<T> on Single<T> {
+  /// The Delay operator modifies its source Single by pausing for a particular
+  /// increment of time (that you specify) before emitting each of the source
+  /// Stream’s items. This has the effect of shifting the entire sequence of
+  /// items emitted by the Single forward in time by that specified increment.
+  ///
+  /// ## Marble
+  /// ```text
+  ///source: ---------a-------|
+  ///result: -------------a---|
+  ///
+  ///source: ---------a-------|
+  ///result: --------------------a|
+  /// ```
+  /// [Interactive marble diagram](http://rxmarbles.com/#delay)
+  Single<T> delay(Duration duration) =>
+      Single._safe(transform(DelayStreamTransformer<T>(duration)));
 }

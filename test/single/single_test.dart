@@ -193,6 +193,55 @@ void main() {
               false);
         });
       });
+
+      group('Single.zip2', () {
+        test('success + success', () async {
+          final build = () => Single.zip2(
+                Single.value(1),
+                Single.timer(2, Duration(milliseconds: 100)),
+                (int a, int b) => a + b,
+              );
+          await singleRule(
+            build(),
+            Either.right(3),
+          );
+          broadcastRule(build(), false);
+        });
+
+        test('success + failure', () async {
+          final build = () => Single.zip2(
+                Single.value(1),
+                Single<int>.error(Exception()),
+                (int a, int b) => a + b,
+              );
+          await singleRule(
+            build(),
+            _left,
+          );
+          broadcastRule(build(), false);
+        });
+
+        test('failure + success', () async {
+          final build = () => Single.zip2(
+                Single<int>.error(Exception()),
+                Single.timer(2, Duration(milliseconds: 100)),
+                (int a, int b) => a + b,
+              );
+          await singleRule(build(), _left);
+          broadcastRule(build(), false);
+        });
+
+        test('failure + failure', () async {
+          final build = () => Single.zip2(
+                Single<int>.error(Exception()),
+                Single<int>.error(Exception())
+                    .delay(Duration(milliseconds: 10)),
+                (int a, int b) => a + b,
+              );
+          await singleRule(build(), _left);
+          broadcastRule(build(), false);
+        });
+      });
     });
 
     group('override', () {
