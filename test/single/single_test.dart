@@ -592,5 +592,30 @@ void main() {
         );
       });
     });
+
+    test('Future.asSingle', () async {
+      await singleRule(Future.value(1).asSingle(), Either.right(1));
+      broadcastRule(Future.value(1).asSingle(), false);
+
+      await singleRule(Future<void>.error(Exception()).asSingle(), _left);
+      broadcastRule(Future<void>.error(Exception()).asSingle(), false);
+    });
+
+    test('(FutureOr<R> Function()).asSingle()', () async {
+      await singleRule((() => 1).asSingle(), Either.right(1));
+      await singleRule((() => 1).asSingle(reusable: true), Either.right(1));
+      await singleRule((() => Future.value(1)).asSingle(), Either.right(1));
+      await singleRule(
+          (() => Future.value(1)).asSingle(reusable: true), Either.right(1));
+
+      await singleRule((() => throw Exception()).asSingle(), _left);
+      await singleRule(
+          (() => throw Exception()).asSingle(reusable: true), _left);
+      await singleRule(
+          (() => Future<void>.error(Exception())).asSingle(), _left);
+      await singleRule(
+          (() => Future<void>.error(Exception())).asSingle(reusable: true),
+          _left);
+    });
   });
 }
