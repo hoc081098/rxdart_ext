@@ -1,3 +1,7 @@
+## 0.1.1-dev.0 - May 14, 2021
+
+-   **Add `Single`.**
+
 ## 0.1.0 - May 7, 2021
 
 -   Support `rxdart: ^0.27.0`.

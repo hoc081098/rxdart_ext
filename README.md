@@ -13,6 +13,41 @@ Some extension methods and classes built on top of `RxDart` - `RxDart` extension
 
 ## API
 
+### Single
+A Stream which emits single event, either data or error, and then close with a done-event.
+
+```text
+Success case: ------(*)-------------------------|---
+                   data                        done
+
+Failure case: ------(x)-------------------------|---
+                   error                       done
+```
+
+-   Create Single
+    -   Factories and static methods.
+        -   [Single.value]()
+        -   [Single.error]()
+        -   [Single.fromFuture]()
+        -   [Single.fromCallable]()
+        -   [Single.timer]()
+        -   [Single.defer]()
+        -   [Single.zip2]()
+        
+    -   Convert others to Single via extensions.
+        -   [Stream.singleOrError]()
+        -   [Future.asSingle]()
+        -   [(FutureOr<T> Function()).asSingle]()
+    
+-   Operators for Single
+    -   [flatMapSingle]()
+    -   [asyncExpandSingle]()
+    -   [switchMapSingle]()
+    -   [exhaustMapSingle]()
+    -   [delay]()
+
+### Operators for Stream
+
 - [debug](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DebugStreamExtension/debug.html), [collect](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/CollectStreamExtension/collect.html)
 - [ForwardingSinkMixin](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ForwardingSinkMixin-mixin.html)
 - [distinctUniqueBy](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DistinctUniqueByStreamExtension/distinctUniqueBy.html)
@@ -22,6 +57,11 @@ Some extension methods and classes built on top of `RxDart` - `RxDart` extension
 - [toSingleSubscription](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ToSingleSubscriptionStreamExtension/toSingleSubscriptionStream.html)
 - [asVoid](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsVoidStreamExtension/asVoid.html)
 - [whereNotNull](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/WhereNotNullStreamExtension/whereNotNull.html)
+
+### NotReplayValueStream
+
+A Stream that provides synchronous access to the last emitted item, but not replay the latest value.
+
 - [NotReplayValueStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/NotReplayValueStream-class.html)
     -   Broadcast
         -   [ValueSubject](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ValueSubject-class.html)
@@ -30,3 +70,11 @@ Some extension methods and classes built on top of `RxDart` - `RxDart` extension
         -   [ValueStreamController](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ValueStreamController-class.html)
         -   [toNotReplayValueStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ToNotReplayValueStreamExtension/toNotReplayValueStream.html)
     
+
+
+## RxDart compatibility
+
+|  rxdart   | rxdart_ext |
+|  :---:    | :---:      |
+|  ^0.26.0  | ^0.0.1     |
+|  ^0.27.0  | ^0.1.0     |
