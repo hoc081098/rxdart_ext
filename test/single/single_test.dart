@@ -393,134 +393,155 @@ void main() {
       });
     });
 
-    test('flatMapSingle', () async {
-      // success -> success
-      await singleRule(
-        Single.value(1).flatMapSingle((i) => Single.value(i + 1)),
-        Either.right(2),
-      );
-      // success -> success
-      await singleRule(
-        Single.value(1).flatMapSingle(
-            (i) => Single.timer(i + 1, const Duration(milliseconds: 100))),
-        Either.right(2),
-      );
+    group('flatMapSingle', () {
+      test('success -> success', () async {
+        await singleRule(
+          Single.value(1).flatMapSingle((i) => Single.value(i + 1)),
+          Either.right(2),
+        );
+        await singleRule(
+          Single.value(1).flatMapSingle(
+              (i) => Single.timer(i + 1, const Duration(milliseconds: 100))),
+          Either.right(2),
+        );
+      });
 
-      // failure -> success
-      await singleRule(
-        Single<int>.error(Exception())
-            .flatMapSingle((i) => Single.value(i + 1)),
-        _left,
-      );
-      // failure -> failure
-      await singleRule(
-        Single<int>.error(Exception())
-            .flatMapSingle((i) => Single<int>.error(Exception())),
-        _left,
-      );
-      // success -> failure
-      await singleRule(
-        Single.value(22).flatMapSingle((i) => Single<int>.error(Exception())),
-        _left,
-      );
+      test('success -> failure', () async {
+        await singleRule(
+          Single.value(22).flatMapSingle((i) => Single<int>.error(Exception())),
+          _left,
+        );
+      });
+
+      test('failure -> success', () async {
+        await singleRule(
+          Single<int>.error(Exception())
+              .flatMapSingle((i) => Single.value(i + 1)),
+          _left,
+        );
+      });
+
+      test('failure -> failure', () async {
+        await singleRule(
+          Single<int>.error(Exception())
+              .flatMapSingle((i) => Single<int>.error(Exception())),
+          _left,
+        );
+      });
     });
 
-    test('switchMapSingle', () async {
-      // success -> success
-      await singleRule(
-        Single.value(1).switchMapSingle((i) => Single.value(i + 1)),
-        Either.right(2),
-      );
-      // success -> success
-      await singleRule(
-        Single.value(1).switchMapSingle(
-            (i) => Single.timer(i + 1, const Duration(milliseconds: 100))),
-        Either.right(2),
-      );
+    group('switchMapSingle', () {
+      test('success -> success', () async {
+        await singleRule(
+          Single.value(1).switchMapSingle((i) => Single.value(i + 1)),
+          Either.right(2),
+        );
+        await singleRule(
+          Single.value(1).switchMapSingle(
+              (i) => Single.timer(i + 1, const Duration(milliseconds: 100))),
+          Either.right(2),
+        );
+      });
 
-      // failure -> success
-      await singleRule(
-        Single<int>.error(Exception())
-            .switchMapSingle((i) => Single.value(i + 1)),
-        _left,
-      );
-      // failure -> failure
-      await singleRule(
-        Single<int>.error(Exception())
-            .switchMapSingle((i) => Single<int>.error(Exception())),
-        _left,
-      );
-      // success -> failure
-      await singleRule(
-        Single.value(22).switchMapSingle((i) => Single<int>.error(Exception())),
-        _left,
-      );
+      test('success -> failure', () async {
+        await singleRule(
+          Single.value(22)
+              .switchMapSingle((i) => Single<int>.error(Exception())),
+          _left,
+        );
+      });
+
+      test('failure -> success', () async {
+        await singleRule(
+          Single<int>.error(Exception())
+              .switchMapSingle((i) => Single.value(i + 1)),
+          _left,
+        );
+      });
+
+      test('failure -> failure', () async {
+        await singleRule(
+          Single<int>.error(Exception())
+              .switchMapSingle((i) => Single<int>.error(Exception())),
+          _left,
+        );
+      });
     });
 
-    test('exhaustMapSingle', () async {
-      // success -> success
-      await singleRule(
-        Single.value(1).exhaustMapSingle((i) => Single.value(i + 1)),
-        Either.right(2),
-      );
-      // success -> success
-      await singleRule(
-        Single.value(1).exhaustMapSingle(
-            (i) => Single.timer(i + 1, const Duration(milliseconds: 100))),
-        Either.right(2),
-      );
+    group('exhaustMapSingle', () {
+      test('success -> success', () async {
+        await singleRule(
+          Single.value(1).exhaustMapSingle((i) => Single.value(i + 1)),
+          Either.right(2),
+        );
+        await singleRule(
+          Single.value(1).exhaustMapSingle(
+              (i) => Single.timer(i + 1, const Duration(milliseconds: 100))),
+          Either.right(2),
+        );
+      });
 
-      // failure -> success
-      await singleRule(
-        Single<int>.error(Exception())
-            .exhaustMapSingle((i) => Single.value(i + 1)),
-        _left,
-      );
-      // failure -> failure
-      await singleRule(
-        Single<int>.error(Exception())
-            .exhaustMapSingle((i) => Single<int>.error(Exception())),
-        _left,
-      );
-      // success -> failure
-      await singleRule(
-        Single.value(22)
-            .exhaustMapSingle((i) => Single<int>.error(Exception())),
-        _left,
-      );
+      test('success -> failure', () async {
+        await singleRule(
+          Single.value(22)
+              .exhaustMapSingle((i) => Single<int>.error(Exception())),
+          _left,
+        );
+      });
+
+      test('failure -> success', () async {
+        await singleRule(
+          Single<int>.error(Exception())
+              .exhaustMapSingle((i) => Single.value(i + 1)),
+          _left,
+        );
+      });
+
+      test('failure -> failure', () async {
+        await singleRule(
+          Single<int>.error(Exception())
+              .exhaustMapSingle((i) => Single<int>.error(Exception())),
+          _left,
+        );
+      });
     });
 
-    test('asyncExpandSingle', () async {
-      // success -> success
-      await singleRule(
-        Single.value(1).asyncExpandSingle((i) => Single.value(i + 1)),
-        Either.right(2),
-      );
-      // success -> success
-      await singleRule(
-        Single.value(1).asyncExpandSingle(
-            (i) => Single.timer(i + 1, const Duration(milliseconds: 100))),
-        Either.right(2),
-      );
+    group('asyncExpandSingle', () {
+      test('success -> success', () async {
+        await singleRule(
+          Single.value(1).asyncExpandSingle((i) => Single.value(i + 1)),
+          Either.right(2),
+        );
+        await singleRule(
+          Single.value(1).asyncExpandSingle(
+              (i) => Single.timer(i + 1, const Duration(milliseconds: 100))),
+          Either.right(2),
+        );
+      });
 
-      // failure -> success
-      await singleRule(
-        Single<int>.error(Exception())
-            .asyncExpandSingle((i) => Single.value(i + 1)),
-        _left,
-      );
-      // failure -> failure
-      await singleRule(
-        Single<int>.error(Exception())
-            .asyncExpandSingle((i) => Single<int>.error(Exception())),
-        _left,
-      );
-      // success -> failure
-      await singleRule(
-        Single.value(22)
-            .asyncExpandSingle((i) => Single<int>.error(Exception())),
-        _left,
-      );
+      test('success -> failure', () async {
+        await singleRule(
+          Single.value(22)
+              .asyncExpandSingle((i) => Single<int>.error(Exception())),
+          _left,
+        );
+      });
+
+      test('failure -> success', () async {
+        await singleRule(
+          Single<int>.error(Exception())
+              .asyncExpandSingle((i) => Single.value(i + 1)),
+          _left,
+        );
+      });
+
+      test('failure -> failure', () async {
+        await singleRule(
+          Single<int>.error(Exception())
+              .asyncExpandSingle((i) => Single<int>.error(Exception())),
+          _left,
+        );
+      });
     });
   });
 }
