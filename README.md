@@ -47,7 +47,7 @@ Failure case: ------(x)-------------------------|---
     -   [exhaustMapSingle]()
     -   [delay]()
 
-NOTE: Single extends Stream, so all operators and transformers are available for Single.
+> NOTE: Single extends Stream, so all operators and transformers for Stream are available for Single as well.
 
 ### Operators for Stream
 
