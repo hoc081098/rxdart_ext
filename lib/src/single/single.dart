@@ -99,7 +99,7 @@ class Single<T> extends StreamView<T> {
   /// ```text
   /// singleA: ----------a-----------|
   /// singleB: ---------------b----------|
-  /// result : ---------------ab-----|
+  /// result : ---------------ab|
   ///
   /// singleA: ----------x-----------|
   /// singleB: ---------------b----------|
@@ -124,7 +124,10 @@ class Single<T> extends StreamView<T> {
 
     controller.onListen = () {
       subscription = Rx.zip2(singleA, singleB, zipper).listen(
-        controller.add,
+        (v) {
+          controller.add(v);
+          controller.close();
+        },
         onError: (Object e, StackTrace s) {
           controller.addError(e, s);
           controller.close();
