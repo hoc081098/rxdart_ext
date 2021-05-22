@@ -27,10 +27,13 @@ class Single<T> extends StreamView<T> {
         assert(source is! Single<T>),
         super(source);
 
-  ///  @internal
-  ///  **DO NOT USE** this constructor.
-  @internal
-  factory Single.unsafe(Stream<T> source) =>
+  /// Create a [Single] from a [Stream].
+  ///
+  /// The [Single] emits a [APIContractViolationError]
+  /// if this [Stream] does not emit exactly one data event or one error event before successfully completing.
+  ///
+  /// Otherwise, it emits single event, either data or error, and then close with a done-event.
+  factory Single.fromStream(Stream<T> source) =>
       source is Single<T> ? source : Single.safe(_buildStream(source));
 
   /// Creates a [Single] which emits a single data event of [value] before completing.
