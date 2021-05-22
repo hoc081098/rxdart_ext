@@ -34,6 +34,7 @@ final _APIContractViolationError = (String s) => Either<Object, Never>.left(
     isA<APIContractViolationError>().having((o) => o.message, 'message', s));
 
 void main() {
+
   group('Single', () {
     group('construct', () {
       test('Single.value', () async {

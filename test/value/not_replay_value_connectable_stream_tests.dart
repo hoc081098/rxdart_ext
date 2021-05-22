@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:rxdart/rxdart.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
 

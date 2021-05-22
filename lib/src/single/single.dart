@@ -19,24 +19,30 @@ class Single<T> extends StreamView<T> {
   /// Underline source Stream.
   final Stream<T> _stream;
 
-  Single._safe(Stream<T> source)
+  ///  @internal
+  ///  **DO NOT USE** this constructor.
+  @internal
+  Single.safe(Stream<T> source)
       : _stream = source,
         assert(source is! Single<T>),
         super(source);
 
-  factory Single._unsafe(Stream<T> source) =>
-      source is Single<T> ? source : Single._safe(_buildStream(source));
+  ///  @internal
+  ///  **DO NOT USE** this constructor.
+  @internal
+  factory Single.unsafe(Stream<T> source) =>
+      source is Single<T> ? source : Single.safe(_buildStream(source));
 
   /// Creates a [Single] which emits a single data event of [value] before completing.
   ///
   /// See [Stream.value].
-  factory Single.value(T value) => Single._safe(Stream.value(value));
+  factory Single.value(T value) => Single.safe(Stream.value(value));
 
   /// Creates a [Single] which emits a single error event before completing.
   ///
   /// See [Stream.error].
   factory Single.error(Object error, [StackTrace? stackTrace]) =>
-      Single._safe(Stream.error(error, stackTrace));
+      Single.safe(Stream.error(error, stackTrace));
 
   /// Creates a new single-subscription [Single] from the future.
   ///
@@ -53,7 +59,7 @@ class Single<T> extends StreamView<T> {
   /// result : ---------x|
   /// ```
   factory Single.fromFuture(Future<T> future) =>
-      Single._safe(Stream.fromFuture(future));
+      Single.safe(Stream.fromFuture(future));
 
   /// Creates a [Single] that, when listening to it, calls a function you specify
   /// and then emits the value returned from that function.
@@ -71,13 +77,13 @@ class Single<T> extends StreamView<T> {
   /// See [Rx.fromCallable] and [FromCallableStream].
   factory Single.fromCallable(FutureOr<T> Function() callable,
           {bool reusable = false}) =>
-      Single._safe(Rx.fromCallable<T>(callable, reusable: reusable));
+      Single.safe(Rx.fromCallable<T>(callable, reusable: reusable));
 
   /// Creates a [Single] which emits the given value after a specified amount of time.
   ///
   /// See [Rx.timer] and [TimerStream].
   factory Single.timer(T value, Duration duration) =>
-      Single._safe(Rx.timer(value, duration));
+      Single.safe(Rx.timer(value, duration));
 
   /// The defer factory waits until an observer subscribes to it, and then it
   /// creates a [Single] with the given factory function.
@@ -88,7 +94,7 @@ class Single<T> extends StreamView<T> {
   /// See [Rx.defer] and [DeferStream].
   factory Single.defer(Single<T> Function() streamFactory,
           {bool reusable = false}) =>
-      Single._safe(Rx.defer(streamFactory, reusable: reusable));
+      Single.safe(Rx.defer(streamFactory, reusable: reusable));
 
   /// Merges the specified [Single]s into one [Single] sequence using the given
   /// [zipper] function whenever all of the [Single] sequences have produced
@@ -143,7 +149,7 @@ class Single<T> extends StreamView<T> {
       return toCancel?.cancel();
     };
 
-    return Single._safe(controller.stream);
+    return Single.safe(controller.stream);
   }
 
   @override
@@ -151,11 +157,11 @@ class Single<T> extends StreamView<T> {
 
   @override
   Single<S> map<S>(S Function(T event) convert) =>
-      Single._safe(_stream.map(convert));
+      Single.safe(_stream.map(convert));
 
   @override
   Single<E> asyncMap<E>(FutureOr<E> Function(T event) convert) =>
-      Single._safe(_stream.asyncMap(convert));
+      Single.safe(_stream.asyncMap(convert));
 
   static Stream<T> _buildStream<T>(Stream<T> source) {
     final controller = source.isBroadcast
@@ -249,78 +255,4 @@ extension on Object? {
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
   bool get _isNotNull => !_isNull;
-}
-
-/// Provides [flatMapSingle] extension for [Single].
-extension FlatMapSingleExtension<T> on Single<T> {
-  /// Likes [flatMap], but returns a [Single].
-  Single<R> flatMapSingle<R>(Single<R> Function(T) transform) =>
-      Single._safe(flatMap(transform));
-}
-
-/// Provides [asyncExpandSingle] extension for [Single].
-extension AsyncExpandSingleExtension<T> on Single<T> {
-  /// Likes [asyncExpand], but returns a [Single].
-  Single<R> asyncExpandSingle<R>(Single<R> Function(T) transform) =>
-      Single._safe(asyncExpand(transform));
-}
-
-/// Provides [switchMapSingle] extension for [Single].
-extension SwitchMapSingleExtension<T> on Single<T> {
-  /// Likes [switchMap], but returns a [Single].
-  Single<R> switchMapSingle<R>(Single<R> Function(T) transform) =>
-      Single._safe(switchMap(transform));
-}
-
-/// Provides [exhaustMapSingle] extension for [Single].
-extension ExhaustMapSingleExtension<T> on Single<T> {
-  /// Likes [exhaustMap], but returns a [Single].
-  Single<R> exhaustMapSingle<R>(Single<R> Function(T) transform) =>
-      Single._safe(exhaustMap(transform));
-}
-
-/// Provides [singleOrError] extension for [Stream].
-extension ToSingleStreamExtension<T> on Stream<T> {
-  /// Converts this [Stream] into a [Single].
-  ///
-  /// The returned [Single] emits a [APIContractViolationError]
-  /// if this [Stream] does not emit exactly one data event or one error event before successfully completing.
-  Single<T> singleOrError() => Single._unsafe(this);
-}
-
-/// Provides [asSingle] extension for [Future].
-extension AsSingleStreamExtension<T> on Future<T> {
-  /// Converts this [Future] into a [Single].
-  ///
-  /// See [Single.fromFuture].
-  Single<T> asSingle() => Single.fromFuture(this);
-}
-
-/// Provides [asSingle] extension for a Function that returns a [FutureOr].
-extension AsSingleFunctionExtension<T> on FutureOr<T> Function() {
-  /// Converts this [Function] into a [Single].
-  ///
-  /// See [Single.fromCallable].
-  Single<T> asSingle({bool reusable = false}) =>
-      Single.fromCallable(this, reusable: reusable);
-}
-
-/// Extends the Single class with the ability to delay events being emitted
-extension DelaySingleExtension<T> on Single<T> {
-  /// The Delay operator modifies its source Single by pausing for a particular
-  /// increment of time (that you specify) before emitting each of the source
-  /// Stream’s items. This has the effect of shifting the entire sequence of
-  /// items emitted by the Single forward in time by that specified increment.
-  ///
-  /// ## Marble
-  /// ```text
-  ///source: ---------a-------|
-  ///result: -------------a---|
-  ///
-  ///source: ---------a-------|
-  ///result: --------------------a|
-  /// ```
-  /// [Interactive marble diagram](http://rxmarbles.com/#delay)
-  Single<T> delay(Duration duration) =>
-      Single._safe(transform(DelayStreamTransformer<T>(duration)));
 }
