@@ -8,11 +8,11 @@ import '../error/api_contract_violation_error.dart';
 /// A Stream which emits single event, either data or error, and then close with a done-event.
 ///
 /// ```text
-/// Success case: ------(*)-------------------------|---
-///                    data                        done
+/// Success case: ------------(*)|------
+///                          data done
 ///
-/// Failure case: ------(x)-------------------------|---
-///                    error                       done
+/// Failure case: ------------(x)|------
+///                         error done
 /// ```
 @sealed
 class Single<T> extends StreamView<T> {
@@ -60,6 +60,8 @@ class Single<T> extends StreamView<T> {
   ///
   /// future: ----------x|
   /// result : ---------x|
+  ///
+  /// NOTE: x is error event
   /// ```
   factory Single.fromFuture(Future<T> future) =>
       Single.safe(Stream.fromFuture(future));
@@ -106,18 +108,19 @@ class Single<T> extends StreamView<T> {
   /// ## Marble
   ///
   /// ```text
-  /// singleA: ----------a-----------|
-  /// singleB: ---------------b----------|
+  /// singleA: ----------a|
+  /// singleB: ---------------b|
   /// result : ---------------ab|
   ///
-  /// singleA: ----------x-----------|
-  /// singleB: ---------------b----------|
-  /// result : ----------x-----------|
-  /// result : ----------x|               (cancelOnError=true)
-  ///
-  /// singleA: ----------x-----------|
-  /// singleB: ---------------x----------|
+  /// singleA: ----------x|
+  /// singleB: ---------------b|
   /// result : ----------x|
+  ///
+  /// singleA: ----------x|
+  /// singleB: ---------------x|
+  /// result : ----------x|
+  ///
+  /// NOTE: x is error event
   /// ```
   ///
   /// [Interactive marble diagram](http://rxmarbles.com/#zip)

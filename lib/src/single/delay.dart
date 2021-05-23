@@ -9,7 +9,6 @@ class _DelaySingleSink<T>
     with ForwardingSinkMixin<T, T>
     implements ForwardingSink<T, T> {
   final Duration duration;
-  var closed = false;
   StreamSubscription<T>? subscription;
 
   _DelaySingleSink(this.duration);
@@ -17,12 +16,8 @@ class _DelaySingleSink<T>
   @override
   void add(EventSink<T> sink, T data) {
     subscription = Rx.timer(data, duration).listen((v) {
-      subscription = null;
-
       sink.add(v);
-      if (closed) {
-        sink.close();
-      }
+      sink.close();
     });
   }
 
@@ -30,8 +25,6 @@ class _DelaySingleSink<T>
   void close(EventSink<T> sink) {
     if (subscription == null) {
       sink.close();
-    } else {
-      closed = true;
     }
   }
 
@@ -58,14 +51,16 @@ extension DelaySingleExtension<T> on Single<T> {
   ///
   /// ## Marble
   /// ```text
-  ///source: ---------a-------|
-  ///result: -------------a---|
+  ///source: ---------a|
+  ///delay:           ----
+  ///result: -------------a|
   ///
-  ///source: ---------a-------|
+  ///source: ---------a|
+  ///delay:           -----------
   ///result: --------------------a|
   ///
-  ///source: ---------x-------|
-  ///result: ---------x-------|
+  ///source: ---------x|
+  ///result: ---------x|
   /// ```
   /// [Interactive marble diagram](http://rxmarbles.com/#delay)
   Single<T> delay(Duration duration) =>
