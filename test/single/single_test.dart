@@ -43,7 +43,7 @@ Future<void> cancelRule<T>(
   await Future<void>.delayed(timeout);
 }
 
-final _left = Either<Object, Never>.left(isA<Exception>());
+final _exceptionLeft = Either<Object, Never>.left(isA<Exception>());
 final _APIContractViolationError = (String s) => Either<Object, Never>.left(
     isA<APIContractViolationError>().having((o) => o.message, 'message', s));
 
@@ -59,7 +59,7 @@ void main() {
 
       test('Single.error', () async {
         final build = () => Single<int>.error(Exception());
-        await singleRule(build(), _left);
+        await singleRule(build(), _exceptionLeft);
         broadcastRule(build(), false);
         await cancelRule(build());
       });
@@ -80,13 +80,13 @@ void main() {
 
           test('failure', () async {
             final build1 = () => Single.fromCallable(() => throw Exception());
-            await singleRule(build1(), _left);
+            await singleRule(build1(), _exceptionLeft);
             broadcastRule(build1(), false);
             await cancelRule(build1());
 
             final build2 = () =>
                 Single.fromCallable(() => throw Exception(), reusable: true);
-            await singleRule(build2(), _left);
+            await singleRule(build2(), _exceptionLeft);
             broadcastRule(build2(), true);
             await cancelRule(build2());
           });
@@ -109,14 +109,14 @@ void main() {
           test('.failure', () async {
             final build1 =
                 () => Single.fromCallable(() async => throw Exception());
-            await singleRule(build1(), _left);
+            await singleRule(build1(), _exceptionLeft);
             broadcastRule(build1(), false);
             await cancelRule(build1());
 
             await singleRule(
               Single.fromCallable(() async => throw Exception(),
                   reusable: true),
-              _left,
+              _exceptionLeft,
             );
             broadcastRule(
                 Single.fromCallable(() async => throw Exception(),
@@ -149,7 +149,7 @@ void main() {
         test('.failure', () async {
           await singleRule(
             Single<String>.defer(() => Single.error(Exception())),
-            _left,
+            _exceptionLeft,
           );
           broadcastRule(
               Single<String>.defer(() => Single.error(Exception())), false);
@@ -159,7 +159,7 @@ void main() {
           await singleRule(
             Single<String>.defer(() => Single.error(Exception()),
                 reusable: true),
-            _left,
+            _exceptionLeft,
           );
           broadcastRule(
               Single<String>.defer(() => Single.error(Exception()),
@@ -193,8 +193,8 @@ void main() {
         });
 
         test('.failure', () async {
-          await singleRule(
-              Single<int>.fromFuture(Future.error(Exception())), _left);
+          await singleRule(Single<int>.fromFuture(Future.error(Exception())),
+              _exceptionLeft);
           broadcastRule(
               Single<int>.fromFuture(Future.error(Exception())), false);
           await cancelRule(Single<int>.fromFuture(Future.error(Exception())));
@@ -202,7 +202,7 @@ void main() {
           await singleRule(
             Single.fromFuture(Future.delayed(
                 Duration(milliseconds: 100), () => throw Exception())),
-            _left,
+            _exceptionLeft,
           );
           broadcastRule(
               Single.fromFuture(Future.delayed(
@@ -236,7 +236,7 @@ void main() {
               );
           await singleRule(
             build(),
-            _left,
+            _exceptionLeft,
           );
           broadcastRule(build(), false);
           await cancelRule(build());
@@ -248,7 +248,7 @@ void main() {
                 Single.timer(2, Duration(milliseconds: 100)),
                 (int a, int b) => a + b,
               );
-          await singleRule(build(), _left);
+          await singleRule(build(), _exceptionLeft);
           broadcastRule(build(), false);
           await cancelRule(build());
         });
@@ -260,7 +260,7 @@ void main() {
                     .delay(Duration(milliseconds: 10)),
                 (int a, int b) => a + b,
               );
-          await singleRule(build(), _left);
+          await singleRule(build(), _exceptionLeft);
           broadcastRule(build(), false);
           await cancelRule(build());
         });
@@ -281,7 +281,7 @@ void main() {
         test('.failure', () async {
           await singleRule(
             Single<void>.error(Exception()).distinct(),
-            _left,
+            _exceptionLeft,
           );
           broadcastRule(Single<void>.error(Exception()).distinct(), false);
           await cancelRule(Single<void>.error(Exception()).distinct());
@@ -302,7 +302,7 @@ void main() {
         test('.failure', () async {
           await singleRule(
             Single.value(1).map((event) => throw Exception()),
-            _left,
+            _exceptionLeft,
           );
           broadcastRule(
               Single.value(1).map((event) => throw Exception()), false);
@@ -326,7 +326,7 @@ void main() {
           test('.failure', () async {
             await singleRule(
               Single.value(1).asyncMap((event) => throw Exception()),
-              _left,
+              _exceptionLeft,
             );
           });
         });
@@ -348,7 +348,7 @@ void main() {
                 await Future<void>.delayed(const Duration(milliseconds: 100));
                 throw Exception();
               }),
-              _left,
+              _exceptionLeft,
             );
           });
         });
@@ -394,7 +394,7 @@ void main() {
       test('from Stream.error', () async {
         await singleRule(
           Stream<void>.error(Exception()).singleOrError(),
-          _left,
+          _exceptionLeft,
         );
         broadcastRule(Stream<void>.error(Exception()).singleOrError(), false);
       });
@@ -495,7 +495,7 @@ void main() {
       test('success -> failure', () async {
         await singleRule(
           Single.value(22).flatMapSingle((i) => Single<int>.error(Exception())),
-          _left,
+          _exceptionLeft,
         );
       });
 
@@ -503,7 +503,7 @@ void main() {
         await singleRule(
           Single<int>.error(Exception())
               .flatMapSingle((i) => Single.value(i + 1)),
-          _left,
+          _exceptionLeft,
         );
       });
 
@@ -511,7 +511,7 @@ void main() {
         await singleRule(
           Single<int>.error(Exception())
               .flatMapSingle((i) => Single<int>.error(Exception())),
-          _left,
+          _exceptionLeft,
         );
       });
     });
@@ -533,7 +533,7 @@ void main() {
         await singleRule(
           Single.value(22)
               .switchMapSingle((i) => Single<int>.error(Exception())),
-          _left,
+          _exceptionLeft,
         );
       });
 
@@ -541,7 +541,7 @@ void main() {
         await singleRule(
           Single<int>.error(Exception())
               .switchMapSingle((i) => Single.value(i + 1)),
-          _left,
+          _exceptionLeft,
         );
       });
 
@@ -549,7 +549,7 @@ void main() {
         await singleRule(
           Single<int>.error(Exception())
               .switchMapSingle((i) => Single<int>.error(Exception())),
-          _left,
+          _exceptionLeft,
         );
       });
     });
@@ -571,7 +571,7 @@ void main() {
         await singleRule(
           Single.value(22)
               .exhaustMapSingle((i) => Single<int>.error(Exception())),
-          _left,
+          _exceptionLeft,
         );
       });
 
@@ -579,7 +579,7 @@ void main() {
         await singleRule(
           Single<int>.error(Exception())
               .exhaustMapSingle((i) => Single.value(i + 1)),
-          _left,
+          _exceptionLeft,
         );
       });
 
@@ -587,7 +587,7 @@ void main() {
         await singleRule(
           Single<int>.error(Exception())
               .exhaustMapSingle((i) => Single<int>.error(Exception())),
-          _left,
+          _exceptionLeft,
         );
       });
     });
@@ -609,7 +609,7 @@ void main() {
         await singleRule(
           Single.value(22)
               .asyncExpandSingle((i) => Single<int>.error(Exception())),
-          _left,
+          _exceptionLeft,
         );
       });
 
@@ -617,7 +617,7 @@ void main() {
         await singleRule(
           Single<int>.error(Exception())
               .asyncExpandSingle((i) => Single.value(i + 1)),
-          _left,
+          _exceptionLeft,
         );
       });
 
@@ -625,7 +625,7 @@ void main() {
         await singleRule(
           Single<int>.error(Exception())
               .asyncExpandSingle((i) => Single<int>.error(Exception())),
-          _left,
+          _exceptionLeft,
         );
       });
     });
@@ -634,7 +634,8 @@ void main() {
       await singleRule(Future.value(1).asSingle(), Either.right(1));
       broadcastRule(Future.value(1).asSingle(), false);
 
-      await singleRule(Future<void>.error(Exception()).asSingle(), _left);
+      await singleRule(
+          Future<void>.error(Exception()).asSingle(), _exceptionLeft);
       broadcastRule(Future<void>.error(Exception()).asSingle(), false);
     });
 
@@ -645,14 +646,14 @@ void main() {
       await singleRule(
           (() => Future.value(1)).asSingle(reusable: true), Either.right(1));
 
-      await singleRule((() => throw Exception()).asSingle(), _left);
+      await singleRule((() => throw Exception()).asSingle(), _exceptionLeft);
       await singleRule(
-          (() => throw Exception()).asSingle(reusable: true), _left);
+          (() => throw Exception()).asSingle(reusable: true), _exceptionLeft);
       await singleRule(
-          (() => Future<void>.error(Exception())).asSingle(), _left);
+          (() => Future<void>.error(Exception())).asSingle(), _exceptionLeft);
       await singleRule(
           (() => Future<void>.error(Exception())).asSingle(reusable: true),
-          _left);
+          _exceptionLeft);
     });
 
     group('delay', () {
@@ -673,7 +674,7 @@ void main() {
         await singleRule(
           Single<int>.error(Exception())
               .delay(const Duration(milliseconds: 100)),
-          _left,
+          _exceptionLeft,
         );
         broadcastRule(
           Single<int>.error(Exception())
