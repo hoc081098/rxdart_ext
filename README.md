@@ -18,12 +18,14 @@ Some extension methods and classes built on top of `RxDart` - `RxDart` extension
 A Stream which emits single event, either data or error, and then close with a done-event.
 
 ```text
-Success case: ------(*)-------------------------|---
-                   data                        done
+Success case: ------------(*)|------
+                         data done
 
-Failure case: ------(x)-------------------------|---
-                   error                       done
+Failure case: ------------(x)|------
+                        error done
 ```
+
+> NOTE: Single extends Stream, so all operators and transformers for Stream are available for Single as well.
 
 -   Create Single
     -   Factories and static methods.
@@ -46,8 +48,6 @@ Failure case: ------(x)-------------------------|---
     -   [switchMapSingle]()
     -   [exhaustMapSingle]()
     -   [delay]()
-
-> NOTE: Single extends Stream, so all operators and transformers for Stream are available for Single as well.
 
 ### Operators for Stream
 
