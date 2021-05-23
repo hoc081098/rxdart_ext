@@ -9,5 +9,5 @@ extension SwitchMapSingleExtension<T> on Single<T> {
   ///
   /// This function is an alias to [exhaustMapSingle] operator.
   Single<R> switchMapSingle<R>(Single<R> Function(T) transform) =>
-      Single.safe(exhaustMapSingle(transform));
+      exhaustMapSingle(transform);
 }
