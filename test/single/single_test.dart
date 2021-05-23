@@ -111,7 +111,7 @@ void main() {
                 () => Single.fromCallable(() async => throw Exception());
             await singleRule(build1(), _left);
             broadcastRule(build1(), false);
-            cancelRule(build1());
+            await cancelRule(build1());
 
             await singleRule(
               Single.fromCallable(() async => throw Exception(),
