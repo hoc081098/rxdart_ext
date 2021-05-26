@@ -117,7 +117,7 @@ class _OnErrorResumeingleSingleSink<T>
   void onResume(EventSink<T> sink) => subscription?.resume();
 }
 
-/// TODO
+/// Extends the Single class with the ability to recover from errors in various ways.
 extension OnErrorSingleExtensions<T> on Single<T> {
   /// TODO
   Stream<T> onErrorResumeNextSingle(Single<T> recoverySingle) => Single.safe(
@@ -138,7 +138,29 @@ extension OnErrorSingleExtensions<T> on Single<T> {
         ),
       );
 
-  /// TODO
+  /// Instructs a Single to emit a particular item when it encounters an
+  /// error, and then terminate normally.
+  ///
+  /// The onErrorReturn operator intercepts an onError notification from
+  /// the source Single. Instead of passing it through to any observers, it
+  /// replaces it with a given item, and then terminates normally.
+  ///
+  /// If you need to perform logic based on the type of error that was emitted,
+  /// please consider using [onErrorReturnWith].
+  ///
+  /// ### Marble
+  ///
+  /// ```text
+  /// single      : ----------x|
+  /// returnValue : a
+  /// result      : ----------a|
+  /// ```
+  ///
+  /// ### Example
+  ///
+  ///     Single<int>.error(Exception())
+  ///       .onErrorReturn(1)
+  ///       .listen(print); // prints 1
   Single<T> onErrorReturn(T returnValue) => Single.safe(
         forwardStream(
           this,

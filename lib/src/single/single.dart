@@ -56,10 +56,10 @@ class Single<T> extends StreamView<T> {
   ///
   /// ```text
   /// future: ----------a|
-  /// result : ---------a|
+  /// result: ----------a|
   ///
   /// future: ----------x|
-  /// result : ---------x|
+  /// result: ----------x|
   ///
   /// NOTE: x is error event
   /// ```
