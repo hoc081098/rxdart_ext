@@ -154,6 +154,8 @@ extension OnErrorSingleExtensions<T> on Single<T> {
   /// single      : ----------x|
   /// returnValue : a
   /// result      : ----------a|
+  ///
+  /// NOTE: x is error event
   /// ```
   ///
   /// ### Example
