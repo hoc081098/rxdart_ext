@@ -166,6 +166,9 @@ class Single<T> extends StreamView<T> {
       Single.safe(_stream.map(convert));
 
   @override
+  Single<R> cast<R>() => Single<R>.safe(_stream.cast<R>());
+
+  @override
   Single<E> asyncMap<E>(FutureOr<E> Function(T event) convert) =>
       Single.safe(_stream.asyncMap(convert));
 
