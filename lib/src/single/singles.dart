@@ -4,6 +4,8 @@ import 'package:rxdart/rxdart.dart';
 
 import 'single.dart';
 
+/// A utility class that provides static methods to create the various [Single]s
+/// provided by `rxdart_ext`.
 abstract class Singles {
   Singles._();
 
