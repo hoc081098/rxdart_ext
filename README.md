@@ -27,6 +27,20 @@ Failure case: ------------(x)|------
 
 > NOTE: Single extends Stream, so all operators and transformers for Stream are available for Single as well.
 
+`Single` is suitable for one-shot operations (likes `Future` but **lazy** - executes when listening), eg. making API request, reading local storage, ...
+
+```dart
+import 'package:http/http.dart' as http;
+
+Single<User> fetchUser(String id) {
+  return Single.fromCallable(() => http.get(Uri.parse('$baseUrl/users/$id')))
+      .flatMapSingle((res) => res.statusCode == HttpStatus.ok
+          ? Single.value(res.body)
+          : Single.error(Exception('Cannot fetch user with id=$id')))
+      .map((body) => User.fromJson(jsonEncode(body)));
+}
+```
+
 -   Create Single
     -   Factories and static methods.
         -   [Single.value]()
