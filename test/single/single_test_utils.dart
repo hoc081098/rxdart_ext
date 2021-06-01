@@ -42,5 +42,6 @@ Future<void> cancelRule<T>(
 }
 
 final exceptionLeft = Either<Object, Never>.left(isA<Exception>());
-final APIContractViolationErrorWithMessage = (String s) => Either<Object, Never>.left(
-    isA<APIContractViolationError>().having((o) => o.message, 'message', s));
+final APIContractViolationErrorWithMessage = (String s) =>
+    Either<Object, Never>.left(isA<APIContractViolationError>()
+        .having((o) => o.message, 'message', s));
