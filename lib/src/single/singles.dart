@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:rxdart_ext/rxdart_ext.dart';
 
 import 'single.dart';
 
@@ -40,12 +41,50 @@ abstract class Singles {
     Single<A> singleA,
     Single<B> singleB,
     T Function(A, B) zipper,
-  ) {
+  ) =>
+      Rx.zip2(singleA, singleB, zipper)._takeFirstDataOrFirstErrorAndClose();
+
+  /// Merges the given [Single]s into a single [Single] sequence by using the
+  /// [combiner] function when all of the [Single] sequences emits their
+  /// last item.
+  ///
+  /// The returned [Single] is single-subscription Stream.
+  ///
+  /// ## Marble
+  ///
+  /// ```text
+  /// singleA: ----------a|
+  /// singleB: ---------------b|
+  /// result : ---------------ab|
+  ///
+  /// singleA: ----------x|
+  /// singleB: ---------------b|
+  /// result : ----------x|
+  ///
+  /// singleA: ----------x|
+  /// singleB: ---------------x|
+  /// result : ----------x|
+  ///
+  /// NOTE: x is error event
+  /// ```
+  ///
+  /// See [Rx.forkJoin2] and [ForkJoinStream].
+  static Single<T> forkJoin2<A, B, T>(
+    Single<A> singleA,
+    Single<B> singleB,
+    T Function(A, B) combiner,
+  ) =>
+      Rx.forkJoin2(singleA, singleB, combiner)
+          ._takeFirstDataOrFirstErrorAndClose();
+}
+
+extension _TakeFirstDataOrFirstErrorExtension<T> on Stream<T> {
+  Single<T> _takeFirstDataOrFirstErrorAndClose() {
     final controller = StreamController<T>(sync: true);
     StreamSubscription<T>? subscription;
 
     controller.onListen = () {
-      subscription = Rx.zip2(singleA, singleB, zipper).listen(
+      subscription = listen(
         (v) {
           controller.add(v);
           controller.close();
@@ -54,7 +93,10 @@ abstract class Singles {
           controller.addError(e, s);
           controller.close();
         },
-        onDone: controller.close,
+        onDone: () {
+          throw APIContractViolationError(
+              'Internal API error! Please file a bug at: https://github.com/hoc081098/rxdart_ext/issues/new');
+        },
       );
     };
     controller.onPause = () => subscription!.pause();
