@@ -18,6 +18,7 @@ import 'single/async_expand_test.dart' as async_expand_test;
 import 'single/delay_test.dart' as delay_test;
 import 'single/single_or_error_test.dart' as single_or_error_test;
 import 'single/single_test.dart' as single_test;
+import 'single/singles_test.dart' as singles_test;
 import 'single/switch_flat_exhaust_map_test.dart'
     as switch_flat_exhaust_map_test;
 
@@ -41,5 +42,6 @@ void main() {
   delay_test.main();
   single_or_error_test.main();
   single_test.main();
+  singles_test.main();
   switch_flat_exhaust_map_test.main();
 }
