@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:rxdart_ext/rxdart_ext.dart';
 
+import '../error/api_contract_violation_error.dart';
 import 'single.dart';
 
 /// A utility class that provides static methods to create the various [Single]s
