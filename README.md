@@ -52,6 +52,7 @@ Single<User> fetchUser(String id) {
             
     -   Static methods provided by [Singles]() class
         -   [Singles.zip2]()
+        -   [Singles.forkJoin2]()
         
     -   Convert others to Single via extensions.
         -   [Stream.singleOrError]()
