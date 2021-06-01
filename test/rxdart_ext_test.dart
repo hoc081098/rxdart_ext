@@ -15,6 +15,7 @@ import 'value/value_subject_test.dart' as value_subject_test;
 
 import 'single/as_single_test.dart' as as_single_test;
 import 'single/delay_test.dart' as delay_test;
+import 'single/single_or_error_test.dart' as single_or_error_test;
 import 'single/single_test.dart' as single_test;
 
 void main() {
@@ -34,5 +35,6 @@ void main() {
 
   as_single_test.main();
   delay_test.main();
+  single_or_error_test.main();
   single_test.main();
 }
