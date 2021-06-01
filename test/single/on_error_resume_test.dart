@@ -21,7 +21,7 @@ void main() {
     });
   });
 
-  group('Single.onErrorReturn', () {
+  group('Single.onErrorReturnWith', () {
     test('.success', () async {
       final build = () =>
           Single.value(1).onErrorReturnWith((e, s) => e is Exception ? 99 : 0);
