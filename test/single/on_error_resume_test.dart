@@ -7,7 +7,7 @@ import 'single_test_utils.dart';
 void main() {
   group('Single.onErrorReturn', () {
     test('.success', () async {
-      final build = () => Single.value(1);
+      final build = () => Single.value(1).onErrorReturn(99);
       await singleRule(build(), Either.right(1));
       broadcastRule(build(), false);
       await cancelRule(build());
@@ -16,6 +16,24 @@ void main() {
     test('.failure', () async {
       final build = () => Single<int>.error(Exception()).onErrorReturn(1);
       await singleRule(build(), Either.right(1));
+      broadcastRule(build(), false);
+      await cancelRule(build());
+    });
+  });
+
+  group('Single.onErrorReturn', () {
+    test('.success', () async {
+      final build = () =>
+          Single.value(1).onErrorReturnWith((e, s) => e is Exception ? 99 : 0);
+      await singleRule(build(), Either.right(1));
+      broadcastRule(build(), false);
+      await cancelRule(build());
+    });
+
+    test('.failure', () async {
+      final build = () => Single<int>.error(Exception())
+          .onErrorReturnWith((e, s) => e is Exception ? 99 : 0);
+      await singleRule(build(), Either.right(99));
       broadcastRule(build(), false);
       await cancelRule(build());
     });
