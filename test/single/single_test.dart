@@ -313,6 +313,23 @@ void main() {
           });
         });
       });
+
+      group('.cast', () {
+        test('.success', () async {
+          final build = () => Single<Object>.value(1).cast<int>();
+          await singleRule(build(), Either.right(1));
+          broadcastRule(build(), false);
+          await cancelRule(build());
+        });
+
+        test('.failure', () async {
+          final build = () => Single<Object>.value(1).cast<String>();
+          await singleRule(
+              build(), Either<Object, String>.left(isA<TypeError>()));
+          broadcastRule(build(), false);
+          await cancelRule(build());
+        });
+      });
     });
 
     group('singleOrError', () {
