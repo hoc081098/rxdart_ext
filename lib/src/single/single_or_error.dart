@@ -1,4 +1,5 @@
 import 'single.dart';
+import '../error/api_contract_violation_error.dart';
 
 /// Provides [singleOrError] extension for [Stream].
 extension ToSingleStreamExtension<T> on Stream<T> {
