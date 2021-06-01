@@ -269,11 +269,16 @@ void main() {
         });
 
         test('.failure', () async {
-          final build = () => Single<Object>.value(1).cast<String>();
+          final build1 = () => Single<Object>.value(1).cast<String>();
           await singleRule(
-              build(), Either<Object, String>.left(isA<TypeError>()));
-          broadcastRule(build(), false);
-          await cancelRule(build());
+              build1(), Either<Object, String>.left(isA<TypeError>()));
+          broadcastRule(build1(), false);
+          await cancelRule(build1());
+
+          final build2 = () => Single<int>.error(Exception());
+          await singleRule(build2(), exceptionLeft);
+          broadcastRule(build2(), false);
+          await cancelRule(build2());
         });
       });
     });
