@@ -29,8 +29,16 @@ class _OnErrorReturnWithSingleSink<T>
   void add(EventSink<T> sink, T data) => sink.add(data);
 
   @override
-  void addError(EventSink<T> sink, Object error, StackTrace st) =>
-      sink.add(itemSupplier(error, st));
+  void addError(EventSink<T> sink, Object error, StackTrace st) {
+    final T item;
+    try {
+      item = itemSupplier(error, st);
+    } catch (e, s) {
+      sink.addError(e, s);
+      return;
+    }
+    sink.add(item);
+  }
 }
 
 class _OnErrorResumeNextSingleSingleSink<T>
@@ -88,7 +96,14 @@ class _OnErrorResumeSingleSingleSink<T>
 
   @override
   void addError(EventSink<T> sink, Object error, StackTrace st) {
-    subscription = fallbackSupplier(error, st).listen(
+    final Single<T> fallback;
+    try {
+      fallback = fallbackSupplier(error, st);
+    } catch (e, s) {
+      sink.addError(e, s);
+      return;
+    }
+    subscription = fallback.listen(
       (value) {
         sink.add(value);
         sink.close();
@@ -120,15 +135,33 @@ class _OnErrorResumeSingleSingleSink<T>
 /// Extends the Single class with the ability to recover from errors in various ways.
 extension OnErrorSingleExtensions<T> on Single<T> {
   /// TODO
-  Stream<T> onErrorResumeNextSingle(Single<T> recoverySingle) => Single.safe(
+  Single<T> onErrorResumeNextSingle(Single<T> recoverySingle) => Single.safe(
         forwardStream(
           this,
           _OnErrorResumeNextSingleSingleSink(recoverySingle),
         ),
       );
 
-  /// TODO
-  Stream<T> onErrorResumeSingle(
+  /// Intercepts error events and switches to a recovery [Single] created by the
+  /// provided [fallbackSupplier].
+  ///
+  /// The onErrorResumeSingle operator intercepts an onError notification from
+  /// the source Stream. Instead of passing the error through to any
+  /// listeners, it replaces it with another Single created by the [fallbackSupplier].
+  ///
+  /// The [fallbackSupplier] receives the emitted error and returns a [Single]. You can
+  /// perform logic in the [fallbackSupplier] to return different [Single]s based on the
+  /// type of error that was emitted.
+  ///
+  /// If you do not need to perform logic based on the type of error that was
+  /// emitted, please consider using [onErrorResumeNextSingle] or [onErrorReturn].
+  ///
+  /// ### Example
+  ///
+  ///     Single<int>.error(Exception())
+  ///         .onErrorResumeSingle((e, st) => Single.value(e is StateError ? 1 : 0))
+  ///         .listen(print); // prints 0
+  Single<T> onErrorResumeSingle(
           Single<T> Function(Object error, StackTrace stackTrace)
               fallbackSupplier) =>
       Single.safe(
@@ -177,8 +210,8 @@ extension OnErrorSingleExtensions<T> on Single<T> {
   /// the source Single. Instead of passing it through to any observers, it
   /// replaces it with a given item, and then terminates normally.
   ///
-  /// The [itemSupplier] receives the emitted error and returns a item. You can
-  /// perform logic in the [itemSupplier] to return different item based on the
+  /// The [itemSupplier] receives the emitted error and returns a value. You can
+  /// perform logic in the [itemSupplier] to return different value based on the
   /// type of error that was emitted.
   ///
   /// If you do not need to perform logic based on the type of error that was

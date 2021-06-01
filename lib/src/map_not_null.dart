@@ -11,7 +11,13 @@ class _MapNotNullSink<T, R extends Object>
 
   @override
   void add(EventSink<R> sink, T data) {
-    final value = transform(data);
+    final R? value;
+    try {
+      value = transform(data);
+    } catch (e, s) {
+      sink.addError(e, s);
+      return;
+    }
     if (value != null) {
       sink.add(value);
     }
