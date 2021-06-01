@@ -13,6 +13,8 @@ import 'value/not_replay_value_connectable_stream_tests.dart'
 import 'value/value_controller_test.dart' as value_controller_test;
 import 'value/value_subject_test.dart' as value_subject_test;
 
+import 'single/as_single_test.dart' as as_single_test;
+import 'single/delay_test.dart' as delay_test;
 import 'single/single_test.dart' as single_test;
 
 void main() {
@@ -30,5 +32,7 @@ void main() {
   value_controller_test.main();
   value_subject_test.main();
 
+  as_single_test.main();
+  delay_test.main();
   single_test.main();
 }
