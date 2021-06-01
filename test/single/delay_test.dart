@@ -17,6 +17,14 @@ void main() {
       );
       await cancelRule(
           Single.value(1).delay(const Duration(milliseconds: 100)));
+
+      Single.value(1)
+          .delay(const Duration(milliseconds: 500))
+          .timeInterval()
+          .listen(expectAsync1(
+            (v) => expect(v.interval.inMilliseconds, greaterThanOrEqualTo(500)),
+            count: 1,
+          ));
     });
 
     test('.failure', () async {
