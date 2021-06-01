@@ -1,14 +1,14 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'single.dart';
 
 /// A utility class that provides static methods to create the various [Single]s
 /// provided by `rxdart_ext`.
+@sealed
 abstract class Singles {
-  Singles._();
-
   /// Merges the specified [Single]s into one [Single] sequence using the given
   /// [zipper] function whenever all of the [Single] sequences have produced
   /// an element.
