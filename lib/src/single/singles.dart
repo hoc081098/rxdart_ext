@@ -13,6 +13,8 @@ abstract class Singles {
   /// [zipper] function whenever all of the [Single] sequences have produced
   /// an element.
   ///
+  /// The returned [Single] is single-subscription Stream.
+  ///
   /// ## Marble
   ///
   /// ```text
