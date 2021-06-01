@@ -59,12 +59,16 @@ Single<User> fetchUser(String id) {
         -   [Future.asSingle]()
         -   [(FutureOr<T> Function()).asSingle]()
     
--   Operators for Single
+-   Operators for Single (returns a Single)
     -   [flatMapSingle]()
     -   [asyncExpandSingle]()
     -   [switchMapSingle]()
     -   [exhaustMapSingle]()
     -   [delay]()
+    -   [onErrorReturn]()
+    -   [onErrorReturnWith]()
+    -   [onErrorResumeSingle]()
+    -   [onErrorResumeNextSingle]()
 
 ### Operators for Stream
 

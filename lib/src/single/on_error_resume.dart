@@ -75,13 +75,13 @@ class _OnErrorResumeNextSingleSingleSink<T>
   void onResume(EventSink<T> sink) => subscription?.resume();
 }
 
-class _OnErrorResumeingleSingleSink<T>
+class _OnErrorResumeSingleSingleSink<T>
     with ForwardingSinkMixin<T, T>
     implements ForwardingSink<T, T> {
   final Single<T> Function(Object, StackTrace) fallbackSupplier;
   StreamSubscription<T>? subscription;
 
-  _OnErrorResumeingleSingleSink(this.fallbackSupplier);
+  _OnErrorResumeSingleSingleSink(this.fallbackSupplier);
 
   @override
   void add(EventSink<T> sink, T data) => sink.add(data);
@@ -134,7 +134,7 @@ extension OnErrorSingleExtensions<T> on Single<T> {
       Single.safe(
         forwardStream(
           this,
-          _OnErrorResumeingleSingleSink(fallbackSupplier),
+          _OnErrorResumeSingleSingleSink(fallbackSupplier),
         ),
       );
 
@@ -170,7 +170,25 @@ extension OnErrorSingleExtensions<T> on Single<T> {
         ),
       );
 
-  /// TODO
+  /// Instructs a Single to emit a particular item created by the
+  /// [itemSupplier] when it encounters an error, and then terminate normally.
+  ///
+  /// The onErrorReturnWith operator intercepts an onError notification from
+  /// the source Single. Instead of passing it through to any observers, it
+  /// replaces it with a given item, and then terminates normally.
+  ///
+  /// The [itemSupplier] receives the emitted error and returns a item. You can
+  /// perform logic in the [itemSupplier] to return different item based on the
+  /// type of error that was emitted.
+  ///
+  /// If you do not need to perform logic based on the type of error that was
+  /// emitted, please consider using [onErrorReturn].
+  ///
+  /// ### Example
+  ///
+  ///     Single<int>.error(Exception())
+  ///       .onErrorReturnWith((e, s) => e is Exception ? 1 : 0)
+  ///       .listen(print); // prints 1
   Single<T> onErrorReturnWith(
           T Function(Object error, StackTrace stackTrace) itemSupplier) =>
       Single.safe(

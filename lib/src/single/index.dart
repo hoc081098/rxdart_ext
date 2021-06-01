@@ -3,7 +3,7 @@ export 'async_expand.dart';
 export 'delay.dart';
 export 'exhaust_map.dart';
 export 'flat_map.dart';
-export 'on_error.dart';
+export 'on_error_resume.dart';
 export 'single.dart';
 export 'single_or_error.dart';
 export 'singles.dart';
