@@ -50,7 +50,7 @@ Single<User> fetchUser(String id) {
         -   [Single.timer]()
         -   [Single.defer]()
             
-    -   Static methods provided by [Singles] class
+    -   Static methods provided by [Singles]() class
         -   [Singles.zip2]()
         
     -   Convert others to Single via extensions.
