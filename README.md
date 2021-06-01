@@ -42,14 +42,16 @@ Single<User> fetchUser(String id) {
 ```
 
 -   Create Single
-    -   Factories and static methods.
+    -   Factory constructors.
         -   [Single.value]()
         -   [Single.error]()
         -   [Single.fromFuture]()
         -   [Single.fromCallable]()
         -   [Single.timer]()
         -   [Single.defer]()
-        -   [Single.zip2]()
+            
+    -   Static methods provided by [Singles]() class
+        -   [Singles.zip2]()
         
     -   Convert others to Single via extensions.
         -   [Stream.singleOrError]()
