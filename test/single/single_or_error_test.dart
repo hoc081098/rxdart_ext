@@ -16,7 +16,8 @@ void main() {
       );
 
       final s = Single.value(1);
-      expect(identical(s, SingleOrErrorStreamExtension(s).singleOrError()), true);
+      expect(
+          identical(s, SingleOrErrorStreamExtension(s).singleOrError()), true);
       broadcastRule(SingleOrErrorStreamExtension(s).singleOrError(), false);
     });
 
