@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:math' as math;
 
-import 'package:path/path.dart' as path;
 import 'package:rxdart/rxdart.dart'
     show DoStreamTransformer, Kind, Notification;
 import 'package:stack_trace/stack_trace.dart';
+
+import 'utils.dart';
 
 extension _NotificationDescriptionExt<T> on Notification<T> {
   @pragma('vm:prefer-inline')
@@ -19,15 +20,6 @@ extension _NotificationDescriptionExt<T> on Notification<T> {
         final error = errorAndStackTrace!;
         return 'error(${error.error}, ${error.stackTrace})';
     }
-  }
-}
-
-extension on Frame {
-  @pragma('vm:prefer-inline')
-  @pragma('dart2js:tryInline')
-  String get formatted {
-    final trimmedFile = path.basename(uri.toString());
-    return '$trimmedFile:$line ($member)';
   }
 }
 

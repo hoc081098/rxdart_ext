@@ -11,13 +11,13 @@ void main() {
   group('singleOrError', () {
     test('returns itself', () async {
       await singleRule(
-        Single.value(1).singleOrError(),
+        SingleOrErrorStreamExtension(Single.value(1)).singleOrError(),
         Either.right(1),
       );
 
       final s = Single.value(1);
-      expect(identical(s, s.singleOrError()), true);
-      broadcastRule(s.singleOrError(), false);
+      expect(identical(s, SingleOrErrorStreamExtension(s).singleOrError()), true);
+      broadcastRule(SingleOrErrorStreamExtension(s).singleOrError(), false);
     });
 
     test('from Stream of Controller', () async {

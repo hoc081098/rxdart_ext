@@ -1,5 +1,6 @@
 export 'as_single.dart';
 export 'async_expand.dart';
+export 'debug.dart';
 export 'delay.dart';
 export 'do.dart';
 export 'exhaust_map.dart';
