@@ -7,7 +7,7 @@ import 'single_test_utils.dart';
 void main() {
   group('Singles.zip2', () {
     test('success + success', () async {
-      final build = () => Singles.zip2(
+      final build = () => RxSingles.zip2(
             Single.value(1),
             Single.timer(2, Duration(milliseconds: 100)),
             (int a, int b) => a + b,
@@ -21,7 +21,7 @@ void main() {
     });
 
     test('success + failure', () async {
-      final build = () => Singles.zip2(
+      final build = () => RxSingles.zip2(
             Single.value(1),
             Single<int>.error(Exception()),
             (int a, int b) => a + b,
@@ -35,7 +35,7 @@ void main() {
     });
 
     test('failure + success', () async {
-      final build = () => Singles.zip2(
+      final build = () => RxSingles.zip2(
             Single<int>.error(Exception()),
             Single.timer(2, Duration(milliseconds: 100)),
             (int a, int b) => a + b,
@@ -46,7 +46,7 @@ void main() {
     });
 
     test('failure + failure', () async {
-      final build = () => Singles.zip2(
+      final build = () => RxSingles.zip2(
             Single<int>.error(Exception()),
             Single<int>.error(Exception()).delay(Duration(milliseconds: 10)),
             (int a, int b) => a + b,
@@ -59,7 +59,7 @@ void main() {
 
   group('Singles.forkJoin2', () {
     test('success + success', () async {
-      final build = () => Singles.forkJoin2(
+      final build = () => RxSingles.forkJoin2(
             Single.value(1),
             Single.timer(2, Duration(milliseconds: 100)),
             (int a, int b) => a + b,
@@ -73,7 +73,7 @@ void main() {
     });
 
     test('success + failure', () async {
-      final build = () => Singles.forkJoin2(
+      final build = () => RxSingles.forkJoin2(
             Single.value(1),
             Single<int>.error(Exception()),
             (int a, int b) => a + b,
@@ -87,7 +87,7 @@ void main() {
     });
 
     test('failure + success', () async {
-      final build = () => Singles.forkJoin2(
+      final build = () => RxSingles.forkJoin2(
             Single<int>.error(Exception()),
             Single.timer(2, Duration(milliseconds: 100)),
             (int a, int b) => a + b,
@@ -98,7 +98,7 @@ void main() {
     });
 
     test('failure + failure', () async {
-      final build = () => Singles.forkJoin2(
+      final build = () => RxSingles.forkJoin2(
             Single<int>.error(Exception()),
             Single<int>.error(Exception()).delay(Duration(milliseconds: 10)),
             (int a, int b) => a + b,

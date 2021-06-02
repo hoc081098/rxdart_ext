@@ -66,6 +66,19 @@ void main() {
       });
     });
 
+    final stateError = StateError('Caught by Zone');
+    void expectStateError(Object e, StackTrace s) {
+      expect(
+        e,
+        isStateError.having(
+          (s) => s.message,
+          'message',
+          stateError.message,
+        ),
+      );
+      expect(e, stateError);
+    }
+
     group('doOnCancel', () {
       test('.success', () async {
         final build1 = () => Single.value(1).doOnCancel(() => null);
@@ -76,12 +89,12 @@ void main() {
         await runZonedGuarded(
           () async {
             final build2 =
-                () => Single.value(1).doOnCancel(() => throw Exception());
+                () => Single.value(1).doOnCancel(() => throw stateError);
             await singleRule(build2(), Either.right(1));
             broadcastRule(build2(), false);
             await cancelRule(build2());
           },
-          (e, s) => expect(e, isException),
+          expectStateError,
         );
       });
 
@@ -94,13 +107,13 @@ void main() {
 
         await runZonedGuarded(
           () async {
-            final build2 = () => Single<int>.error(StateError('error'))
-                .doOnCancel(() => throw Exception());
-            await singleRule(build2(), Either<Matcher, int>.left(isStateError));
+            final build2 = () => Single<int>.error(Exception())
+                .doOnCancel(() => throw stateError);
+            await singleRule(build2(), exceptionLeft);
             broadcastRule(build2(), false);
             await cancelRule(build2());
           },
-          (e, s) => expect(e, isException),
+          expectStateError,
         );
       });
     });

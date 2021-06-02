@@ -7,5 +7,5 @@ export 'flat_map.dart';
 export 'on_error_resume.dart';
 export 'single.dart';
 export 'single_or_error.dart';
-export 'singles.dart';
+export 'rx_singles.dart';
 export 'switch_map.dart';
