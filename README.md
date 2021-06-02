@@ -50,9 +50,9 @@ Single<User> fetchUser(String id) {
         -   [Single.timer]()
         -   [Single.defer]()
             
-    -   Static methods provided by [Singles]() class
-        -   [Singles.zip2]()
-        -   [Singles.forkJoin2]()
+    -   Static methods provided by [RxSingles]() class
+        -   [RxSingles.zip2]()
+        -   [RxSingles.forkJoin2]()
         
     -   Convert others to Single via extensions.
         -   [Stream.singleOrError]()

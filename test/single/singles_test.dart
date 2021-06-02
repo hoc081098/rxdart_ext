@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 import 'single_test_utils.dart';
 
 void main() {
-  group('Singles.zip2', () {
+  group('RxSingles.zip2', () {
     test('success + success', () async {
       final build = () => RxSingles.zip2(
             Single.value(1),
@@ -57,7 +57,7 @@ void main() {
     });
   });
 
-  group('Singles.forkJoin2', () {
+  group('RxSingles.forkJoin2', () {
     test('success + success', () async {
       final build = () => RxSingles.forkJoin2(
             Single.value(1),
