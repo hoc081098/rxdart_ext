@@ -1,6 +1,11 @@
+import 'dart:async';
+
+import 'package:dart_either/dart_either.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
+
+import 'single_test_utils.dart';
 
 void main() {
   group('Single.doX', () {
@@ -62,7 +67,42 @@ void main() {
     });
 
     group('doOnCancel', () {
+      test('.success', () async {
+        final build1 = () => Single.value(1).doOnCancel(() => null);
+        await singleRule(build1(), Either.right(1));
+        broadcastRule(build1(), false);
+        await cancelRule(build1());
 
+        await runZonedGuarded(
+          () async {
+            final build2 =
+                () => Single.value(1).doOnCancel(() => throw Exception());
+            await singleRule(build2(), Either.right(1));
+            broadcastRule(build2(), false);
+            await cancelRule(build2());
+          },
+          (e, s) => expect(e, isException),
+        );
+      });
+
+      test('.failure', () async {
+        final build1 =
+            () => Single<int>.error(Exception()).doOnCancel(() => null);
+        await singleRule(build1(), exceptionLeft);
+        broadcastRule(build1(), false);
+        await cancelRule(build1());
+
+        await runZonedGuarded(
+          () async {
+            final build2 = () => Single<int>.error(StateError('error'))
+                .doOnCancel(() => throw Exception());
+            await singleRule(build2(), Either<Matcher, int>.left(isStateError));
+            broadcastRule(build2(), false);
+            await cancelRule(build2());
+          },
+          (e, s) => expect(e, isException),
+        );
+      });
     });
   });
 }
