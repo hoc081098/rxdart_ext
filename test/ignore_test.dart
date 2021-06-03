@@ -4,15 +4,25 @@ import 'package:test/test.dart';
 void main() {
   test('ignoreElements', () {
     expect(
-      Stream.fromIterable([1, 2, 3]).ignoreElements<void>(),
+      Stream.fromIterable([1, 2, 3]).ignoreElements(),
       emitsDone,
+    );
+
+    expect(
+      Stream.fromIterable([1, 2, 3]).ignoreElements(),
+      isA<Stream<int>>(),
+    );
+
+    expect(
+      Stream.fromIterable([1, 2, 3]).ignoreElements(),
+      isA<Stream<Object?>>(),
     );
 
     expect(
       Rx.concat([
         Stream.fromIterable([1, 2, 3]),
         Stream<int>.error(Exception()),
-      ]).ignoreElements<void>(),
+      ]).ignoreElements(),
       emitsInOrder(<dynamic>[
         emitsError(isException),
         emitsDone,

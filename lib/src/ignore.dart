@@ -3,16 +3,16 @@ import 'dart:async';
 import 'default_sink.dart';
 
 class _IgnoreElementsStreamSink<T>
-    with ForwardingSinkMixin<T, T>
-    implements ForwardingSink<T, T> {
+    with ForwardingSinkMixin<T, Never>
+    implements ForwardingSink<T, Never> {
   @override
-  void add(EventSink<T> sink, T data) {}
+  void add(EventSink<Never> sink, T data) {}
 }
 
 /// Ignore all data events, forward only error and done event.
 extension IgnoreElementStreamExtension<T> on Stream<T> {
   /// Ignore all data events, forward only error and done event.
-  Stream<R> ignoreElements<R>() =>
+  Stream<Never> ignoreElements() =>
       forwardStreamWithSink(_IgnoreElementsStreamSink());
 }
 
