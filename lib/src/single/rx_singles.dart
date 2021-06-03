@@ -8,8 +8,10 @@ import 'single.dart';
 
 /// A utility class that provides static methods to create the various [Single]s
 /// provided by `rxdart_ext`.
+///
+/// Similar to [Rx] of `rxdart`, but for [Single].
 @sealed
-abstract class Singles {
+abstract class RxSingles {
   /// Merges the specified [Single]s into one [Single] sequence using the given
   /// [zipper] function whenever all of the [Single] sequences have produced
   /// an element.
@@ -86,10 +88,16 @@ extension _TakeFirstDataOrFirstErrorExtension<T> on Stream<T> {
     controller.onListen = () {
       subscription = listen(
         (v) {
+          subscription!.cancel();
+          subscription = null;
+
           controller.add(v);
           controller.close();
         },
         onError: (Object e, StackTrace s) {
+          subscription!.cancel();
+          subscription = null;
+
           controller.addError(e, s);
           controller.close();
         },

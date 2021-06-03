@@ -50,9 +50,9 @@ Single<User> fetchUser(String id) {
         -   [Single.timer]()
         -   [Single.defer]()
             
-    -   Static methods provided by [Singles]() class
-        -   [Singles.zip2]()
-        -   [Singles.forkJoin2]()
+    -   Static methods provided by [RxSingles]() class
+        -   [RxSingles.zip2]()
+        -   [RxSingles.forkJoin2]()
         
     -   Convert others to Single via extensions.
         -   [Stream.singleOrError]()
@@ -69,11 +69,21 @@ Single<User> fetchUser(String id) {
     -   [onErrorReturnWith]()
     -   [onErrorResumeSingle]()
     -   [onErrorResumeNextSingle]()
+    -   [doOnCancel]()
+    -   [doOnData]()
+    -   [doOnDone]()
+    -   [doOnEach]()
+    -   [doOnError]()
+    -   [doOnListen]()
+    -   [doOnPause]()
+    -   [doOnResume]()
 
 ### Operators for Stream
 
 - [debug](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DebugStreamExtension/debug.html), [collect](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/CollectStreamExtension/collect.html)
 - [ForwardingSinkMixin](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ForwardingSinkMixin-mixin.html)
+- [forwardSingleWithSink]()  
+- [forwardStreamWithSink]()
 - [distinctUniqueBy](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DistinctUniqueByStreamExtension/distinctUniqueBy.html)
 - [distinctBy](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DistinctByExtension/distinctBy.html)
 - [ignoreElements](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/IgnoreElementStreamExtension/ignoreElements.html), [ignoreErrors](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/IgnoreErrorsStreamExtension/ignoreErrors.html)

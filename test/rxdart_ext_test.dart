@@ -15,8 +15,10 @@ import 'value/value_subject_test.dart' as value_subject_test;
 
 import 'single/as_single_test.dart' as as_single_test;
 import 'single/async_expand_test.dart' as async_expand_test;
+import 'single/debug_test.dart' as single_debug_test;
 import 'single/on_error_resume_test.dart' as on_error_resume_test;
 import 'single/delay_test.dart' as delay_test;
+import 'single/do_test.dart' as do_test;
 import 'single/single_or_error_test.dart' as single_or_error_test;
 import 'single/single_test.dart' as single_test;
 import 'single/singles_test.dart' as singles_test;
@@ -40,8 +42,10 @@ void main() {
 
   as_single_test.main();
   async_expand_test.main();
+  single_debug_test.main();
   on_error_resume_test.main();
   delay_test.main();
+  do_test.main();
   single_or_error_test.main();
   single_test.main();
   singles_test.main();

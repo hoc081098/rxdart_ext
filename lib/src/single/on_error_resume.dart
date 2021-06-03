@@ -134,13 +134,36 @@ class _OnErrorResumeSingleSingleSink<T>
 
 /// Extends the Single class with the ability to recover from errors in various ways.
 extension OnErrorSingleExtensions<T> on Single<T> {
-  /// TODO
-  Single<T> onErrorResumeNextSingle(Single<T> recoverySingle) => Single.safe(
-        forwardStream(
-          this,
-          _OnErrorResumeNextSingleSingleSink(recoverySingle),
-        ),
-      );
+  /// Intercepts error events and switches to the given recovery Single in
+  /// that case.
+  ///
+  /// The onErrorResumeNextSingle operator intercepts an onError notification from
+  /// the source Single. Instead of passing the error through to any
+  /// listeners, it replaces it with another Single.
+  ///
+  /// If you need to perform logic based on the type of error that was emitted,
+  /// please consider using [onErrorResumeSingle].
+  ///
+  /// ### Marble
+  /// ```text
+  /// single         : ----------x|
+  /// recoverySingle : ----a|
+  /// result         : --------------a|
+  ///
+  /// single         : ----------x|
+  /// recoverySingle : ----x|
+  /// result         : --------------x|
+  ///
+  /// NOTE: x is error event
+  /// ```
+  ///
+  /// ### Example
+  ///
+  ///     Single<int>.error(Exception())
+  ///       .onErrorResumeNextSingle(Single.value(1))
+  ///       .listen(print); // prints 1
+  Single<T> onErrorResumeNextSingle(Single<T> recoverySingle) =>
+      forwardSingleWithSink(_OnErrorResumeNextSingleSingleSink(recoverySingle));
 
   /// Intercepts error events and switches to a recovery [Single] created by the
   /// provided [fallbackSupplier].
@@ -164,12 +187,7 @@ extension OnErrorSingleExtensions<T> on Single<T> {
   Single<T> onErrorResumeSingle(
           Single<T> Function(Object error, StackTrace stackTrace)
               fallbackSupplier) =>
-      Single.safe(
-        forwardStream(
-          this,
-          _OnErrorResumeSingleSingleSink(fallbackSupplier),
-        ),
-      );
+      forwardSingleWithSink(_OnErrorResumeSingleSingleSink(fallbackSupplier));
 
   /// Instructs a Single to emit a particular item when it encounters an
   /// error, and then terminate normally.
@@ -196,12 +214,8 @@ extension OnErrorSingleExtensions<T> on Single<T> {
   ///     Single<int>.error(Exception())
   ///       .onErrorReturn(1)
   ///       .listen(print); // prints 1
-  Single<T> onErrorReturn(T returnValue) => Single.safe(
-        forwardStream(
-          this,
-          _OnErrorReturnSingleSink(returnValue),
-        ),
-      );
+  Single<T> onErrorReturn(T returnValue) =>
+      forwardSingleWithSink(_OnErrorReturnSingleSink(returnValue));
 
   /// Instructs a Single to emit a particular item created by the
   /// [itemSupplier] when it encounters an error, and then terminate normally.
@@ -224,10 +238,5 @@ extension OnErrorSingleExtensions<T> on Single<T> {
   ///       .listen(print); // prints 1
   Single<T> onErrorReturnWith(
           T Function(Object error, StackTrace stackTrace) itemSupplier) =>
-      Single.safe(
-        forwardStream(
-          this,
-          _OnErrorReturnWithSingleSink(itemSupplier),
-        ),
-      );
+      forwardSingleWithSink(_OnErrorReturnWithSingleSink(itemSupplier));
 }

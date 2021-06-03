@@ -29,7 +29,7 @@ Future<void> singleRule<T>(Single<T> single, Either<Object, T> e) {
 
 Future<void> cancelRule<T>(
   Single<T> single, [
-  Duration timeout = const Duration(seconds: 1),
+  Duration timeout = const Duration(milliseconds: 800),
 ]) async {
   unawaited(single
       .listen(

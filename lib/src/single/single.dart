@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../default_sink.dart';
 import '../error/api_contract_violation_error.dart';
 
 /// A Stream which emits single event, either data or error, and then close with a done-event.
@@ -20,6 +21,11 @@ class Single<T> extends StreamView<T> {
   final Stream<T> _stream;
 
   ///  @internal
+  ///  **DO NOT USE** this getter.
+  @internal
+  Stream<T> get stream => _stream;
+
+  ///  @internal
   ///  **DO NOT USE** this constructor.
   @internal
   Single.safe(Stream<T> source)
@@ -33,8 +39,9 @@ class Single<T> extends StreamView<T> {
   /// if this [Stream] does not emit exactly one data event or one error event before successfully completing.
   ///
   /// Otherwise, it emits single event, either data or error, and then close with a done-event.
-  factory Single.fromStream(Stream<T> source) =>
-      source is Single<T> ? source : Single.safe(_buildStream(source));
+  factory Single.fromStream(Stream<T> source) => source is Single<T>
+      ? source
+      : Single.safe(source.forwardStreamWithSink(_SingleOrErrorStreamSink()));
 
   /// Creates a [Single] which emits a single data event of [value] before completing.
   ///
@@ -114,82 +121,67 @@ class Single<T> extends StreamView<T> {
   @override
   Single<E> asyncMap<E>(FutureOr<E> Function(T event) convert) =>
       Single.safe(_stream.asyncMap(convert));
+}
 
-  static Stream<T> _buildStream<T>(Stream<T> source) {
-    final controller = source.isBroadcast
-        ? StreamController<T>.broadcast(sync: true)
-        : StreamController<T>(sync: true);
-    StreamSubscription<T>? subscription;
+class _SingleOrErrorStreamSink<T>
+    with ForwardingSinkMixin<T, T>
+    implements ForwardingSink<T, T> {
+  var value = _null;
+  ErrorAndStackTrace? error;
 
-    controller.onListen = () {
-      var value = _null;
-      ErrorAndStackTrace? error;
+  @override
+  void add(EventSink<T> sink, T data) {
+    if (value._isNotNull) {
+      sink.addError(APIContractViolationError(
+          'Stream contains more than one data event.'));
+      sink.close();
+      return;
+    }
+    if (error != null) {
+      sink.addError(APIContractViolationError(
+          'Stream contains both data and error event.'));
+      sink.close();
+      return;
+    }
 
-      subscription = source.listen(
-        (data) {
-          if (value._isNotNull) {
-            controller.addError(APIContractViolationError(
-                'Stream contains more than one data event.'));
-            controller.close();
-            return;
-          }
-          if (error != null) {
-            controller.addError(APIContractViolationError(
-                'Stream contains both data and error event.'));
-            controller.close();
-            return;
-          }
+    value = data;
+  }
 
-          value = data;
-        },
-        onError: (Object e, StackTrace s) {
-          if (error != null) {
-            controller.addError(APIContractViolationError(
-                'Stream contains more than one error event.'));
-            controller.close();
-            return;
-          }
-          if (value._isNotNull) {
-            controller.addError(APIContractViolationError(
-                'Stream contains both data and error event.'));
-            controller.close();
-            return;
-          }
+  @override
+  void addError(EventSink<T> sink, Object e, StackTrace s) {
+    if (error != null) {
+      sink.addError(APIContractViolationError(
+          'Stream contains more than one error event.'));
+      sink.close();
+      return;
+    }
+    if (value._isNotNull) {
+      sink.addError(APIContractViolationError(
+          'Stream contains both data and error event.'));
+      sink.close();
+      return;
+    }
 
-          error = ErrorAndStackTrace(e, s);
-        },
-        onDone: () {
-          if (value._isNull && error == null) {
-            controller.addError(APIContractViolationError(
-                "Stream doesn't contains any data or error event."));
-            controller.close();
-            return;
-          }
+    error = ErrorAndStackTrace(e, s);
+  }
 
-          if (error != null) {
-            controller.addError(error!.error, error!.stackTrace);
-            controller.close();
-            return;
-          }
+  @override
+  void close(EventSink<T> sink) {
+    if (value._isNull && error == null) {
+      sink.addError(APIContractViolationError(
+          "Stream doesn't contains any data or error event."));
+      sink.close();
+      return;
+    }
 
-          controller.add(value as T);
-          controller.close();
-        },
-      );
+    if (error != null) {
+      sink.addError(error!.error, error!.stackTrace);
+      sink.close();
+      return;
+    }
 
-      if (!source.isBroadcast) {
-        controller
-          ..onPause = subscription!.pause
-          ..onResume = subscription!.resume;
-      }
-    };
-    controller.onCancel = () {
-      final toCancel = subscription;
-      subscription = null;
-      return toCancel?.cancel();
-    };
-
-    return controller.stream;
+    sink.add(value as T);
+    sink.close();
   }
 }
 

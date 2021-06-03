@@ -24,5 +24,5 @@ extension AsVoidStreamExtension<T> on Stream<T> {
   ///     Stream.fromIterable(['1', 'two', '3', 'four'])
   ///       .mapTo<void>(null)
   ///       .listen(print); // prints null, null, null, null
-  Stream<void> asVoid() => forwardStream<T, void>(this, _AsVoidStreamSink());
+  Stream<void> asVoid() => forwardStreamWithSink<void>(_AsVoidStreamSink());
 }

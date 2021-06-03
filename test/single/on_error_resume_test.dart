@@ -74,4 +74,32 @@ void main() {
       await cancelRule(build3());
     });
   });
+
+  group('Single.onErrorResumeNextSingle', () {
+    test('.success', () async {
+      final build =
+          () => Single.value(1).onErrorResumeNextSingle(Single.value(2));
+      await singleRule(build(), Either.right(1));
+      broadcastRule(build(), false);
+      await cancelRule(build());
+    });
+
+    test('.failure', () async {
+      {
+        final build = () => Single<int>.error(Exception())
+            .onErrorResumeNextSingle(Single.value(99));
+        await singleRule(build(), Either.right(99));
+        broadcastRule(build(), false);
+        await cancelRule(build());
+      }
+
+      {
+        final build = () => Single<int>.error(StateError(''))
+            .onErrorResumeNextSingle(Single.error(Exception()));
+        await singleRule(build(), exceptionLeft);
+        broadcastRule(build(), false);
+        await cancelRule(build());
+      }
+    });
+  });
 }

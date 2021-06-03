@@ -44,5 +44,5 @@ extension MapNotNullStreamExtension<T> on Stream<T> {
   ///       .whereType<int>()
   ///       .listen(print); // prints 1, 3
   Stream<R> mapNotNull<R extends Object>(R? Function(T) transform) =>
-      forwardStream(this, _MapNotNullSink(transform));
+      forwardStreamWithSink(_MapNotNullSink(transform));
 }

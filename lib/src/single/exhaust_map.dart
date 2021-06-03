@@ -6,5 +6,5 @@ import 'single.dart';
 extension ExhaustMapSingleExtension<T> on Single<T> {
   /// Likes [exhaustMap], but returns a [Single].
   Single<R> exhaustMapSingle<R>(Single<R> Function(T) transform) =>
-      Single.safe(exhaustMap(transform));
+      Single.safe(stream.exhaustMap(transform));
 }

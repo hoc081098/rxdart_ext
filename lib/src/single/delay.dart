@@ -64,5 +64,5 @@ extension DelaySingleExtension<T> on Single<T> {
   /// ```
   /// [Interactive marble diagram](http://rxmarbles.com/#delay)
   Single<T> delay(Duration duration) =>
-      Single.safe(forwardStream(this, _DelaySingleSink(duration)));
+      forwardSingleWithSink(_DelaySingleSink(duration));
 }
