@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:rxdart/rxdart.dart' show DoExtensions, Kind, Notification;
+import 'package:rxdart/rxdart.dart' show Kind, Notification;
 
 import '../default_sink.dart';
 import 'single.dart';
@@ -43,7 +43,6 @@ class _DoStreamSink<S> implements ForwardingSink<S, S> {
       return;
     }
     sink.add(data);
-    sink.close();
   }
 
   @override
@@ -63,7 +62,6 @@ class _DoStreamSink<S> implements ForwardingSink<S, S> {
       return;
     }
     sink.addError(e, st);
-    sink.close();
   }
 
   @override
@@ -82,6 +80,7 @@ class _DoStreamSink<S> implements ForwardingSink<S, S> {
       sink.close();
       return;
     }
+    sink.close();
   }
 
   @override
