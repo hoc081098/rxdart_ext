@@ -33,5 +33,6 @@ extension WhereNotNullStreamExtension<T extends Object> on Stream<T?> {
   ///     Stream.fromIterable(<int?>[1, 2, 3, null, 4, null])
   ///       .whereType<int>()
   ///       .listen(print); // prints 1, 2, 3, 4
-  Stream<T> whereNotNull() => forwardStream(this, _WhereNotNullStreamSink<T>());
+  Stream<T> whereNotNull() =>
+      forwardStreamWithSink(_WhereNotNullStreamSink<T>());
 }

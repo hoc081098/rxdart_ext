@@ -20,6 +20,11 @@ class Single<T> extends StreamView<T> {
   final Stream<T> _stream;
 
   ///  @internal
+  ///  **DO NOT USE** this getter.
+  @internal
+  Stream<T> get stream => _stream;
+
+  ///  @internal
   ///  **DO NOT USE** this constructor.
   @internal
   Single.safe(Stream<T> source)

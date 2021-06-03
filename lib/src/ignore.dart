@@ -13,7 +13,7 @@ class _IgnoreElementsStreamSink<T>
 extension IgnoreElementStreamExtension<T> on Stream<T> {
   /// Ignore all data events, forward only error and done event.
   Stream<R> ignoreElements<R>() =>
-      forwardStream(this, _IgnoreElementsStreamSink());
+      forwardStreamWithSink(_IgnoreElementsStreamSink());
 }
 
 class _IgnoreErrorsStreamSink<T>
@@ -29,5 +29,5 @@ class _IgnoreErrorsStreamSink<T>
 /// Ignore all error events, forward only data and done event.
 extension IgnoreErrorsStreamExtension<T> on Stream<T> {
   /// Ignore all error events, forward only data and done event.
-  Stream<T> ignoreErrors() => forwardStream(this, _IgnoreErrorsStreamSink());
+  Stream<T> ignoreErrors() => forwardStreamWithSink(_IgnoreErrorsStreamSink());
 }

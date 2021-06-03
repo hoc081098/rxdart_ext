@@ -74,6 +74,8 @@ Single<User> fetchUser(String id) {
 
 - [debug](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DebugStreamExtension/debug.html), [collect](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/CollectStreamExtension/collect.html)
 - [ForwardingSinkMixin](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ForwardingSinkMixin-mixin.html)
+- [forwardSingleWithSink]()  
+- [forwardStreamWithSink]()
 - [distinctUniqueBy](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DistinctUniqueByStreamExtension/distinctUniqueBy.html)
 - [distinctBy](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DistinctByExtension/distinctBy.html)
 - [ignoreElements](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/IgnoreElementStreamExtension/ignoreElements.html), [ignoreErrors](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/IgnoreErrorsStreamExtension/ignoreErrors.html)

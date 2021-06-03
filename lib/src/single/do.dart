@@ -131,8 +131,8 @@ extension DoSingleExtensions<T> on Single<T> {
   ///       .listen(null);
   ///
   ///     subscription.cancel(); // prints 'hi'
-  Single<T> doOnCancel(FutureOr<void> Function() onCancel) => Single.safe(
-      forwardStream(this, _DoStreamSink(onCancelCallback: onCancel)));
+  Single<T> doOnCancel(FutureOr<void> Function() onCancel) =>
+      forwardSingleWithSink(_DoStreamSink(onCancelCallback: onCancel));
 
   /// Invokes the given callback function when the Single emits an item. In
   /// other implementations, this is called doOnNext.
@@ -143,7 +143,7 @@ extension DoSingleExtensions<T> on Single<T> {
   ///       .doOnData(print)
   ///       .listen(null); // prints 1
   Single<T> doOnData(void Function(T event) onData) =>
-      Single.safe(forwardStream(this, _DoStreamSink(onDataCallback: onData)));
+      forwardSingleWithSink(_DoStreamSink(onDataCallback: onData));
 
   /// Invokes the given callback function when the Single finishes emitting
   /// items. In other implementations, this is called doOnComplete(d).
@@ -154,7 +154,7 @@ extension DoSingleExtensions<T> on Single<T> {
   ///       .doOnDone(() => print('all set'))
   ///       .listen(null); // prints 'all set'
   Single<T> doOnDone(void Function() onDone) =>
-      Single.safe(forwardStream(this, _DoStreamSink(onDoneCallback: onDone)));
+      forwardSingleWithSink(_DoStreamSink(onDoneCallback: onDone));
 
   /// Invokes the given callback function when the Single emits data, emits
   /// an error, or emits done. The callback receives a [Notification] object.
@@ -169,7 +169,7 @@ extension DoSingleExtensions<T> on Single<T> {
   ///       .doOnEach(print)
   ///       .listen(null); // prints Notification{kind: OnData, value: 1, errorAndStackTrace: null}, Notification{kind: OnDone, value: null, errorAndStackTrace: null}
   Single<T> doOnEach(void Function(Notification<T> notification) onEach) =>
-      Single.safe(forwardStream(this, _DoStreamSink(onEachCallback: onEach)));
+      forwardSingleWithSink(_DoStreamSink(onEachCallback: onEach));
 
   /// Invokes the given callback function when the Single emits an error.
   ///
@@ -179,7 +179,7 @@ extension DoSingleExtensions<T> on Single<T> {
   ///       .doOnError((error, stacktrace) => print('oh no'))
   ///       .listen(null); // prints 'Oh no'
   Single<T> doOnError(void Function(Object, StackTrace) onError) =>
-      Single.safe(forwardStream(this, _DoStreamSink(onErrorCallback: onError)));
+      forwardSingleWithSink(_DoStreamSink(onErrorCallback: onError));
 
   /// Invokes the given callback function when the Single is first listened to.
   ///
@@ -188,8 +188,8 @@ extension DoSingleExtensions<T> on Single<T> {
   ///     Single.value(1)
   ///       .doOnListen(() => print('Is someone there?'))
   ///       .listen(null); // prints 'Is someone there?'
-  Single<T> doOnListen(void Function() onListen) => Single.safe(
-      forwardStream(this, _DoStreamSink(onListenCallback: onListen)));
+  Single<T> doOnListen(void Function() onListen) =>
+      forwardSingleWithSink(_DoStreamSink(onListenCallback: onListen));
 
   /// Invokes the given callback function when the Single subscription is
   /// paused.
@@ -202,7 +202,7 @@ extension DoSingleExtensions<T> on Single<T> {
   ///
   ///     subscription.pause(); // prints 'Gimme a minute please'
   Single<T> doOnPause(void Function() onPause) =>
-      Single.safe(forwardStream(this, _DoStreamSink(onPauseCallback: onPause)));
+      forwardSingleWithSink(_DoStreamSink(onPauseCallback: onPause));
 
   /// Invokes the given callback function when the Single subscription
   /// resumes receiving items.
@@ -215,6 +215,6 @@ extension DoSingleExtensions<T> on Single<T> {
   ///
   ///     subscription.pause();
   ///     subscription.resume(); 'Let's do this!'
-  Single<T> doOnResume(void Function() onResume) => Single.safe(
-      forwardStream(this, _DoStreamSink(onResumeCallback: onResume)));
+  Single<T> doOnResume(void Function() onResume) =>
+      forwardSingleWithSink(_DoStreamSink(onResumeCallback: onResume));
 }
