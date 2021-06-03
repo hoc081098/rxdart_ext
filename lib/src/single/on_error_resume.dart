@@ -134,7 +134,34 @@ class _OnErrorResumeSingleSingleSink<T>
 
 /// Extends the Single class with the ability to recover from errors in various ways.
 extension OnErrorSingleExtensions<T> on Single<T> {
-  /// TODO
+  /// Intercepts error events and switches to the given recovery Single in
+  /// that case.
+  ///
+  /// The onErrorResumeNextSingle operator intercepts an onError notification from
+  /// the source Single. Instead of passing the error through to any
+  /// listeners, it replaces it with another Single.
+  ///
+  /// If you need to perform logic based on the type of error that was emitted,
+  /// please consider using [onErrorResumeSingle].
+  ///
+  /// ### Marble
+  /// ```text
+  /// single         : ----------x|
+  /// recoverySingle : ----a|
+  /// result         : --------------a|
+  ///
+  /// single         : ----------x|
+  /// recoverySingle : ----x|
+  /// result         : --------------x|
+  ///
+  /// NOTE: x is error event
+  /// ```
+  ///
+  /// ### Example
+  ///
+  ///     Single<int>.error(Exception())
+  ///       .onErrorResumeNextSingle(Single.value(1))
+  ///       .listen(print); // prints 1
   Single<T> onErrorResumeNextSingle(Single<T> recoverySingle) =>
       forwardSingleWithSink(_OnErrorResumeNextSingleSingleSink(recoverySingle));
 
