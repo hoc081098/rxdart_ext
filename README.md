@@ -69,6 +69,14 @@ Single<User> fetchUser(String id) {
     -   [onErrorReturnWith]()
     -   [onErrorResumeSingle]()
     -   [onErrorResumeNextSingle]()
+    -   [doOnCancel]()
+    -   [doOnData]()
+    -   [doOnDone]()
+    -   [doOnEach]()
+    -   [doOnError]()
+    -   [doOnListen]()
+    -   [doOnPause]()
+    -   [doOnResume]()
 
 ### Operators for Stream
 
