@@ -152,5 +152,39 @@ void main() {
         }
       });
     });
+
+    group('doOnDone', () {
+      test('.success', () async {
+        final build = () => Single.value(1).doOnDone(() => null);
+        await singleRule(build(), Either.right(1));
+        broadcastRule(build(), false);
+        await cancelRule(build());
+      });
+
+      test('.failure', () async {
+        {
+          final build = () => Single.value(1).doOnDone(() => throw Exception());
+          await singleRule(build(), exceptionLeft);
+          broadcastRule(build(), false);
+          await cancelRule(build());
+        }
+
+        {
+          final build =
+              () => Single<int>.error(Exception()).doOnDone(() => null);
+          await singleRule(build(), exceptionLeft);
+          broadcastRule(build(), false);
+          await cancelRule(build());
+        }
+
+        {
+          final build = () =>
+              Single<int>.error(Exception()).doOnDone(() => throw stateError);
+          await singleRule(build(), exceptionLeft);
+          broadcastRule(build(), false);
+          await cancelRule(build());
+        }
+      });
+    });
   });
 }
