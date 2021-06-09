@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:rxdart/rxdart.dart' show Kind, Notification;
-
 import '../default_sink.dart';
 import 'single.dart';
 
@@ -10,16 +8,12 @@ class _DoStreamSink<S>
     implements ForwardingSink<S, S> {
   final FutureOr<void> Function()? onCancelCallback;
   final void Function(S event)? onDataCallback;
-  final void Function()? onDoneCallback;
-  final void Function(Notification<S> notification)? onEachCallback;
   final void Function(Object, StackTrace)? onErrorCallback;
   final void Function()? onListenCallback;
 
   _DoStreamSink({
     this.onCancelCallback,
     this.onDataCallback,
-    this.onDoneCallback,
-    this.onEachCallback,
     this.onErrorCallback,
     this.onListenCallback,
   });
@@ -28,13 +22,6 @@ class _DoStreamSink<S>
   void add(EventSink<S> sink, S data) {
     try {
       onDataCallback?.call(data);
-    } catch (e, s) {
-      sink.addError(e, s);
-      sink.close();
-      return;
-    }
-    try {
-      onEachCallback?.call(Notification.onData(data));
     } catch (e, s) {
       sink.addError(e, s);
       sink.close();
@@ -52,21 +39,7 @@ class _DoStreamSink<S>
       sink.close();
       return;
     }
-    try {
-      onEachCallback?.call(Notification.onError(e, st));
-    } catch (e, s) {
-      sink.addError(e, s);
-      sink.close();
-      return;
-    }
     sink.addError(e, st);
-  }
-
-  @override
-  void close(EventSink<S> sink) {
-    onDoneCallback?.call();
-    onEachCallback?.call(Notification.onDone());
-    sink.close();
   }
 
   @override
@@ -110,32 +83,6 @@ extension DoSingleExtensions<T> on Single<T> {
   ///       .listen(null); // prints 1
   Single<T> doOnData(void Function(T event) onData) =>
       forwardSingleWithSink(_DoStreamSink(onDataCallback: onData));
-
-  /// Invokes the given callback function when the Single finishes emitting
-  /// items. In other implementations, this is called doOnComplete(d).
-  ///
-  /// ### Example
-  ///
-  ///     Single.value(1)
-  ///       .doOnDone(() => print('all set'))
-  ///       .listen(null); // prints 'all set'
-  Single<T> doOnDone(void Function() onDone) =>
-      forwardSingleWithSink(_DoStreamSink(onDoneCallback: onDone));
-
-  /// Invokes the given callback function when the Single emits data, emits
-  /// an error, or emits done. The callback receives a [Notification] object.
-  ///
-  /// The [Notification] object contains the [Kind] of event (OnData, onDone,
-  /// or OnError), and the item or error that was emitted. In the case of
-  /// onDone, no data is emitted as part of the [Notification].
-  ///
-  /// ### Example
-  ///
-  ///     Single.value(1)
-  ///       .doOnEach(print)
-  ///       .listen(null); // prints Notification{kind: OnData, value: 1, errorAndStackTrace: null}, Notification{kind: OnDone, value: null, errorAndStackTrace: null}
-  Single<T> doOnEach(void Function(Notification<T> notification) onEach) =>
-      forwardSingleWithSink(_DoStreamSink(onEachCallback: onEach));
 
   /// Invokes the given callback function when the Single emits an error.
   ///
