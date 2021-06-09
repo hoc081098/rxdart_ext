@@ -5,15 +5,15 @@ import 'package:rxdart/rxdart.dart' show Kind, Notification;
 import '../default_sink.dart';
 import 'single.dart';
 
-class _DoStreamSink<S> implements ForwardingSink<S, S> {
+class _DoStreamSink<S>
+    with ForwardingSinkMixin<S, S>
+    implements ForwardingSink<S, S> {
   final FutureOr<void> Function()? onCancelCallback;
   final void Function(S event)? onDataCallback;
   final void Function()? onDoneCallback;
   final void Function(Notification<S> notification)? onEachCallback;
   final void Function(Object, StackTrace)? onErrorCallback;
   final void Function()? onListenCallback;
-  final void Function()? onPauseCallback;
-  final void Function()? onResumeCallback;
 
   _DoStreamSink({
     this.onCancelCallback,
@@ -22,8 +22,6 @@ class _DoStreamSink<S> implements ForwardingSink<S, S> {
     this.onEachCallback,
     this.onErrorCallback,
     this.onListenCallback,
-    this.onPauseCallback,
-    this.onResumeCallback,
   });
 
   @override
@@ -83,12 +81,6 @@ class _DoStreamSink<S> implements ForwardingSink<S, S> {
       sink.close();
     }
   }
-
-  @override
-  void onPause(EventSink<S> sink) => onPauseCallback?.call();
-
-  @override
-  void onResume(EventSink<S> sink) => onResumeCallback?.call();
 }
 
 /// Extends the Single class with the ability to execute a callback function
@@ -164,31 +156,4 @@ extension DoSingleExtensions<T> on Single<T> {
   ///       .listen(null); // prints 'Is someone there?'
   Single<T> doOnListen(void Function() onListen) =>
       forwardSingleWithSink(_DoStreamSink(onListenCallback: onListen));
-
-  /// Invokes the given callback function when the Single subscription is
-  /// paused.
-  ///
-  /// ### Example
-  ///
-  ///     final subscription = Single.value(1)
-  ///       .doOnPause(() => print('Gimme a minute please'))
-  ///       .listen(null);
-  ///
-  ///     subscription.pause(); // prints 'Gimme a minute please'
-  Single<T> doOnPause(void Function() onPause) =>
-      forwardSingleWithSink(_DoStreamSink(onPauseCallback: onPause));
-
-  /// Invokes the given callback function when the Single subscription
-  /// resumes receiving items.
-  ///
-  /// ### Example
-  ///
-  ///     final subscription = Single.value(1)
-  ///       .doOnResume(() => print('Let's do this!'))
-  ///       .listen(null);
-  ///
-  ///     subscription.pause();
-  ///     subscription.resume(); 'Let's do this!'
-  Single<T> doOnResume(void Function() onResume) =>
-      forwardSingleWithSink(_DoStreamSink(onResumeCallback: onResume));
 }
