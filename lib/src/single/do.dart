@@ -66,20 +66,8 @@ class _DoStreamSink<S> implements ForwardingSink<S, S> {
 
   @override
   void close(EventSink<S> sink) {
-    try {
-      onDoneCallback?.call();
-    } catch (e, s) {
-      sink.addError(e, s);
-      sink.close();
-      return;
-    }
-    try {
-      onEachCallback?.call(Notification.onDone());
-    } catch (e, s) {
-      sink.addError(e, s);
-      sink.close();
-      return;
-    }
+    onDoneCallback?.call();
+    onEachCallback?.call(Notification.onDone());
     sink.close();
   }
 
@@ -97,24 +85,10 @@ class _DoStreamSink<S> implements ForwardingSink<S, S> {
   }
 
   @override
-  void onPause(EventSink<S> sink) {
-    try {
-      onPauseCallback?.call();
-    } catch (e, s) {
-      sink.addError(e, s);
-      sink.close();
-    }
-  }
+  void onPause(EventSink<S> sink) => onPauseCallback?.call();
 
   @override
-  void onResume(EventSink<S> sink) {
-    try {
-      onResumeCallback?.call();
-    } catch (e, s) {
-      sink.addError(e, s);
-      sink.close();
-    }
-  }
+  void onResume(EventSink<S> sink) => onResumeCallback?.call();
 }
 
 /// Extends the Single class with the ability to execute a callback function
