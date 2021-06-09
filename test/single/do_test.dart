@@ -23,9 +23,6 @@ void main() {
                 .doOnError(expectAsync2((p0, p1) {}, count: 0))
                 .doOnCancel(expectAsync0(() => print('Cancelled'), count: 1));
 
-        build().listen((value) => expect(value, expected));
-        await Future<void>.delayed(const Duration(seconds: 1));
-
         await singleRule(build(), Either.right(expected));
         broadcastRule(build(), false);
         await cancelRule(build());
