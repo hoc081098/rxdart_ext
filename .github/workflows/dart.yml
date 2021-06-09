@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        container: ["google/dart:stable", "google/dart:dev"]
+        container: ['google/dart:stable', 'google/dart:dev']
 
     container:
       image: ${{ matrix.container }}
