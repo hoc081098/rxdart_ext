@@ -67,14 +67,14 @@ Single<User> fetchUser(String id) {
     -   [exhaustMapSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/ExhaustMapSingleExtension/exhaustMapSingle.html)
     -   [debug](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/DebugSingleExtension/debug.html)
     -   [delay](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/DelaySingleExtension/delay.html)
-    -   [doOnCancel]()
-    -   [doOnData]()
-    -   [doOnError]()
-    -   [doOnListen]()
-    -   [onErrorReturn]()
-    -   [onErrorReturnWith]()
-    -   [onErrorResumeSingle]()
-    -   [onErrorResumeNextSingle]()
+    -   [doOnCancel](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/DoSingleExtensions/doOnCancel.html)
+    -   [doOnData](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/DoSingleExtensions/doOnData.html)
+    -   [doOnError](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/DoSingleExtensions/doOnError.html)
+    -   [doOnListen](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/DoSingleExtensions/doOnListen.html)
+    -   [onErrorReturn](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/OnErrorResumeSingleExtensions/onErrorReturn.html)
+    -   [onErrorReturnWith](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/OnErrorResumeSingleExtensions/onErrorReturnWith.html)
+    -   [onErrorResumeSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/OnErrorResumeSingleExtensions/onErrorResumeSingle.html)
+    -   [onErrorResumeNextSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/OnErrorResumeSingleExtensions/onErrorResumeNextSingle.html)
 
 ### Operators for Stream
 

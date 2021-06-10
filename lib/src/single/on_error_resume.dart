@@ -133,7 +133,7 @@ class _OnErrorResumeSingleSingleSink<T>
 }
 
 /// Extends the Single class with the ability to recover from errors in various ways.
-extension OnErrorSingleExtensions<T> on Single<T> {
+extension OnErrorResumeSingleExtensions<T> on Single<T> {
   /// Intercepts error events and switches to the given recovery Single in
   /// that case.
   ///
