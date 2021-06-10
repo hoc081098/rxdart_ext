@@ -13,7 +13,7 @@ Some extension methods and classes built on top of `RxDart` - `RxDart` extension
 
 ## API
 
-### Single
+### [Single](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single-class.html)
 
 A Stream which emits single event, either data or error, and then close with a done-event.
 
@@ -43,23 +43,23 @@ Single<User> fetchUser(String id) {
 
 -   Create Single
     -   Factory constructors.
-        -   [Single.fromStream]()
-        -   [Single.value]()
-        -   [Single.error]()
-        -   [Single.fromFuture]()
-        -   [Single.fromCallable]()
-        -   [Single.timer]()
-        -   [Single.defer]()
-            
+        -   [Single.fromStream](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single/Single.fromStream.html)
+        -   [Single.value](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single/Single.value.html)
+        -   [Single.error](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single/Single.error.html)
+        -   [Single.fromFuture](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single/Single.fromFuture.html)
+        -   [Single.fromCallable](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single/Single.fromCallable.html)
+        -   [Single.timer](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single/Single.timer.html)
+        -   [Single.defer](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single/Single.defer.html)
+
     -   Static methods provided by [RxSingles]() class
-        -   [RxSingles.zip2]()
-        -   [RxSingles.forkJoin2]()
+        -   [RxSingles.zip2](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/RxSingles/zip2.html)
+        -   [RxSingles.forkJoin2](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/RxSingles/forkJoin2.html)
         
     -   Convert others to Single via extensions.
-        -   [Stream.singleOrError]()
-        -   [Future.asSingle]()
-        -   [`(FutureOr<T> Function())`.asSingle]()
-    
+        -   [Stream.singleOrError](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/SingleOrErrorStreamExtension/singleOrError.html)
+        -   [Future.asSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/AsSingleFutureExtension/asSingle.html)
+        -   [`(FutureOr<T> Function())`.asSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/AsSingleFunctionExtension/asSingle.html)
+
 -   Operators for Single (returns a Single instead of Stream)
     -   [flatMapSingle]()
     -   [asyncExpandSingle]()

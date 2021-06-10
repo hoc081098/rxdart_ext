@@ -3,7 +3,7 @@ import 'dart:async';
 import 'single.dart';
 
 /// Provides [asSingle] extension for [Future].
-extension AsSingleStreamExtension<T> on Future<T> {
+extension AsSingleFutureExtension<T> on Future<T> {
   /// Converts this [Future] into a [Single].
   ///
   /// See [Single.fromFuture].
