@@ -21,27 +21,23 @@ void main() {
                   expect(event, expected);
                 }, count: 1))
                 .doOnError(expectAsync2((p0, p1) {}, count: 0))
-                .doOnCancel(expectAsync0(() => print('Cancelled'), count: 1));
+                .doOnCancel(expectAsync0(() => print('onCancel'), count: 1));
 
         await singleRule(build(), Either.right(expected));
-        broadcastRule(build(), false);
-        await cancelRule(build());
       });
 
       test('.failure', () async {
-        Single<int>.error(Exception())
-            .delay(const Duration(seconds: 1))
+        final build = () => Single<int>.error(Exception())
+            .delay(const Duration(milliseconds: 300))
             .doOnListen(expectAsync0(() => print('onListen'), count: 1))
             .doOnData(expectAsync1((event) {}, count: 0))
             .doOnError(expectAsync2((e, s) {
               print('onError $e');
               expect(e, isException);
             }, count: 1))
-            .doOnCancel(expectAsync0(() => print('Cancelled'), count: 1))
-            .listen(null,
-                onError: (Object e, StackTrace s) => expect(e, isException));
+            .doOnCancel(expectAsync0(() => print('onCancel'), count: 1));
 
-        await Future<void>.delayed(const Duration(seconds: 2));
+        await singleRule(build(), exceptionLeft);
       });
     });
 
