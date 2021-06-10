@@ -1,6 +1,6 @@
 name: rxdart_ext
 description: Some extension methods and classes built on top of RxDart - RxDart extension.
-version: 0.1.1-dev.0
+version: 0.1.1-dev.1
 author: Petrus Nguyen Thai Hoc <hoc081098@gmail.com>
 homepage: https://github.com/hoc081098/rxdart_ext.git
 repository: https://github.com/hoc081098/rxdart_ext.git
@@ -23,10 +23,10 @@ dev_dependencies:
   build_runner: ^2.0.2
   dart_either: ^0.0.1
 
-dependency_overrides:
-  rxdart:
-    git:
-      url: https://github.com/hoc081098/rxdart.git
-      ref: 3158c9be3d3c985047fc69d75049149454ce9fa7
+#dependency_overrides:
+#  rxdart:
+#    git:
+#      url: https://github.com/hoc081098/rxdart.git
+#      ref: 3158c9be3d3c985047fc69d75049149454ce9fa7
 
 #  pub run build_runner build --delete-conflicting-outputs

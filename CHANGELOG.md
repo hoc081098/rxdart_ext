@@ -1,3 +1,23 @@
+## 0.1.1-dev.1 - Jun 10, 2021
+
+-   Change return type of `Stream.ignoreElements()` to `Stream<Never>`.
+-   Refactor `Single`
+    -   Add `Single.fromStream`.
+    -   Remove `Single.zip2` (move to `RxSingles`).
+    -   Add operators
+        -   `debug`.
+        -   `doOnCancel`.
+        -   `doOnData`.
+        -   `doOnError`.
+        -   `doOnListen`.
+        -   `onErrorResumeNextSingle`.
+        -   `onErrorResumeSingle`.
+        -   `onErrorReturn`.
+        -   `onErrorReturnWith`.
+    -   Add `RxSingles`
+        -   `zip2`.
+        -   `forkJoin2`.
+
 ## 0.1.1-dev.0 - May 14, 2021
 
 -   **Add `Single`.**

@@ -13,7 +13,7 @@ Some extension methods and classes built on top of `RxDart` - `RxDart` extension
 
 ## API
 
-### [Single](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single-class.html)
+### [Single](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/Single-class.html)
 
 A Stream which emits single event, either data or error, and then close with a done-event.
 
@@ -43,38 +43,38 @@ Single<User> fetchUser(String id) {
 
 -   Create Single
     -   Factory constructors.
-        -   [Single.fromStream](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single/Single.fromStream.html)
-        -   [Single.value](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single/Single.value.html)
-        -   [Single.error](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single/Single.error.html)
-        -   [Single.fromFuture](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single/Single.fromFuture.html)
-        -   [Single.fromCallable](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single/Single.fromCallable.html)
-        -   [Single.timer](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single/Single.timer.html)
-        -   [Single.defer](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/Single/Single.defer.html)
+        -   [Single.fromStream](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/Single/Single.fromStream.html)
+        -   [Single.value](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/Single/Single.value.html)
+        -   [Single.error](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/Single/Single.error.html)
+        -   [Single.fromFuture](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/Single/Single.fromFuture.html)
+        -   [Single.fromCallable](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/Single/Single.fromCallable.html)
+        -   [Single.timer](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/Single/Single.timer.html)
+        -   [Single.defer](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/Single/Single.defer.html)
 
     -   Static methods provided by [RxSingles]() class
-        -   [RxSingles.zip2](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/RxSingles/zip2.html)
-        -   [RxSingles.forkJoin2](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/RxSingles/forkJoin2.html)
+        -   [RxSingles.zip2](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/RxSingles/zip2.html)
+        -   [RxSingles.forkJoin2](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/RxSingles/forkJoin2.html)
         
     -   Convert others to Single via extensions.
-        -   [Stream.singleOrError](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/SingleOrErrorStreamExtension/singleOrError.html)
-        -   [Future.asSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/AsSingleFutureExtension/asSingle.html)
-        -   [`(FutureOr<T> Function())`.asSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/AsSingleFunctionExtension/asSingle.html)
+        -   [Stream.singleOrError](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/SingleOrErrorStreamExtension/singleOrError.html)
+        -   [Future.asSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/AsSingleFutureExtension/asSingle.html)
+        -   [`(FutureOr<T> Function())`.asSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/AsSingleFunctionExtension/asSingle.html)
 
 -   Operators for Single (returns a Single instead of Stream)
-    -   [flatMapSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/FlatMapSingleExtension/flatMapSingle.html)
-    -   [asyncExpandSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/AsyncExpandSingleExtension/asyncExpandSingle.html)
-    -   [switchMapSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/SwitchMapSingleExtension/switchMapSingle.html)
-    -   [exhaustMapSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/ExhaustMapSingleExtension/exhaustMapSingle.html)
-    -   [debug](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/DebugSingleExtension/debug.html)
-    -   [delay](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/DelaySingleExtension/delay.html)
-    -   [doOnCancel](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/DoSingleExtensions/doOnCancel.html)
-    -   [doOnData](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/DoSingleExtensions/doOnData.html)
-    -   [doOnError](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/DoSingleExtensions/doOnError.html)
-    -   [doOnListen](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/DoSingleExtensions/doOnListen.html)
-    -   [onErrorReturn](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/OnErrorResumeSingleExtensions/onErrorReturn.html)
-    -   [onErrorReturnWith](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/OnErrorResumeSingleExtensions/onErrorReturnWith.html)
-    -   [onErrorResumeSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/OnErrorResumeSingleExtensions/onErrorResumeSingle.html)
-    -   [onErrorResumeNextSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.0/rxdart_ext/OnErrorResumeSingleExtensions/onErrorResumeNextSingle.html)
+    -   [flatMapSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/FlatMapSingleExtension/flatMapSingle.html)
+    -   [asyncExpandSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/AsyncExpandSingleExtension/asyncExpandSingle.html)
+    -   [switchMapSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/SwitchMapSingleExtension/switchMapSingle.html)
+    -   [exhaustMapSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/ExhaustMapSingleExtension/exhaustMapSingle.html)
+    -   [debug](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/DebugSingleExtension/debug.html)
+    -   [delay](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/DelaySingleExtension/delay.html)
+    -   [doOnCancel](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/DoSingleExtensions/doOnCancel.html)
+    -   [doOnData](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/DoSingleExtensions/doOnData.html)
+    -   [doOnError](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/DoSingleExtensions/doOnError.html)
+    -   [doOnListen](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/DoSingleExtensions/doOnListen.html)
+    -   [onErrorReturn](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/OnErrorResumeSingleExtensions/onErrorReturn.html)
+    -   [onErrorReturnWith](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/OnErrorResumeSingleExtensions/onErrorReturnWith.html)
+    -   [onErrorResumeSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/OnErrorResumeSingleExtensions/onErrorResumeSingle.html)
+    -   [onErrorResumeNextSingle](https://pub.dev/documentation/rxdart_ext/0.1.1-dev.1/rxdart_ext/OnErrorResumeSingleExtensions/onErrorResumeNextSingle.html)
 
 ### Operators for Stream
 
