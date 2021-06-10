@@ -43,6 +43,7 @@ Single<User> fetchUser(String id) {
 
 -   Create Single
     -   Factory constructors.
+        -   [Single.fromStream]()
         -   [Single.value]()
         -   [Single.error]()
         -   [Single.fromFuture]()
@@ -57,26 +58,23 @@ Single<User> fetchUser(String id) {
     -   Convert others to Single via extensions.
         -   [Stream.singleOrError]()
         -   [Future.asSingle]()
-        -   [(FutureOr<T> Function()).asSingle]()
+        -   [`(FutureOr<T> Function())`.asSingle]()
     
--   Operators for Single (returns a Single)
+-   Operators for Single (returns a Single instead of Stream)
     -   [flatMapSingle]()
     -   [asyncExpandSingle]()
     -   [switchMapSingle]()
     -   [exhaustMapSingle]()
+    -   [debug]()
     -   [delay]()
+    -   [doOnCancel]()
+    -   [doOnData]()
+    -   [doOnError]()
+    -   [doOnListen]()
     -   [onErrorReturn]()
     -   [onErrorReturnWith]()
     -   [onErrorResumeSingle]()
     -   [onErrorResumeNextSingle]()
-    -   [doOnCancel]()
-    -   [doOnData]()
-    -   [doOnDone]()
-    -   [doOnEach]()
-    -   [doOnError]()
-    -   [doOnListen]()
-    -   [doOnPause]()
-    -   [doOnResume]()
 
 ### Operators for Stream
 
