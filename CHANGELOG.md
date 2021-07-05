@@ -1,3 +1,8 @@
+## 0.1.1-dev.2 - Jul 5, 2021
+
+-   Add `Single.mapTo`.
+-   Refactoring operators.
+
 ## 0.1.1-dev.1 - Jun 10, 2021
 
 -   Change return type of `Stream.ignoreElements()` to `Stream<Never>`.
