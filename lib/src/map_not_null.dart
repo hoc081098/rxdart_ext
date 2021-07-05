@@ -2,24 +2,22 @@ import 'dart:async';
 
 import 'default_sink.dart';
 
-class _MapNotNullSink<T, R extends Object>
-    with ForwardingSinkMixin<T, R>
-    implements ForwardingSink<T, R> {
+class _MapNotNullSink<T, R extends Object> extends BaseEventSink<T, R> {
   final R? Function(T) transform;
 
-  _MapNotNullSink(this.transform);
+  _MapNotNullSink(EventSink<R> outputSink, this.transform) : super(outputSink);
 
   @override
-  void add(EventSink<R> sink, T data) {
+  void add(T data) {
     final R? value;
     try {
       value = transform(data);
     } catch (e, s) {
-      sink.addError(e, s);
+      outputSink.addError(e, s);
       return;
     }
     if (value != null) {
-      sink.add(value);
+      outputSink.add(value);
     }
   }
 }
@@ -44,5 +42,6 @@ extension MapNotNullStreamExtension<T> on Stream<T> {
   ///       .whereType<int>()
   ///       .listen(print); // prints 1, 3
   Stream<R> mapNotNull<R extends Object>(R? Function(T) transform) =>
-      forwardStreamWithSink(_MapNotNullSink(transform));
+      Stream<R>.eventTransformed(
+          this, (sink) => _MapNotNullSink<T, R>(sink, transform));
 }

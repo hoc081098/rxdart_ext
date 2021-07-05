@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:rxdart/src/utils/forwarding_sink.dart';
 import 'package:rxdart/src/utils/forwarding_stream.dart' show forwardStream;
 
@@ -30,6 +31,26 @@ mixin ForwardingSinkMixin<T, R> implements ForwardingSink<T, R> {
 
   @override
   void close(EventSink<R> sink) => sink.close();
+}
+
+/// TODO
+abstract class BaseEventSink<T, R> implements EventSink<T> {
+  @protected
+  final EventSink<R> outputSink;
+
+  /// TODO
+  @visibleForOverriding
+  BaseEventSink(this.outputSink);
+
+  @override
+  void add(T event);
+
+  @override
+  void addError(Object error, [StackTrace? stackTrace]) =>
+      outputSink.addError(error, stackTrace);
+
+  @override
+  void close() => outputSink.close();
 }
 
 /// Forward [Single] events.
