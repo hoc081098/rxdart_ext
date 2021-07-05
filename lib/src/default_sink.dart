@@ -36,21 +36,21 @@ mixin ForwardingSinkMixin<T, R> implements ForwardingSink<T, R> {
 /// TODO
 abstract class BaseEventSink<T, R> implements EventSink<T> {
   @protected
-  final EventSink<R> outputSink;
+  final EventSink<R> sink;
 
   /// TODO
   @visibleForOverriding
-  BaseEventSink(this.outputSink);
+  BaseEventSink(this.sink);
 
   @override
   void add(T event);
 
   @override
   void addError(Object error, [StackTrace? stackTrace]) =>
-      outputSink.addError(error, stackTrace);
+      sink.addError(error, stackTrace);
 
   @override
-  void close() => outputSink.close();
+  void close() => sink.close();
 }
 
 /// Forward [Single] events.

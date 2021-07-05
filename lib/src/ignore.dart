@@ -3,7 +3,7 @@ import 'dart:async';
 import 'default_sink.dart';
 
 class _IgnoreElementsEventSink<T> extends BaseEventSink<T, Never> {
-  _IgnoreElementsEventSink(EventSink<Never> outputSink) : super(outputSink);
+  _IgnoreElementsEventSink(EventSink<Never> sink) : super(sink);
 
   @override
   void add(T event) {}
@@ -17,10 +17,10 @@ extension IgnoreElementStreamExtension<T> on Stream<T> {
 }
 
 class _IgnoreErrorsEventSink<T> extends BaseEventSink<T, T> {
-  _IgnoreErrorsEventSink(EventSink<T> outputSink) : super(outputSink);
+  _IgnoreErrorsEventSink(EventSink<T> sink) : super(sink);
 
   @override
-  void add(T event) => outputSink.add(event);
+  void add(T event) => sink.add(event);
 
   @override
   void addError(Object error, [StackTrace? stackTrace]) {}

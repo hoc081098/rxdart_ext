@@ -3,10 +3,10 @@ import 'dart:async';
 import 'default_sink.dart';
 
 class _AsVoidStreamSink<T> extends BaseEventSink<T, void> {
-  _AsVoidStreamSink(EventSink<void> outputSink) : super(outputSink);
+  _AsVoidStreamSink(EventSink<void> sink) : super(sink);
 
   @override
-  void add(T data) => outputSink.add(null);
+  void add(T data) => sink.add(null);
 }
 
 /// Extends the Stream class with the ability to convert the source Stream to a `Stream<void>`.
