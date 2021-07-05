@@ -33,12 +33,13 @@ mixin ForwardingSinkMixin<T, R> implements ForwardingSink<T, R> {
   void close(EventSink<R> sink) => sink.close();
 }
 
-/// TODO
+/// This [EventSink] class implements all [EventSink] members except [add].
 abstract class BaseEventSink<T, R> implements EventSink<T> {
+  /// The output sink.
   @protected
   final EventSink<R> sink;
 
-  /// TODO
+  /// Construct [BaseEventSink] with [sink].
   @visibleForOverriding
   BaseEventSink(this.sink);
 
