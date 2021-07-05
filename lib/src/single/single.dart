@@ -41,7 +41,8 @@ class Single<T> extends StreamView<T> {
   /// Otherwise, it emits single event, either data or error, and then close with a done-event.
   factory Single.fromStream(Stream<T> source) => source is Single<T>
       ? source
-      : Single.safe(Stream<T>.eventTransformed(source, (sink) => _SingleOrErrorStreamSink<T>(sink)));
+      : Single.safe(Stream<T>.eventTransformed(
+          source, (sink) => _SingleOrErrorStreamSink<T>(sink)));
 
   /// Creates a [Single] which emits a single data event of [value] before completing.
   ///
