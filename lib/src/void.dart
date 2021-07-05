@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'default_sink.dart';
 
-class _AsVoidStreamSink<T>
-    with ForwardingSinkMixin<T, void>
-    implements ForwardingSink<T, void> {
+class _AsVoidStreamSink<T> extends BaseEventSink<T, void> {
+  _AsVoidStreamSink(EventSink<void> sink) : super(sink);
+
   @override
-  void add(EventSink<void> sink, T data) => sink.add(null);
+  void add(T data) => sink.add(null);
 }
 
 /// Extends the Stream class with the ability to convert the source Stream to a `Stream<void>`.
@@ -24,5 +24,6 @@ extension AsVoidStreamExtension<T> on Stream<T> {
   ///     Stream.fromIterable(['1', 'two', '3', 'four'])
   ///       .mapTo<void>(null)
   ///       .listen(print); // prints null, null, null, null
-  Stream<void> asVoid() => forwardStreamWithSink<void>(_AsVoidStreamSink());
+  Stream<void> asVoid() =>
+      Stream<void>.eventTransformed(this, (sink) => _AsVoidStreamSink<T>(sink));
 }

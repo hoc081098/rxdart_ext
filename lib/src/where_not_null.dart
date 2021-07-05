@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'default_sink.dart';
 
-class _WhereNotNullStreamSink<T extends Object>
-    with ForwardingSinkMixin<T?, T>
-    implements ForwardingSink<T?, T> {
+class _WhereNotNullStreamSink<T extends Object> extends BaseEventSink<T?, T> {
+  _WhereNotNullStreamSink(EventSink<T> sink) : super(sink);
+
   @override
-  void add(EventSink<T> sink, T? data) {
+  void add(T? data) {
     if (data != null) {
       sink.add(data);
     }
@@ -33,6 +33,6 @@ extension WhereNotNullStreamExtension<T extends Object> on Stream<T?> {
   ///     Stream.fromIterable(<int?>[1, 2, 3, null, 4, null])
   ///       .whereType<int>()
   ///       .listen(print); // prints 1, 2, 3, 4
-  Stream<T> whereNotNull() =>
-      forwardStreamWithSink(_WhereNotNullStreamSink<T>());
+  Stream<T> whereNotNull() => Stream<T>.eventTransformed(
+      this, (sink) => _WhereNotNullStreamSink<T>(sink));
 }

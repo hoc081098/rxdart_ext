@@ -2,32 +2,33 @@ import 'dart:async';
 
 import 'default_sink.dart';
 
-class _IgnoreElementsStreamSink<T>
-    with ForwardingSinkMixin<T, Never>
-    implements ForwardingSink<T, Never> {
+class _IgnoreElementsEventSink<T> extends BaseEventSink<T, Never> {
+  _IgnoreElementsEventSink(EventSink<Never> sink) : super(sink);
+
   @override
-  void add(EventSink<Never> sink, T data) {}
+  void add(T event) {}
 }
 
 /// Ignore all data events, forward only error and done event.
 extension IgnoreElementStreamExtension<T> on Stream<T> {
   /// Ignore all data events, forward only error and done event.
-  Stream<Never> ignoreElements() =>
-      forwardStreamWithSink(_IgnoreElementsStreamSink());
+  Stream<Never> ignoreElements() => Stream<Never>.eventTransformed(
+      this, (sink) => _IgnoreElementsEventSink<T>(sink));
 }
 
-class _IgnoreErrorsStreamSink<T>
-    with ForwardingSinkMixin<T, T>
-    implements ForwardingSink<T, T> {
-  @override
-  void add(EventSink<T> sink, T data) => sink.add(data);
+class _IgnoreErrorsEventSink<T> extends BaseEventSink<T, T> {
+  _IgnoreErrorsEventSink(EventSink<T> sink) : super(sink);
 
   @override
-  void addError(EventSink<T> sink, Object error, [StackTrace? st]) {}
+  void add(T event) => sink.add(event);
+
+  @override
+  void addError(Object error, [StackTrace? stackTrace]) {}
 }
 
 /// Ignore all error events, forward only data and done event.
 extension IgnoreErrorsStreamExtension<T> on Stream<T> {
   /// Ignore all error events, forward only data and done event.
-  Stream<T> ignoreErrors() => forwardStreamWithSink(_IgnoreErrorsStreamSink());
+  Stream<T> ignoreErrors() => Stream<T>.eventTransformed(
+      this, (sink) => _IgnoreErrorsEventSink<T>(sink));
 }

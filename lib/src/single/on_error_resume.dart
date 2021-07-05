@@ -3,36 +3,33 @@ import 'dart:async';
 import '../default_sink.dart';
 import 'single.dart';
 
-class _OnErrorReturnSingleSink<T>
-    with ForwardingSinkMixin<T, T>
-    implements ForwardingSink<T, T> {
+class _OnErrorReturnSingleSink<T> extends BaseEventSink<T, T> {
   final T returnValue;
 
-  _OnErrorReturnSingleSink(this.returnValue);
+  _OnErrorReturnSingleSink(EventSink<T> sink, this.returnValue) : super(sink);
 
   @override
-  void add(EventSink<T> sink, T data) => sink.add(data);
+  void add(T data) => sink.add(data);
 
   @override
-  void addError(EventSink<T> sink, Object error, StackTrace st) =>
+  void addError(Object error, [StackTrace? stackTrace]) =>
       sink.add(returnValue);
 }
 
-class _OnErrorReturnWithSingleSink<T>
-    with ForwardingSinkMixin<T, T>
-    implements ForwardingSink<T, T> {
+class _OnErrorReturnWithSingleSink<T> extends BaseEventSink<T, T> {
   final T Function(Object error, StackTrace stackTrace) itemSupplier;
 
-  _OnErrorReturnWithSingleSink(this.itemSupplier);
+  _OnErrorReturnWithSingleSink(EventSink<T> sink, this.itemSupplier)
+      : super(sink);
 
   @override
-  void add(EventSink<T> sink, T data) => sink.add(data);
+  void add(T data) => sink.add(data);
 
   @override
-  void addError(EventSink<T> sink, Object error, StackTrace st) {
+  void addError(Object error, [StackTrace? st]) {
     final T item;
     try {
-      item = itemSupplier(error, st);
+      item = itemSupplier(error, st!); // NOTE: `st` is always not `null`.
     } catch (e, s) {
       sink.addError(e, s);
       return;
@@ -215,7 +212,8 @@ extension OnErrorResumeSingleExtensions<T> on Single<T> {
   ///       .onErrorReturn(1)
   ///       .listen(print); // prints 1
   Single<T> onErrorReturn(T returnValue) =>
-      forwardSingleWithSink(_OnErrorReturnSingleSink(returnValue));
+      Single.safe(Stream<T>.eventTransformed(
+          this, (sink) => _OnErrorReturnSingleSink<T>(sink, returnValue)));
 
   /// Instructs a Single to emit a particular item created by the
   /// [itemSupplier] when it encounters an error, and then terminate normally.
@@ -238,5 +236,6 @@ extension OnErrorResumeSingleExtensions<T> on Single<T> {
   ///       .listen(print); // prints 1
   Single<T> onErrorReturnWith(
           T Function(Object error, StackTrace stackTrace) itemSupplier) =>
-      forwardSingleWithSink(_OnErrorReturnWithSingleSink(itemSupplier));
+      Single.safe(Stream<T>.eventTransformed(
+          this, (sink) => _OnErrorReturnWithSingleSink<T>(sink, itemSupplier)));
 }

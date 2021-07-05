@@ -41,7 +41,8 @@ class Single<T> extends StreamView<T> {
   /// Otherwise, it emits single event, either data or error, and then close with a done-event.
   factory Single.fromStream(Stream<T> source) => source is Single<T>
       ? source
-      : Single.safe(source.forwardStreamWithSink(_SingleOrErrorStreamSink()));
+      : Single.safe(Stream<T>.eventTransformed(
+          source, (sink) => _SingleOrErrorStreamSink<T>(sink)));
 
   /// Creates a [Single] which emits a single data event of [value] before completing.
   ///
@@ -123,14 +124,14 @@ class Single<T> extends StreamView<T> {
       Single.safe(_stream.asyncMap(convert));
 }
 
-class _SingleOrErrorStreamSink<T>
-    with ForwardingSinkMixin<T, T>
-    implements ForwardingSink<T, T> {
+class _SingleOrErrorStreamSink<T> extends BaseEventSink<T, T> {
   var value = _null;
   ErrorAndStackTrace? error;
 
+  _SingleOrErrorStreamSink(EventSink<T> sink) : super(sink);
+
   @override
-  void add(EventSink<T> sink, T data) {
+  void add(T data) {
     if (value._isNotNull) {
       sink.addError(APIContractViolationError(
           'Stream contains more than one data event.'));
@@ -148,7 +149,7 @@ class _SingleOrErrorStreamSink<T>
   }
 
   @override
-  void addError(EventSink<T> sink, Object e, StackTrace s) {
+  void addError(Object e, [StackTrace? s]) {
     if (error != null) {
       sink.addError(APIContractViolationError(
           'Stream contains more than one error event.'));
@@ -166,7 +167,7 @@ class _SingleOrErrorStreamSink<T>
   }
 
   @override
-  void close(EventSink<T> sink) {
+  void close() {
     if (value._isNull && error == null) {
       sink.addError(APIContractViolationError(
           "Stream doesn't contains any data or error event."));
