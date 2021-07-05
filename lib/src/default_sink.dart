@@ -40,7 +40,6 @@ abstract class BaseEventSink<T, R> implements EventSink<T> {
   final EventSink<R> sink;
 
   /// Construct [BaseEventSink] with [sink].
-  @visibleForOverriding
   BaseEventSink(this.sink);
 
   @override
@@ -62,14 +61,4 @@ extension ForwardSingleExtension<T> on Single<T> {
   /// which can be used in pair with a [ForwardingSink].
   Single<R> forwardSingleWithSink<R>(ForwardingSink<T, R> sink) =>
       Single.safe(forwardStream(stream, sink));
-}
-
-/// Forward [Stream] events.
-extension ForwardStreamExtension<T> on Stream<T> {
-  /// Helper method which forwards the events from an incoming [Stream]
-  /// to a new [StreamController].
-  /// It captures events such as onListen, onPause, onResume and onCancel,
-  /// which can be used in pair with a [ForwardingSink]
-  Stream<R> forwardStreamWithSink<R>(ForwardingSink<T, R> sink) =>
-      forwardStream(this, sink);
 }
