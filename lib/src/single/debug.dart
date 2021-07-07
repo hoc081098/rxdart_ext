@@ -1,6 +1,6 @@
 import 'package:stack_trace/stack_trace.dart';
 
-import '../debug.dart';
+import '../operators/debug.dart';
 import '../utils.dart';
 import 'single.dart';
 

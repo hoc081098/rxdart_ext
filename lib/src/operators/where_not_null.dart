@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'default_sink.dart';
+import '../default_sink.dart';
 
 class _WhereNotNullStreamSink<T extends Object> extends BaseEventSink<T?, T> {
   _WhereNotNullStreamSink(EventSink<T> sink) : super(sink);

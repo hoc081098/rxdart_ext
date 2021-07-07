@@ -6,6 +6,6 @@ export 'package:rxdart/rxdart.dart'
     hide IgnoreElementsExtension, IgnoreElementsStreamTransformer;
 
 export 'src/error/index.dart';
-export 'src/index.dart';
+export 'src/operators/index.dart';
 export 'src/single/index.dart';
 export 'src/value/index.dart';
