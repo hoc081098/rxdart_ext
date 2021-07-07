@@ -5,7 +5,7 @@ import 'package:rxdart/rxdart.dart'
     show DoStreamTransformer, Kind, Notification;
 import 'package:stack_trace/stack_trace.dart';
 
-import 'utils.dart';
+import '../utils.dart';
 
 extension _NotificationDescriptionExt<T> on Notification<T> {
   @pragma('vm:prefer-inline')

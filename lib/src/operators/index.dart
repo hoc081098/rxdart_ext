@@ -1,5 +1,4 @@
 export 'debug.dart';
-export 'default_sink.dart';
 export 'distinct_by.dart';
 export 'distinct_unique_by.dart';
 export 'do_on.dart';

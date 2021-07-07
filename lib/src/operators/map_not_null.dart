@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'default_sink.dart';
+import '../default_sink.dart';
 
 class _MapNotNullSink<T, R extends Object> extends BaseEventSink<T, R> {
   final R? Function(T) transform;
