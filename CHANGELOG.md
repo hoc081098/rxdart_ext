@@ -1,3 +1,8 @@
+## 0.1.1-dev.3 - Jul 7, 2021
+
+-   Add `Single.asVoid`.
+-   Refactoring operators.
+
 ## 0.1.1-dev.2 - Jul 5, 2021
 
 -   Add `Single.mapTo`.
