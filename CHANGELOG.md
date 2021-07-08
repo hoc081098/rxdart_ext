@@ -1,3 +1,9 @@
+## 0.1.1 - Jul 8, 2021
+
+-   Stable release: see change logs of `0.1.1-dev.x` versions.
+    -   **Add `Single` type.**
+    -   Operators refactoring.
+
 ## 0.1.1-dev.3 - Jul 7, 2021
 
 -   Add `Single.asVoid`.
