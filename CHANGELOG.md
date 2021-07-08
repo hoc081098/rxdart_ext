@@ -1,3 +1,7 @@
+## 0.1.1 - Jul 8, 2021
+
+-   Stable release
+
 ## 0.1.1-dev.3 - Jul 7, 2021
 
 -   Add `Single.asVoid`.

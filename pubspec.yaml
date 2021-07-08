@@ -1,6 +1,6 @@
 name: rxdart_ext
 description: Some extension methods and classes built on top of RxDart - RxDart extension.
-version: 0.1.1-dev.3
+version: 0.1.1
 homepage: https://github.com/hoc081098/rxdart_ext.git
 repository: https://github.com/hoc081098/rxdart_ext.git
 issue_tracker: https://github.com/hoc081098/rxdart_ext/issues
@@ -9,14 +9,14 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
-  rxdart: ^0.27.0
+  rxdart: ^0.27.1
   meta: ^1.3.0
   stack_trace: ^1.10.0
   path: ^1.8.0
 
 dev_dependencies:
   pedantic: ^1.11.0
-  test: ^1.17.4
+  test: ^1.17.9
   collection: ^1.15.0
   mockito: ^5.0.7
   build_runner: ^2.0.2
