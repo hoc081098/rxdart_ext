@@ -1,3 +1,7 @@
+## 0.2.0-dev.0 - TODO
+
+-   Add `StreamController<void>.addNull()` extension.
+
 ## 0.1.1 - Jul 8, 2021
 
 -   Stable release: see change logs of `0.1.1-dev.x` versions.
