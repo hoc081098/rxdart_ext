@@ -52,16 +52,8 @@ extension ToStateStreamExtension<T> on Stream<T> {
   StateStream<T> state(
     T value, {
     bool Function(T p1, T p2)? equals,
-  }) {
-    final eq = equals ?? StateStream.defaultEquals;
-
-    final self = this;
-    if (self is _StateStream<T> && identical(self.equals, eq)) {
-      return self;
-    }
-
-    return _StateStream(this, value, eq);
-  }
+  }) =>
+      _StateStream(this, value, equals ?? StateStream.defaultEquals);
 }
 
 /// Default implementation of [StateStream].
