@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_void_to_null
+
 import 'package:rxdart/rxdart.dart' show ValueStreamError;
 
 import 'state_stream.dart';
