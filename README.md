@@ -81,9 +81,6 @@ Single<User> fetchUser(String id) {
 ### Operators for Stream
 
 - [debug](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DebugStreamExtension/debug.html), [collect](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/CollectStreamExtension/collect.html)
-- [ForwardingSinkMixin](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ForwardingSinkMixin-mixin.html)
-- [BaseEventSink](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/BaseEventSink-class.html)
-- [forwardSingleWithSink](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ForwardSingleExtension/forwardSingleWithSink.html)  
 - [distinctUniqueBy](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DistinctUniqueByStreamExtension/distinctUniqueBy.html)
 - [distinctBy](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DistinctByExtension/distinctBy.html)
 - [ignoreElements](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/IgnoreElementStreamExtension/ignoreElements.html), [ignoreErrors](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/IgnoreErrorsStreamExtension/ignoreErrors.html)
@@ -109,5 +106,5 @@ A Stream that provides synchronous access to the last emitted item, but not repl
 
 |  rxdart   | rxdart_ext |
 |  :---:    | :---:      |
-|  ^0.26.0  | ^0.0.1     |
-|  ^0.27.0  | ^0.1.0     |
+|  `0.26.0`  | `<=0.0.1`     |
+|  `>=0.27.0 <=0.27.1`  | `>=0.1.0 <=0.1.1`  |
