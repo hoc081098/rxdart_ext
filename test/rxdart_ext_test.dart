@@ -27,6 +27,8 @@ import 'single/singles_test.dart' as singles_test;
 import 'single/switch_flat_exhaust_map_test.dart'
     as switch_flat_exhaust_map_test;
 
+import 'controller/add_null_test.dart' as add_null_test;
+
 void main() {
   debug_test.main();
   distinct_by_test.main();
@@ -54,4 +56,6 @@ void main() {
   single_test.main();
   singles_test.main();
   switch_flat_exhaust_map_test.main();
+
+  add_null_test.main();
 }
