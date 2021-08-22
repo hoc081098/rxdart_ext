@@ -7,6 +7,6 @@ export 'package:rxdart/rxdart.dart'
 
 export 'src/controller/index.dart';
 export 'src/error/index.dart';
+export 'src/not_replay_value_stream/index.dart';
 export 'src/operators/index.dart';
 export 'src/single/index.dart';
-export 'src/value/index.dart';

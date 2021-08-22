@@ -1,6 +1,8 @@
+import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart' show ErrorAndStackTrace, ValueWrapper;
 
 /// Class that holds latest value and lasted error emitted from Stream.
+@internal
 class StreamEvent<T> {
   ValueWrapper<T> _valueWrapper;
   ErrorAndStackTrace? _errorAndStacktrace;
