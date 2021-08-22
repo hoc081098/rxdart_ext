@@ -10,3 +10,4 @@ export 'src/error/index.dart';
 export 'src/not_replay_value_stream/index.dart';
 export 'src/operators/index.dart';
 export 'src/single/index.dart';
+export 'src/state_stream/index.dart';
