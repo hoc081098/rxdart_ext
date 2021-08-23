@@ -16,7 +16,7 @@ extension ToStateStreamExtension<T> on Stream<T> {
   /// the '==' operator on the last provided data element is used.
   ///
   /// This stream is a single-subscription stream.
-  StateStream<T> state(
+  StateStream<T> toStateStream(
     T value, {
     bool Function(T p1, T p2)? equals,
   }) =>
