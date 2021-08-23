@@ -1,7 +1,7 @@
 import 'package:stack_trace/stack_trace.dart';
 
 import '../operators/debug.dart';
-import '../utils.dart';
+import '../utils/others.dart';
 import 'single.dart';
 
 /// RxDart debug operator - Port from [RxSwift Debug Operator](https://github.com/ReactiveX/RxSwift/blob/main/RxSwift/Observables/Debug.swift)

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 
-import '../default_sink.dart';
+import '../utils/default_sink.dart';
 import 'single.dart';
 
 class _DelaySingleSink<T>
