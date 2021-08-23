@@ -1,4 +1,4 @@
-import '../utils/others.dart';
+import '../utils/internal.dart';
 
 /// Skips data events if their key are equal to the key of the previous data event.
 extension DistinctByExtension<T> on Stream<T> {

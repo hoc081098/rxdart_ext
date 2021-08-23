@@ -1,6 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 
-import '../utils/others.dart';
+import '../utils/internal.dart';
 
 /// WARNING: More commonly known as distinct in other Rx implementations.
 ///

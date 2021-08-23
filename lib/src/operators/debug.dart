@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart' show DoStreamTransformer;
 import 'package:stack_trace/stack_trace.dart';
 
-import '../utils/others.dart';
+import '../utils/internal.dart';
 
 /// RxDart debug operator - Port from [RxSwift Debug Operator](https://github.com/ReactiveX/RxSwift/blob/main/RxSwift/Observables/Debug.swift)
 ///
