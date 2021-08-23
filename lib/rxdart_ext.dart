@@ -5,9 +5,8 @@ library rxdart_ext;
 export 'package:rxdart/rxdart.dart'
     hide IgnoreElementsExtension, IgnoreElementsStreamTransformer;
 
+export 'not_replay_value_stream.dart';
+export 'operators.dart';
+export 'single.dart';
 export 'src/controller/index.dart';
-export 'src/error/index.dart';
-export 'src/not_replay_value_stream/index.dart';
-export 'src/operators/index.dart';
-export 'src/single/index.dart';
-export 'src/state_stream/index.dart';
+export 'state_stream.dart';

@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../default_sink.dart';
-import '../error/api_contract_violation_error.dart';
+import 'api_contract_violation_error.dart';
 
 /// A Stream which emits single event, either data or error, and then close with a done-event.
 ///
