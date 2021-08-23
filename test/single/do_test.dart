@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_function_declarations_over_variables
+
 import 'dart:async';
 
 import 'package:dart_either/dart_either.dart';
@@ -95,7 +97,7 @@ void main() {
 
     group('doOnData', () {
       test('.success', () async {
-        final build = () => Single.value(1).doOnData((_) => null);
+        final build = () => Single.value(1).doOnData((_) {});
         await singleRule(build(), Either.right(1));
         broadcastRule(build(), false);
         await cancelRule(build());
@@ -111,8 +113,7 @@ void main() {
         }
 
         {
-          final build =
-              () => Single<int>.error(Exception()).doOnData((_) => null);
+          final build = () => Single<int>.error(Exception()).doOnData((_) {});
           await singleRule(build(), exceptionLeft);
           broadcastRule(build(), false);
           await cancelRule(build());

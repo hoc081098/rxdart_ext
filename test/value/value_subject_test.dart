@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_function_declarations_over_variables
+
 import 'dart:async';
 
 import 'package:pedantic/pedantic.dart';
@@ -178,7 +180,7 @@ void main() {
     });
 
     test('returns onCancel callback set in constructor', () async {
-      final onCancel = () => Future<Null>.value(null);
+      final onCancel = () => Future<void>.value(null);
 
       final subject = ValueSubject<int>(0, onCancel: onCancel);
 

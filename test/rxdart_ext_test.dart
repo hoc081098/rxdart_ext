@@ -29,6 +29,8 @@ import 'single/switch_flat_exhaust_map_test.dart'
 
 import 'controller/add_null_test.dart' as add_null_test;
 
+import 'state_stream/to_state_stream_test.dart' as to_state_stream_test;
+
 void main() {
   debug_test.main();
   distinct_by_test.main();
@@ -58,4 +60,6 @@ void main() {
   switch_flat_exhaust_map_test.main();
 
   add_null_test.main();
+
+  to_state_stream_test.main();
 }

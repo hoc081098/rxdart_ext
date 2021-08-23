@@ -5,6 +5,7 @@ import 'not_replay_value_stream.dart';
 import 'stream_event.dart';
 
 /// This [NotReplayValueStream] mixin implements all [NotReplayValueStream] members via [event].
+@internal
 mixin NotReplayValueStreamMixin<T> implements NotReplayValueStream<T> {
   /// Keep latest state.
   @visibleForOverriding

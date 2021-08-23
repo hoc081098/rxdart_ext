@@ -4,7 +4,7 @@ import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
 
 void broadcastRule<T>(Single<T> single, bool isBroadcast) {
-  final ignoreError = (Object e) {};
+  void ignoreError(Object e) {}
 
   if (isBroadcast) {
     expect(single.isBroadcast, true);
@@ -42,6 +42,7 @@ Future<void> cancelRule<T>(
 }
 
 final exceptionLeft = Either<Object, Never>.left(isA<Exception>());
-final APIContractViolationErrorWithMessage = (String s) =>
+
+Either<Object, Never> buildAPIContractViolationErrorWithMessage(String s) =>
     Either<Object, Never>.left(isA<APIContractViolationError>()
         .having((o) => o.message, 'message', s));

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_function_declarations_over_variables
+
 import 'dart:async';
 
 import 'package:dart_either/dart_either.dart';

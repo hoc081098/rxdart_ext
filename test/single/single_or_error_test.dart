@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_function_declarations_over_variables
+
 import 'dart:async';
 
 import 'package:dart_either/dart_either.dart';
@@ -56,7 +58,7 @@ void main() {
     test('from Stream.empty', () async {
       await singleRule(
         Stream<int>.empty().singleOrError(),
-        APIContractViolationErrorWithMessage(
+        buildAPIContractViolationErrorWithMessage(
             "Stream doesn't contains any data or error event."),
       );
       broadcastRule(Stream<int>.empty().singleOrError(), true);
@@ -78,7 +80,7 @@ void main() {
     test('from multiple data events Stream (data -> data)', () async {
       await singleRule(
         Stream.fromIterable([1, 2, 3]).singleOrError(),
-        APIContractViolationErrorWithMessage(
+        buildAPIContractViolationErrorWithMessage(
             'Stream contains more than one data event.'),
       );
       broadcastRule(Stream.fromIterable([1, 2, 3]).singleOrError(), false);
@@ -94,7 +96,7 @@ void main() {
 
       await singleRule(
         buildSingle(),
-        APIContractViolationErrorWithMessage(
+        buildAPIContractViolationErrorWithMessage(
             'Stream contains both data and error event.'),
       );
       broadcastRule(buildSingle(), false);
@@ -110,7 +112,7 @@ void main() {
 
       await singleRule(
         buildSingle(),
-        APIContractViolationErrorWithMessage(
+        buildAPIContractViolationErrorWithMessage(
             'Stream contains both data and error event.'),
       );
       broadcastRule(buildSingle(), false);
@@ -126,7 +128,7 @@ void main() {
 
       await singleRule(
         buildSingle(),
-        APIContractViolationErrorWithMessage(
+        buildAPIContractViolationErrorWithMessage(
             'Stream contains more than one error event.'),
       );
       broadcastRule(buildSingle(), false);
