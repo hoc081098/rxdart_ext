@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../default_sink.dart';
+import '../utils/default_sink.dart';
 import 'single.dart';
 
 class _DoStreamSink<S>

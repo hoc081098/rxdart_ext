@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../default_sink.dart';
+import '../utils/default_sink.dart';
 
 class _AsVoidStreamSink<T> extends BaseEventSink<T, void> {
   _AsVoidStreamSink(EventSink<void> sink) : super(sink);

@@ -1,55 +1,9 @@
 import 'dart:async';
-import 'dart:math' as math;
 
-import 'package:rxdart/rxdart.dart'
-    show DoStreamTransformer, Kind, Notification;
+import 'package:rxdart/rxdart.dart' show DoStreamTransformer;
 import 'package:stack_trace/stack_trace.dart';
 
-import '../utils.dart';
-
-extension _NotificationDescriptionExt<T> on Notification<T> {
-  @pragma('vm:prefer-inline')
-  @pragma('dart2js:tryInline')
-  String get description {
-    switch (kind) {
-      case Kind.OnData:
-        return 'data($requireData)';
-      case Kind.OnDone:
-        return 'done';
-      case Kind.OnError:
-        final error = errorAndStackTrace!;
-        return 'error(${error.error}, ${error.stackTrace})';
-    }
-  }
-}
-
-extension on String {
-  @pragma('vm:prefer-inline')
-  @pragma('dart2js:tryInline')
-  String take(int n) {
-    if (n < 0) {
-      throw ArgumentError.value(
-        n,
-        'n',
-        'Requested character count is less than zero.',
-      );
-    }
-    return substring(0, math.min(n, length));
-  }
-
-  @pragma('vm:prefer-inline')
-  @pragma('dart2js:tryInline')
-  String takeLast(int n) {
-    if (n < 0) {
-      throw ArgumentError.value(
-        n,
-        'n',
-        'Requested character count is less than zero.',
-      );
-    }
-    return substring(length - math.min(n, length));
-  }
-}
+import '../utils/internal.dart';
 
 /// RxDart debug operator - Port from [RxSwift Debug Operator](https://github.com/ReactiveX/RxSwift/blob/main/RxSwift/Observables/Debug.swift)
 ///

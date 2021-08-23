@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/src/utils/forwarding_sink.dart';
 import 'package:rxdart/src/utils/forwarding_stream.dart' show forwardStream;
 
-import 'single/single.dart';
+import '../single/single.dart';
 
 export 'package:rxdart/src/utils/forwarding_sink.dart' show ForwardingSink;
 

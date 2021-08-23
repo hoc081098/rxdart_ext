@@ -8,5 +8,5 @@ export 'package:rxdart/rxdart.dart'
 export 'not_replay_value_stream.dart';
 export 'operators.dart';
 export 'single.dart';
-export 'src/controller/index.dart';
+export 'utils.dart';
 export 'state_stream.dart';

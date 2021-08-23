@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../default_sink.dart';
+import '../utils/default_sink.dart';
 
 class _IgnoreElementsEventSink<T> extends BaseEventSink<T, Never> {
   _IgnoreElementsEventSink(EventSink<Never> sink) : super(sink);
