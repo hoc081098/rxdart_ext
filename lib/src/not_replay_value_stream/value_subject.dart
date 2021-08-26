@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart'
     show ErrorAndStackTrace, PublishSubject, Subject;
 
@@ -30,6 +31,7 @@ import 'stream_event.dart';
 ///
 ///     subject.add(2);
 ///     subject.close();
+@sealed
 class ValueSubject<T> extends Subject<T>
     with NotReplayValueStreamMixin<T>
     implements NotReplayValueStream<T> {

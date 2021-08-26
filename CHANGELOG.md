@@ -1,6 +1,8 @@
 ## 0.2.0-dev.0 - TODO
 
--   Add `StreamController<void>.addNull()` extension.
+-   Add `Sink<void>.addNull()` extension.
+-   Add `StateStream`, `StateSubject`.
+-   Split into multiple libraries.
 
 ## 0.1.1 - Jul 8, 2021
 
