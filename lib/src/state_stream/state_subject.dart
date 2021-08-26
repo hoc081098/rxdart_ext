@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/rxdart.dart' show PublishSubject, Subject;
 
 import '../not_replay_value_stream/value_subject.dart';
 import 'state_stream.dart';
