@@ -1,8 +1,9 @@
 ## 0.2.0-dev.0 - TODO
 
+-   Split into multiple libraries.
 -   Add `Sink<void>.addNull()` extension.
 -   Add `StateStream`, `StateSubject`.
--   Split into multiple libraries.
+-   Add `Single.retry()`.
 
 ## 0.1.1 - Jul 8, 2021
 
