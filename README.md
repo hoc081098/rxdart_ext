@@ -108,3 +108,11 @@ A Stream that provides synchronous access to the last emitted item, but not repl
 |  :---:    | :---:      |
 |  `0.26.0`  | `<=0.0.1`     |
 |  `>=0.27.0 <=0.27.1`  | `>=0.1.0 <=0.1.1`  |
+
+## License
+
+    MIT License
+
+    Copyright (c) 2020-2021 Petrus Nguyễn Thái Học
+
+![Tim Cook dancing to the sound of a permissive license.](http://i.imgur.com/mONiWzj.gif)
