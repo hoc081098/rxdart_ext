@@ -5,6 +5,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../utils/default_sink.dart';
 import 'api_contract_violation_error.dart';
+import 'internal.dart';
 
 /// A Stream which emits single event, either data or error, and then close with a done-event.
 ///
@@ -105,9 +106,22 @@ class Single<T> extends StreamView<T> {
   /// to make it reusable.
   ///
   /// See [Rx.defer] and [DeferStream].
-  factory Single.defer(Single<T> Function() streamFactory,
+  factory Single.defer(Single<T> Function() singleFactory,
           {bool reusable = false}) =>
-      Single.safe(Rx.defer(streamFactory, reusable: reusable));
+      Single.safe(Rx.defer(singleFactory, reusable: reusable));
+
+  /// Creates a [Single] that will recreate and re-listen to the source
+  /// [Single] the specified number of times until the Single terminates
+  /// successfully.
+  ///
+  /// If the retry count is not specified (is null), it retries indefinitely.
+  ///
+  /// If the retry count is met, but the [Single] has not terminated successfully,
+  /// the first error and [StackTrace] that caused the failure will be emitted.
+  ///
+  /// See [Rx.retry] and [RetryStream].
+  factory Single.retry(Single<T> Function() singleFactory, [int? count]) =>
+      Rx.retry(singleFactory, count).takeFirstDataOrFirstErrorAndClose();
 
   @override
   Single<T> distinct([bool Function(T previous, T next)? equals]) => this;

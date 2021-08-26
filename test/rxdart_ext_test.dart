@@ -25,7 +25,7 @@ import 'single/map_to_test.dart' as map_to_test;
 import 'single/on_error_resume_test.dart' as on_error_resume_test;
 import 'single/single_or_error_test.dart' as single_or_error_test;
 import 'single/single_test.dart' as single_test;
-import 'single/singles_test.dart' as singles_test;
+import 'single/rx_singles_test.dart' as rx_singles_test;
 import 'single/switch_flat_exhaust_map_test.dart'
     as switch_flat_exhaust_map_test;
 
@@ -59,7 +59,7 @@ void main() {
   on_error_resume_test.main();
   single_or_error_test.main();
   single_test.main();
-  singles_test.main();
+  rx_singles_test.main();
   switch_flat_exhaust_map_test.main();
 
   add_null_test.main();
