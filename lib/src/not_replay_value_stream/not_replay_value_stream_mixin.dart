@@ -31,10 +31,10 @@ mixin NotReplayValueStreamMixin<T> implements NotReplayValueStream<T> {
   StackTrace? get stackTrace => event.errorAndStackTrace?.stackTrace;
 
   @override
-  T get value => event.valueWrapper.value;
+  T get value => event.value;
 
   @override
-  T get valueOrNull => event.valueWrapper.value;
+  T get valueOrNull => event.value;
 
   @override
   bool get hasValue => true;
