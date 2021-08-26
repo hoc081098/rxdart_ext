@@ -4,7 +4,7 @@ import 'package:dart_either/dart_either.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/scaffolding.dart';
 
-import 'single_test_utils.dart';
+import 'utils.dart';
 
 void main() {
   group('Single.mapTo', () {

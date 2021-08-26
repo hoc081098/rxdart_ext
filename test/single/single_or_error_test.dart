@@ -7,7 +7,7 @@ import 'package:pedantic/pedantic.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
 
-import 'single_test_utils.dart';
+import 'utils.dart';
 
 void main() {
   group('singleOrError', () {
