@@ -1,7 +1,5 @@
-import 'dart:async';
-
-/// Provide [addNull] extension on [StreamController<void>].
-extension AddNullStreamControllerExtension on StreamController<void> {
-  /// Add `null` to this controller.
+/// Provide [addNull] extension on [Sink<void>].
+extension AddNullSinkExtension on Sink<void> {
+  /// Add `null` to this [Sink].
   void addNull() => add(null);
 }

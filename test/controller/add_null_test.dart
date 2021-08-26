@@ -11,7 +11,7 @@ abstract class VoidController implements StreamController<void> {}
 
 @GenerateMocks([VoidController])
 void main() {
-  test('StreamController<void>.addNull', () {
+  test('Sink<void>.addNull', () {
     final c = MockVoidController();
     when(c.add(null)).thenReturn(null);
 
