@@ -1,6 +1,12 @@
 ## 0.1.2 - TODO
 
-- Split into multiple libraries.
+- Split into multiple libraries:
+    - `not_replay_value_stream`
+    - `operators`
+    - `single`
+    - `state_stream`
+    - `utils`
+    - `rxdart_ext`: includes all the above.
 - Add `Sink<void>.addNull()` extension.
 - Add `StateStream`, `StateSubject`.
 - Add `Single.retry()`.
