@@ -9,7 +9,7 @@ extension ToSingleSubscriptionStreamExtension<T> on Stream<T> {
       return this;
     }
 
-    late StreamSubscription<T> subscription;
+    StreamSubscription<T>? subscription;
 
     final controller = StreamController<T>(sync: true);
     controller.onListen = () {
@@ -19,7 +19,11 @@ extension ToSingleSubscriptionStreamExtension<T> on Stream<T> {
         onDone: controller.close,
       );
     };
-    controller.onCancel = () => subscription.cancel();
+    controller.onCancel = () {
+      final cancel = subscription?.cancel();
+      subscription = null;
+      return cancel;
+    };
 
     return controller.stream;
   }
