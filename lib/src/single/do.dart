@@ -3,7 +3,7 @@ import 'dart:async';
 import '../utils/default_sink.dart';
 import 'single.dart';
 
-class _DoStreamSink<S>
+class _DoStreamSingleSink<S>
     with ForwardingSinkMixin<S, S>
     implements ForwardingSink<S, S> {
   final FutureOr<void> Function()? onCancelCallback;
@@ -11,7 +11,7 @@ class _DoStreamSink<S>
   final void Function(Object, StackTrace)? onErrorCallback;
   final void Function()? onListenCallback;
 
-  _DoStreamSink({
+  _DoStreamSingleSink({
     this.onCancelCallback,
     this.onDataCallback,
     this.onErrorCallback,
@@ -71,7 +71,7 @@ extension DoSingleExtensions<T> on Single<T> {
   ///
   ///     subscription.cancel(); // prints 'hi'
   Single<T> doOnCancel(FutureOr<void> Function() onCancel) =>
-      forwardSingleWithSink(_DoStreamSink(onCancelCallback: onCancel));
+      forwardSingleWithSink(_DoStreamSingleSink(onCancelCallback: onCancel));
 
   /// Invokes the given callback function when the Single emits an item. In
   /// other implementations, this is called doOnNext.
@@ -82,7 +82,7 @@ extension DoSingleExtensions<T> on Single<T> {
   ///       .doOnData(print)
   ///       .listen(null); // prints 1
   Single<T> doOnData(void Function(T event) onData) =>
-      forwardSingleWithSink(_DoStreamSink(onDataCallback: onData));
+      forwardSingleWithSink(_DoStreamSingleSink(onDataCallback: onData));
 
   /// Invokes the given callback function when the Single emits an error.
   ///
@@ -92,7 +92,7 @@ extension DoSingleExtensions<T> on Single<T> {
   ///       .doOnError((error, stacktrace) => print('oh no'))
   ///       .listen(null); // prints 'Oh no'
   Single<T> doOnError(void Function(Object, StackTrace) onError) =>
-      forwardSingleWithSink(_DoStreamSink(onErrorCallback: onError));
+      forwardSingleWithSink(_DoStreamSingleSink(onErrorCallback: onError));
 
   /// Invokes the given callback function when the Single is first listened to.
   ///
@@ -102,5 +102,5 @@ extension DoSingleExtensions<T> on Single<T> {
   ///       .doOnListen(() => print('Is someone there?'))
   ///       .listen(null); // prints 'Is someone there?'
   Single<T> doOnListen(void Function() onListen) =>
-      forwardSingleWithSink(_DoStreamSink(onListenCallback: onListen));
+      forwardSingleWithSink(_DoStreamSingleSink(onListenCallback: onListen));
 }
