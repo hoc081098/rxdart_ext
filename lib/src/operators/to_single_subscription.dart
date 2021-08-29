@@ -3,8 +3,11 @@ import 'dart:async';
 /// Converts a broadcast Stream into a single-subscription Stream.
 extension ToSingleSubscriptionStreamExtension<T> on Stream<T> {
   /// Converts a broadcast Stream into a single-subscription Stream.
+  /// If this [Stream] is single-subscription Stream, just return it.
   Stream<T> toSingleSubscriptionStream() {
-    assert(isBroadcast);
+    if (!isBroadcast) {
+      return this;
+    }
 
     late StreamSubscription<T> subscription;
 
