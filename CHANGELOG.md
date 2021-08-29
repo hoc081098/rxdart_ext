@@ -1,4 +1,4 @@
-## 0.2.0-dev.0 - TODO
+## 0.1.2 - TODO
 
 -   Add `Sink<void>.addNull()` extension.
 -   Add `StateStream`, `StateSubject`.

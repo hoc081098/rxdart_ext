@@ -50,6 +50,7 @@ Single<User> fetchUser(String id) {
         -   [Single.fromCallable](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single/Single.fromCallable.html)
         -   [Single.timer](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single/Single.timer.html)
         -   [Single.defer](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single/Single.defer.html)
+        -   [Single.retry](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single/Single.retry.html)
 
     -   Static methods provided by [RxSingles]() class
         -   [RxSingles.zip2](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/RxSingles/zip2.html)
@@ -107,7 +108,7 @@ A Stream that provides synchronous access to the last emitted item, but not repl
 |  rxdart   | rxdart_ext |
 |  :---:    | :---:      |
 |  `0.26.0`  | `<=0.0.1`     |
-|  `>=0.27.0 <=0.27.1`  | `>=0.1.0 <=0.1.1`  |
+|  `>=0.27.0 <=0.27.1`  | `>=0.1.0 <=0.1.2`  |
 
 ## License
 
