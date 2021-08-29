@@ -6,7 +6,7 @@ import 'package:dart_either/dart_either.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
 
-import 'single_test_utils.dart';
+import 'utils.dart';
 
 void main() {
   group('Single', () {
@@ -171,6 +171,70 @@ void main() {
               false);
           await cancelRule(Single.fromFuture(Future.delayed(
               Duration(milliseconds: 100), () => throw Exception())));
+        });
+      });
+
+      group('Single.retry', () {
+        Single<int> Function() getRetrySingle(final int failCount) {
+          var count = 0;
+
+          return () {
+            if (count < failCount) {
+              return Single<int>.error(
+                Exception(),
+                StackTrace.fromString('Stack#${count++}'),
+              );
+            } else {
+              return Single.value(1);
+            }
+          };
+        }
+
+        test('.success', () async {
+          {
+            final build = () => Single.retry(getRetrySingle(3), 3);
+            await singleRule(build(), Either.right(1));
+            broadcastRule(build(), false);
+            await cancelRule(build());
+          }
+
+          {
+            final build = () => Single.retry(getRetrySingle(3), 10);
+            await singleRule(build(), Either.right(1));
+            broadcastRule(build(), false);
+            await cancelRule(build());
+          }
+
+          {
+            // infinite
+            final build = () => Single.retry(getRetrySingle(1000));
+            await singleRule(build(), Either.right(1));
+            broadcastRule(build(), false);
+            await cancelRule(build());
+          }
+        });
+
+        test('.failure', () async {
+          {
+            final build = () => Single.retry(getRetrySingle(3), 2);
+            await singleRule(build(), exceptionLeft);
+            broadcastRule(build(), false);
+            await cancelRule(build());
+          }
+
+          {
+            Single.retry(getRetrySingle(3), 2).listen(
+              expectAsync1((_) {}, count: 0),
+              onError: expectAsync2(
+                (Object e, StackTrace st) {
+                  expect(e, isException);
+                  expect(st.toString(), 'Stack#0');
+                },
+                count: 1,
+              ),
+              onDone: expectAsync0(() {}, count: 1),
+            );
+          }
         });
       });
     });
