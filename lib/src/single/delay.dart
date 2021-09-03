@@ -5,16 +5,15 @@ import 'package:rxdart/rxdart.dart';
 import '../utils/default_sink.dart';
 import 'single.dart';
 
-class _DelaySingleSink<T>
-    with ForwardingSinkMixin<T, T>
-    implements ForwardingSink<T, T> {
+class _DelaySingleSink<T> extends ForwardingSink<T, T>
+    with ForwardingSinkMixin<T, T> {
   final Duration duration;
   StreamSubscription<T>? subscription;
 
   _DelaySingleSink(this.duration);
 
   @override
-  void add(EventSink<T> sink, T data) {
+  void onData(T data) {
     subscription = Rx.timer(data, duration).listen((v) {
       sink.add(v);
       sink.close();
@@ -22,24 +21,27 @@ class _DelaySingleSink<T>
   }
 
   @override
-  void close(EventSink<T> sink) {
+  void onDone() {
     if (subscription == null) {
       sink.close();
     }
   }
 
   @override
-  FutureOr<void> onCancel(EventSink<T> sink) {
+  FutureOr<void> onCancel() {
     final cancel = subscription?.cancel();
     subscription = null;
     return cancel;
   }
 
   @override
-  void onPause(EventSink<T> sink) => subscription?.pause();
+  void onPause() => subscription?.pause();
 
   @override
-  void onResume(EventSink<T> sink) => subscription?.resume();
+  void onResume() => subscription?.resume();
+
+  @override
+  FutureOr<void> onListen() {}
 }
 
 /// Extends the Single class with the ability to delay events being emitted
@@ -64,5 +66,5 @@ extension DelaySingleExtension<T> on Single<T> {
   /// ```
   /// [Interactive marble diagram](http://rxmarbles.com/#delay)
   Single<T> delay(Duration duration) =>
-      forwardSingleWithSink(_DelaySingleSink(duration));
+      forwardSingleWithSink(() => _DelaySingleSink(duration));
 }

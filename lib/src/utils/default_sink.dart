@@ -13,26 +13,10 @@ export 'package:rxdart/src/utils/forwarding_sink.dart' show ForwardingSink;
 /// This [ForwardingSink] mixin implements all [ForwardingSink] members except [add].
 mixin ForwardingSinkMixin<T, R> implements ForwardingSink<T, R> {
   @override
-  FutureOr<void> onCancel(EventSink<R> sink) {}
+  void onDone() => sink.close();
 
   @override
-  void onPause(EventSink<R> sink) {}
-
-  @override
-  void onResume(EventSink<R> sink) {}
-
-  @override
-  void onListen(EventSink<R> sink) {}
-
-  @override
-  void add(EventSink<R> sink, T data);
-
-  @override
-  void addError(EventSink<R> sink, Object error, StackTrace st) =>
-      sink.addError(error, st);
-
-  @override
-  void close(EventSink<R> sink) => sink.close();
+  void onError(Object error, StackTrace st) => sink.addError(error, st);
 }
 
 /// This [EventSink] class implements all [EventSink] members except [add].
@@ -61,6 +45,7 @@ extension ForwardSingleExtension<T> on Single<T> {
   /// to a new [Single].
   /// It captures events such as onListen, onPause, onResume and onCancel,
   /// which can be used in pair with a [ForwardingSink].
-  Single<R> forwardSingleWithSink<R>(ForwardingSink<T, R> sink) =>
-      Single.safe(forwardStream(stream, sink));
+  Single<R> forwardSingleWithSink<R>(ForwardingSink<T, R> Function() sink,
+          [bool listenOnlyOnce = false]) =>
+      Single.safe(forwardStream(stream, sink, listenOnlyOnce));
 }

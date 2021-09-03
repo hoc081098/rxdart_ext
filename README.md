@@ -108,7 +108,8 @@ A Stream that provides synchronous access to the last emitted item, but not repl
 |  rxdart   | rxdart_ext |
 |  :---:    | :---:      |
 |  `0.26.0`  | `<=0.0.1`     |
-|  `>=0.27.0 <=0.27.1`  | `>=0.1.0 <=0.1.2`  |
+|  `>=0.27.0 <=0.27.1`  | `>=0.1.0 <=0.1.1`  |
+|  `>=0.27.2`           | `>=0.2.0`  |
 
 ## License
 
