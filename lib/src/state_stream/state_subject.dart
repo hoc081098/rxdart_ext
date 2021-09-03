@@ -105,17 +105,5 @@ class StateSubject<T> extends Subject<T>
   }
 
   @override
-  Subject<R> createForwardingSubject<R>({
-    void Function()? onListen,
-    void Function()? onCancel,
-    bool sync = false,
-  }) =>
-      PublishSubject<R>(
-        onListen: onListen,
-        onCancel: onCancel,
-        sync: sync,
-      );
-
-  @override
   T get value => _subject.value;
 }
