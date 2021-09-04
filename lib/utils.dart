@@ -1,6 +1,5 @@
 library utils;
 
-export 'package:rxdart/rxdart.dart'
-    hide IgnoreElementsExtension, IgnoreElementsStreamTransformer;
+export 'package:rxdart/rxdart.dart';
 
 export 'src/utils/index.dart';

@@ -2,8 +2,7 @@
 /// ## Author: [Petrus Nguyễn Thái Học](https://github.com/hoc081098)
 library rxdart_ext;
 
-export 'package:rxdart/rxdart.dart'
-    hide IgnoreElementsExtension, IgnoreElementsStreamTransformer;
+export 'package:rxdart/rxdart.dart';
 
 export 'not_replay_value_stream.dart';
 export 'operators.dart';

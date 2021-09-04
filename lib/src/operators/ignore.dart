@@ -2,20 +2,6 @@ import 'dart:async';
 
 import '../utils/default_sink.dart';
 
-class _IgnoreElementsEventSink<T> extends BaseEventSink<T, Never> {
-  _IgnoreElementsEventSink(EventSink<Never> sink) : super(sink);
-
-  @override
-  void add(T event) {}
-}
-
-/// Ignore all data events, forward only error and done event.
-extension IgnoreElementStreamExtension<T> on Stream<T> {
-  /// Ignore all data events, forward only error and done event.
-  Stream<Never> ignoreElements() => Stream<Never>.eventTransformed(
-      this, (sink) => _IgnoreElementsEventSink<T>(sink));
-}
-
 class _IgnoreErrorsEventSink<T> extends BaseEventSink<T, T> {
   _IgnoreErrorsEventSink(EventSink<T> sink) : super(sink);
 

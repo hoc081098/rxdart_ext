@@ -1,6 +1,5 @@
 library single;
 
-export 'package:rxdart/rxdart.dart'
-    hide IgnoreElementsExtension, IgnoreElementsStreamTransformer;
+export 'package:rxdart/rxdart.dart';
 
 export 'src/single/index.dart';

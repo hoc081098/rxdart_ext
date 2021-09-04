@@ -1,6 +1,5 @@
 library operators;
 
-export 'package:rxdart/rxdart.dart'
-    hide IgnoreElementsExtension, IgnoreElementsStreamTransformer;
+export 'package:rxdart/rxdart.dart';
 
 export 'src/operators/index.dart';

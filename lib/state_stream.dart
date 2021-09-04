@@ -1,6 +1,5 @@
 library state_stream;
 
-export 'package:rxdart/rxdart.dart'
-    hide IgnoreElementsExtension, IgnoreElementsStreamTransformer;
+export 'package:rxdart/rxdart.dart';
 
 export 'src/state_stream/index.dart';
