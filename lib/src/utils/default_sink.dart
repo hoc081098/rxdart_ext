@@ -11,7 +11,7 @@ import '../single/single.dart';
 export 'package:rxdart/src/utils/forwarding_sink.dart' show ForwardingSink;
 export 'package:rxdart/src/utils/forwarding_stream.dart' show forwardStream;
 
-/// This [ForwardingSink] mixin implements all [ForwardingSink] members except [add].
+/// This [ForwardingSink] mixin implements [onDone] and [onError].
 mixin ForwardingSinkMixin<T, R> implements ForwardingSink<T, R> {
   @override
   void onDone() => sink.close();
