@@ -14,7 +14,16 @@ class _DoneOnErrorSink<T> extends BaseEventSink<T, T> {
   void addError(Object error, [StackTrace? stackTrace]) {
     // NOTE: `stackTrace` is always not `null`.
     sink.addError(error, stackTrace!);
-    if (predicate(error, stackTrace)) {
+
+    final bool shouldClose;
+    try {
+      shouldClose = predicate(error, stackTrace);
+    } catch (e, s) {
+      sink.addError(e, s);
+      return;
+    }
+
+    if (shouldClose) {
       sink.close();
     }
   }
