@@ -38,19 +38,18 @@ class _OnErrorReturnWithSingleSink<T> extends BaseEventSink<T, T> {
   }
 }
 
-class _OnErrorResumeNextSingleSingleSink<T>
-    with ForwardingSinkMixin<T, T>
-    implements ForwardingSink<T, T> {
+class _OnErrorResumeNextSingleSingleSink<T> extends ForwardingSink<T, T>
+    with ForwardingSinkMixin<T, T> {
   final Single<T> recoverySingle;
   StreamSubscription<T>? subscription;
 
   _OnErrorResumeNextSingleSingleSink(this.recoverySingle);
 
   @override
-  void add(EventSink<T> sink, T data) => sink.add(data);
+  void onData(T data) => sink.add(data);
 
   @override
-  void addError(EventSink<T> sink, Object error, StackTrace st) {
+  void onError(Object error, StackTrace st) {
     subscription = recoverySingle.listen(
       (value) {
         sink.add(value);
@@ -64,35 +63,37 @@ class _OnErrorResumeNextSingleSingleSink<T>
   }
 
   @override
-  void close(EventSink<T> sink) {
+  void onDone() {
     if (subscription == null) {
       sink.close();
     }
   }
 
   @override
-  FutureOr<void> onCancel(EventSink<T> sink) => subscription?.cancel();
+  FutureOr<void> onCancel() => subscription?.cancel();
 
   @override
-  void onPause(EventSink<T> sink) => subscription?.pause();
+  void onPause() => subscription?.pause();
 
   @override
-  void onResume(EventSink<T> sink) => subscription?.resume();
+  void onResume() => subscription?.resume();
+
+  @override
+  FutureOr<void> onListen() {}
 }
 
-class _OnErrorResumeSingleSingleSink<T>
-    with ForwardingSinkMixin<T, T>
-    implements ForwardingSink<T, T> {
+class _OnErrorResumeSingleSingleSink<T> extends ForwardingSink<T, T>
+    with ForwardingSinkMixin<T, T> {
   final Single<T> Function(Object, StackTrace) fallbackSupplier;
   StreamSubscription<T>? subscription;
 
   _OnErrorResumeSingleSingleSink(this.fallbackSupplier);
 
   @override
-  void add(EventSink<T> sink, T data) => sink.add(data);
+  void onData(T data) => sink.add(data);
 
   @override
-  void addError(EventSink<T> sink, Object error, StackTrace st) {
+  void onError(Object error, StackTrace st) {
     final Single<T> fallback;
     try {
       fallback = fallbackSupplier(error, st);
@@ -113,20 +114,23 @@ class _OnErrorResumeSingleSingleSink<T>
   }
 
   @override
-  void close(EventSink<T> sink) {
+  void onDone() {
     if (subscription == null) {
       sink.close();
     }
   }
 
   @override
-  FutureOr<void> onCancel(EventSink<T> sink) => subscription?.cancel();
+  FutureOr<void> onCancel() => subscription?.cancel();
 
   @override
-  void onPause(EventSink<T> sink) => subscription?.pause();
+  void onPause() => subscription?.pause();
 
   @override
-  void onResume(EventSink<T> sink) => subscription?.resume();
+  void onResume() => subscription?.resume();
+
+  @override
+  FutureOr<void> onListen() {}
 }
 
 /// Extends the Single class with the ability to recover from errors in various ways.
@@ -160,7 +164,8 @@ extension OnErrorResumeSingleExtensions<T> on Single<T> {
   ///       .onErrorResumeNextSingle(Single.value(1))
   ///       .listen(print); // prints 1
   Single<T> onErrorResumeNextSingle(Single<T> recoverySingle) =>
-      forwardSingleWithSink(_OnErrorResumeNextSingleSingleSink(recoverySingle));
+      forwardSingleWithSink(
+          () => _OnErrorResumeNextSingleSingleSink(recoverySingle));
 
   /// Intercepts error events and switches to a recovery [Single] created by the
   /// provided [fallbackSupplier].
@@ -184,7 +189,8 @@ extension OnErrorResumeSingleExtensions<T> on Single<T> {
   Single<T> onErrorResumeSingle(
           Single<T> Function(Object error, StackTrace stackTrace)
               fallbackSupplier) =>
-      forwardSingleWithSink(_OnErrorResumeSingleSingleSink(fallbackSupplier));
+      forwardSingleWithSink(
+          () => _OnErrorResumeSingleSingleSink(fallbackSupplier));
 
   /// Instructs a Single to emit a particular item when it encounters an
   /// error, and then terminate normally.

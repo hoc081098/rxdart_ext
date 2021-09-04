@@ -11,6 +11,15 @@
 
 Some extension methods and classes built on top of `RxDart` - `RxDart` extension.
 
+## RxDart compatibility
+
+|  rxdart   | rxdart_ext |
+|  :---:    | :---:      |
+|  `0.26.0`  | `<=0.0.1`     |
+|  `>=0.27.0 <=0.27.1`  | `>=0.1.0 <=0.1.1`  |
+|  `>=0.27.2`           | `>=0.2.0`  |
+
+
 ## API
 
 ### [Single](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single-class.html)
@@ -104,14 +113,6 @@ A Stream that provides synchronous access to the last emitted item, but not repl
     -   [ValueStreamController](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ValueStreamController-class.html)
     -   [toNotReplayValueStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ToNotReplayValueStreamExtension/toNotReplayValueStream.html)
     
-
-
-## RxDart compatibility
-
-|  rxdart   | rxdart_ext |
-|  :---:    | :---:      |
-|  `0.26.0`  | `<=0.0.1`     |
-|  `>=0.27.0 <=0.27.1`  | `>=0.1.0 <=0.1.2`  |
 
 ## License
 

@@ -1,4 +1,4 @@
-## 0.1.2 - TODO
+## 0.2.0 - TODO
 
 - Split into multiple libraries:
     - `not_replay_value_stream`
