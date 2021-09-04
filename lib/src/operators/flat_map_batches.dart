@@ -1,9 +1,15 @@
 import 'package:rxdart/rxdart.dart';
 
+import '../single/internal.dart';
+import '../single/single.dart';
+
 /// TODO
 extension FlatMapBatchesStreamExtension<T> on Stream<T> {
   /// TODO
-  Stream<List<R>> flatMapBatches<R>(Stream<R> Function(T) transform, int max) {
+  Stream<List<R>> flatMapBatches<R>(
+    Stream<R> Function(T) transform,
+    int maxConcurrent,
+  ) {
     Stream<List<R>> convert(List<T> streams) {
       return Rx.zip(
         streams.map(transform).toList(growable: false),
@@ -11,27 +17,41 @@ extension FlatMapBatchesStreamExtension<T> on Stream<T> {
       );
     }
 
-    return bufferCount(max).asyncExpand(convert);
+    return bufferCount(maxConcurrent).asyncExpand(convert);
+  }
+
+  /// TODO
+  Single<List<R>> flatMapBatchesSingle<R>(
+    Single<R> Function(T) transform,
+    int maxConcurrent,
+  ) {
+    Stream<List<R>> convert(List<T> streams) {
+      return Rx.forkJoin(
+        streams.map(transform).toList(growable: false),
+        (List<R> values) => values,
+      );
+    }
+
+    return bufferCount(maxConcurrent)
+        .asyncExpand(convert)
+        .scan<List<R>>((acc, value, _) => [...acc, ...value], [])
+        .takeLast(1)
+        .takeFirstDataOrFirstErrorAndClose();
   }
 }
-
+//
 // Single<int> api(int count) {
 //   return Single.fromCallable(() async {
 //     print('Call.. $count');
 //     await Future<void>.delayed(const Duration(seconds: 1));
-//     throw 'Error $count';
 //     return count;
 //   });
 // }
-
+//
 // void main() async {
 //   final ids = List.generate(10, (index) => index);
 //   Stream.fromIterable(ids)
-//       .flatMapBatches(api, 3)
-//       .scan<List<int>>((acc, value, _) => [...acc, ...value], [])
-//       .takeLast(1)
-//       .doneOnError()
-//       .singleOrError()
+//       .flatMapBatchesSingle(api, 3)
 //       .listen(print, onError: print);
 //
 //   await Future<void>.delayed(const Duration(seconds: 2));
