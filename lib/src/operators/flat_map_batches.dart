@@ -2,6 +2,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../single/internal.dart';
 import '../single/single.dart';
+import '../utils/identity.dart';
 
 /// TODO
 extension FlatMapBatchesStreamExtension<T> on Stream<T> {
@@ -13,7 +14,7 @@ extension FlatMapBatchesStreamExtension<T> on Stream<T> {
     Stream<List<R>> convert(List<T> streams) {
       return Rx.zip(
         streams.map(transform).toList(growable: false),
-        (List<R> values) => values,
+        identity,
       );
     }
 
@@ -28,7 +29,7 @@ extension FlatMapBatchesStreamExtension<T> on Stream<T> {
     Stream<List<R>> convert(List<T> streams) {
       return Rx.forkJoin(
         streams.map(transform).toList(growable: false),
-        (List<R> values) => values,
+        identity,
       );
     }
 
