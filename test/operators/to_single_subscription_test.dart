@@ -6,12 +6,26 @@ import 'package:test/test.dart';
 void main() {
   group('Stream.toSingleSubscriptionStream', () {
     test('To single-subscription stream', () {
-      final singleSubscriptionStream =
-          StreamController<int>.broadcast().stream.toSingleSubscriptionStream();
-      expect(singleSubscriptionStream.isBroadcast, isFalse);
+      {
+        final singleSubscriptionStream = StreamController<int>.broadcast()
+            .stream
+            .toSingleSubscriptionStream();
+        expect(singleSubscriptionStream.isBroadcast, isFalse);
 
-      singleSubscriptionStream.listen(null);
-      expect(() => singleSubscriptionStream.listen(null), throwsStateError);
+        singleSubscriptionStream.listen(null);
+        expect(() => singleSubscriptionStream.listen(null), throwsStateError);
+      }
+
+      {
+        final stream = Stream.value(1);
+        final singleSubscriptionStream = stream.toSingleSubscriptionStream();
+
+        expect(singleSubscriptionStream, stream);
+        expect(singleSubscriptionStream.isBroadcast, isFalse);
+
+        singleSubscriptionStream.listen(null);
+        expect(() => singleSubscriptionStream.listen(null), throwsStateError);
+      }
     });
 
     test('Emitting values since listening', () {
@@ -31,15 +45,6 @@ void main() {
       streamController.add(2);
       streamController.add(3);
       streamController.close();
-    });
-
-    test('Assert isBroadcast', () {
-      Stream<void>.empty().toSingleSubscriptionStream();
-
-      expect(
-        () => Stream.value(1).toSingleSubscriptionStream(),
-        throwsA(isA<AssertionError>()),
-      );
     });
   });
 }

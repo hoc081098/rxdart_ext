@@ -17,7 +17,7 @@ Some extension methods and classes built on top of `RxDart` - `RxDart` extension
 |  :---:    | :---:      |
 |  `0.26.0`  | `<=0.0.1`     |
 |  `>=0.27.0 <=0.27.1`  | `>=0.1.0 <=0.1.1`  |
-|  `>=0.27.2`           | `>=0.2.0`  |
+|  `>=0.27.2`           | `>=0.1.2`  |
 
 
 ## API
@@ -93,7 +93,10 @@ Single<User> fetchUser(String id) {
 - [debug](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DebugStreamExtension/debug.html), [collect](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/CollectStreamExtension/collect.html)
 - [distinctUniqueBy](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DistinctUniqueByStreamExtension/distinctUniqueBy.html)
 - [distinctBy](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DistinctByExtension/distinctBy.html)
-- [ignoreElements](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/IgnoreElementStreamExtension/ignoreElements.html), [ignoreErrors](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/IgnoreErrorsStreamExtension/ignoreErrors.html)
+- [doOn](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DoOnStreamExtensions/doOn.html)
+- [doneOnError](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DoneOnErrorStreamExtension/doneOnError.html)
+- [flatMapBatches](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/FlatMapBatchesStreamExtension/flatMapBatches.html)
+- [ignoreErrors](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/IgnoreErrorsStreamExtension/ignoreErrors.html)
 - [mapNotNull](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/MapNotNullStreamExtension/mapNotNull.html)
 - [toSingleSubscription](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ToSingleSubscriptionStreamExtension/toSingleSubscriptionStream.html)
 - [asVoid](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsVoidStreamExtension/asVoid.html)

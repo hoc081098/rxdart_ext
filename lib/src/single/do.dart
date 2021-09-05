@@ -9,6 +9,7 @@ class _DoStreamSingleSink<S> extends ForwardingSink<S, S>
   final void Function(S event)? onDataCallback;
   final void Function(Object, StackTrace)? onErrorCallback;
   final void Function()? onListenCallback;
+  var closed = false;
 
   _DoStreamSingleSink({
     this.onCancelCallback,
@@ -19,11 +20,16 @@ class _DoStreamSingleSink<S> extends ForwardingSink<S, S>
 
   @override
   void onData(S data) {
+    if (closed) {
+      return;
+    }
+
     try {
       onDataCallback?.call(data);
     } catch (e, s) {
       sink.addError(e, s);
       sink.close();
+      closed = true;
       return;
     }
     sink.add(data);
@@ -31,11 +37,16 @@ class _DoStreamSingleSink<S> extends ForwardingSink<S, S>
 
   @override
   void onError(Object e, StackTrace st) {
+    if (closed) {
+      return;
+    }
+
     try {
       onErrorCallback?.call(e, st);
     } catch (e, s) {
       sink.addError(e, s);
       sink.close();
+      closed = true;
       return;
     }
     sink.addError(e, st);
@@ -51,6 +62,7 @@ class _DoStreamSingleSink<S> extends ForwardingSink<S, S>
     } catch (e, s) {
       sink.addError(e, s);
       sink.close();
+      closed = true;
     }
   }
 
