@@ -9,7 +9,7 @@ extension FlatMapBatchesStreamExtension<T> on Stream<T> {
   /// TODO
   Stream<List<R>> flatMapBatches<R>(
     Stream<R> Function(T) transform,
-    int maxConcurrent,
+    int size,
   ) {
     Stream<List<R>> convert(List<T> streams) {
       return Rx.zip(
@@ -18,13 +18,13 @@ extension FlatMapBatchesStreamExtension<T> on Stream<T> {
       );
     }
 
-    return bufferCount(maxConcurrent).asyncExpand(convert);
+    return bufferCount(size).asyncExpand(convert);
   }
 
   /// TODO
   Single<List<R>> flatMapBatchesSingle<R>(
     Single<R> Function(T) transform,
-    int maxConcurrent,
+    int size,
   ) {
     Stream<List<R>> convert(List<T> streams) {
       return Rx.forkJoin(
@@ -33,7 +33,7 @@ extension FlatMapBatchesStreamExtension<T> on Stream<T> {
       );
     }
 
-    return bufferCount(maxConcurrent)
+    return bufferCount(size)
         .asyncExpand(convert)
         .scan<List<R>>((acc, value, _) => acc..addAll(value), [])
         .takeLast(1)
