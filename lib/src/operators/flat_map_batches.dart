@@ -8,7 +8,7 @@ import '../utils/identity.dart';
 extension FlatMapBatchesStreamExtension<T> on Stream<T> {
   /// TODO
   Stream<List<R>> flatMapBatches<R>(
-    Stream<R> Function(T) transform,
+    Stream<R> Function(T value) transform,
     int size,
   ) {
     Stream<List<R>> convert(List<T> streams) {
@@ -23,7 +23,7 @@ extension FlatMapBatchesStreamExtension<T> on Stream<T> {
 
   /// TODO
   Single<List<R>> flatMapBatchesSingle<R>(
-    Single<R> Function(T) transform,
+    Single<R> Function(T value) transform,
     int size,
   ) {
     Stream<List<R>> convert(List<T> streams) {
