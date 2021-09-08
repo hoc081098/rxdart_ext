@@ -10,7 +10,9 @@ extension TakeFirstDataOrFirstErrorExtension<T> on Stream<T> {
   /// DO NOT USE this extension.
   @internal
   Single<T> takeFirstDataOrFirstErrorAndClose() {
-    final controller = StreamController<T>(sync: true);
+    final controller = isBroadcast
+        ? StreamController<T>(sync: true)
+        : StreamController<T>.broadcast(sync: true);
     StreamSubscription<T>? subscription;
 
     controller.onListen = () {
@@ -34,9 +36,12 @@ extension TakeFirstDataOrFirstErrorExtension<T> on Stream<T> {
               'Internal API error! Please file a bug at: https://github.com/hoc081098/rxdart_ext/issues/new');
         },
       );
+
+      if (!isBroadcast) {
+        controller.onPause = subscription!.pause;
+        controller.onResume = subscription!.resume;
+      }
     };
-    controller.onPause = () => subscription!.pause();
-    controller.onResume = () => subscription!.resume();
     controller.onCancel = () {
       final toCancel = subscription;
       subscription = null;

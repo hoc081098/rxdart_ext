@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:quiver/iterables.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
@@ -91,6 +93,57 @@ void main() {
           emitsDone,
         ]),
       );
+    });
+
+    test('asBroadcastStream', () {
+      {
+        final stream = Stream.value(1)
+            .flatMapBatches((v) => Stream.value(v), 1)
+            .asBroadcastStream();
+
+        // listen twice on same stream
+        stream.listen(null);
+        stream.listen(null);
+
+        // code should reach here
+        expect(true, true);
+      }
+
+      {
+        final stream = Rx.fromCallable(() => 1, reusable: true)
+            .flatMapBatches((v) => Stream.value(v), 1);
+
+        // listen twice on same stream
+        stream.listen(null);
+        stream.listen(null);
+
+        // code should reach here
+        expect(true, true);
+      }
+    });
+
+    test('singleSubscription', () {
+      final stream = StreamController<int>()
+          .stream
+          .flatMapBatches((value) => Stream.value(value), 1);
+
+      expect(stream.isBroadcast, isFalse);
+      stream.listen(null);
+      expect(() => stream.listen(null), throwsStateError);
+    });
+
+    test('pause and resume', () async {
+      final subscription = Stream.fromIterable([1, 2, 3, 4, 5, 6])
+          .flatMapBatches((value) => Stream.value(value), 2)
+          .listen(null);
+
+      subscription
+        ..pause()
+        ..onData(expectAsync1((data) {
+          subscription.cancel();
+          expect(data, [1, 2]);
+        }))
+        ..resume();
     });
   });
 }
