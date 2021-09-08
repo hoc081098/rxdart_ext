@@ -11,8 +11,8 @@ extension TakeFirstDataOrFirstErrorExtension<T> on Stream<T> {
   @internal
   Single<T> takeFirstDataOrFirstErrorAndClose() {
     final controller = isBroadcast
-        ? StreamController<T>(sync: true)
-        : StreamController<T>.broadcast(sync: true);
+        ? StreamController<T>.broadcast(sync: true)
+        : StreamController<T>(sync: true);
     StreamSubscription<T>? subscription;
 
     controller.onListen = () {
