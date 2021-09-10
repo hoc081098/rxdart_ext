@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
-import 'package:rxdart/rxdart.dart' show Kind, Notification;
 import 'package:stack_trace/stack_trace.dart';
 
 import '../state_stream/state_stream.dart';
@@ -23,22 +22,6 @@ extension FormattedFrameExtension on Frame {
   String get formatted {
     final trimmedFile = path.basename(uri.toString());
     return '$trimmedFile:$line ($member)';
-  }
-}
-
-extension NotificationDescriptionExt<T> on Notification<T> {
-  @pragma('vm:prefer-inline')
-  @pragma('dart2js:tryInline')
-  String get description {
-    switch (kind) {
-      case Kind.OnData:
-        return 'data($requireData)';
-      case Kind.OnDone:
-        return 'done';
-      case Kind.OnError:
-        final error = errorAndStackTrace!;
-        return 'error(${error.error}, ${error.stackTrace})';
-    }
   }
 }
 
