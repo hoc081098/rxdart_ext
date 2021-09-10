@@ -4,9 +4,28 @@ import '../single/internal.dart';
 import '../single/single.dart';
 import '../utils/identity.dart';
 
-/// TODO
+/// Extends the Stream class with the ability to convert each element to a [Stream],
+/// then listen to at most `size` [Stream](s) at a time
+/// and outputs their results in `size`-sized batches, while maintaining
+/// order within each batch — subsequent batches of [Stream]s are only
+/// listened to when the batch before it successfully completes.
 extension FlatMapBatchesStreamExtension<T> on Stream<T> {
-  /// TODO
+  /// Convert each element to a [Stream], then listen to at most `size` [Stream](s)
+  /// at a time and outputs their results in `size`-sized batches, while maintaining
+  /// order within each batch — subsequent batches of [Stream]s are only
+  /// listened to when the batch before it successfully completes.
+  /// Errors will be forwarded downstream.
+  ///
+  /// ### Marble
+  ///
+  /// ```text
+  /// input     : --a---b---c---x---d-------e--|
+  /// transform : a -> a| (Stream.value)
+  /// size      : 3
+  /// output    : --------[a,b,c]---x----------[d,e]--|
+  ///
+  /// NOTE: x is error event
+  /// ```
   Stream<List<R>> flatMapBatches<R>(
     Stream<R> Function(T value) transform,
     int size,
