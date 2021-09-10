@@ -40,7 +40,26 @@ extension FlatMapBatchesStreamExtension<T> on Stream<T> {
     return bufferCount(size).asyncExpand(convert);
   }
 
-  /// TODO
+  /// Similar to [flatMapBatches], but collect all output result batches into a [List],
+  /// and emit final result when source [Stream] emits done event.
+  /// ```text
+  /// input     : --a---b---c----d--e--|
+  /// transform : a -> a| (Single.value)
+  /// size      : 3
+  /// output    : --------------[a,b,c,d,e]|
+  ///
+  /// input     : --a---b---c--x--d--e--|
+  /// transform : a -> a| (Single.value)
+  /// size      : 3
+  /// output    : ----------x|
+  ///
+  /// input     : --a---b---c--x--d--e--|
+  /// transform : a -> x| (Single.error)
+  /// size      : 3
+  /// output    : --x|
+  ///
+  /// NOTE: x is error event
+  /// ```
   Single<List<R>> flatMapBatchesSingle<R>(
     Single<R> Function(T value) transform,
     int size,
