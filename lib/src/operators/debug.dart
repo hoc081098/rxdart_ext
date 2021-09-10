@@ -37,20 +37,23 @@ extension DebugStreamExtension<T> on Stream<T> {
     void logEvent(String content) =>
         log('${DateTime.now()}: $identifier -> $content');
 
+    @pragma('vm:prefer-inline')
+    @pragma('dart2js:tryInline')
+    void logDataErrorDoneEvent(String description) {
+      const maxEventTextLength = 40;
+      final descriptionNormalized = description.length > maxEventTextLength &&
+              trimOutput
+          ? '${description.take(maxEventTextLength ~/ 2)}...${description.takeLast(maxEventTextLength ~/ 2)}'
+          : description;
+
+      logEvent('Event $descriptionNormalized');
+    }
+
     return transform<T>(
       DoStreamTransformer<T>(
-        onEach: (notification) {
-          const maxEventTextLength = 40;
-
-          final description = notification.description;
-          final descriptionNormalized = description.length >
-                      maxEventTextLength &&
-                  trimOutput
-              ? '${description.take(maxEventTextLength ~/ 2)}...${description.takeLast(maxEventTextLength ~/ 2)}'
-              : description;
-
-          logEvent('Event $descriptionNormalized');
-        },
+        onData: (data) => logDataErrorDoneEvent('data($data)'),
+        onError: (e, s) => logDataErrorDoneEvent('error($e, $s)'),
+        onDone: () => logDataErrorDoneEvent('done'),
         onListen: () => logEvent('Listened'),
         onCancel: () => logEvent('Cancelled'),
         onPause: () => logEvent('Paused'),
