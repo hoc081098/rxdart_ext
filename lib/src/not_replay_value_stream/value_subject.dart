@@ -74,18 +74,6 @@ class ValueSubject<T> extends Subject<T>
       _dataOrError.onError(ErrorAndStackTrace(error, stackTrace));
 
   @override
-  Subject<R> createForwardingSubject<R>({
-    void Function()? onListen,
-    void Function()? onCancel,
-    bool sync = false,
-  }) =>
-      PublishSubject<R>(
-        onListen: onListen,
-        onCancel: onCancel,
-        sync: sync,
-      );
-
-  @override
   NotReplayValueStream<T> get stream => this;
 
   @override

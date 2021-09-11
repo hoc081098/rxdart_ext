@@ -3,13 +3,13 @@ import 'dart:async';
 import '../utils/default_sink.dart';
 import 'single.dart';
 
-class _DoStreamSingleSink<S>
-    with ForwardingSinkMixin<S, S>
-    implements ForwardingSink<S, S> {
+class _DoStreamSingleSink<S> extends ForwardingSink<S, S>
+    with ForwardingSinkMixin<S, S> {
   final FutureOr<void> Function()? onCancelCallback;
   final void Function(S event)? onDataCallback;
   final void Function(Object, StackTrace)? onErrorCallback;
   final void Function()? onListenCallback;
+  var closed = false;
 
   _DoStreamSingleSink({
     this.onCancelCallback,
@@ -19,41 +19,58 @@ class _DoStreamSingleSink<S>
   });
 
   @override
-  void add(EventSink<S> sink, S data) {
+  void onData(S data) {
+    if (closed) {
+      return;
+    }
+
     try {
       onDataCallback?.call(data);
     } catch (e, s) {
       sink.addError(e, s);
       sink.close();
+      closed = true;
       return;
     }
     sink.add(data);
   }
 
   @override
-  void addError(EventSink<S> sink, Object e, StackTrace st) {
+  void onError(Object e, StackTrace st) {
+    if (closed) {
+      return;
+    }
+
     try {
       onErrorCallback?.call(e, st);
     } catch (e, s) {
       sink.addError(e, s);
       sink.close();
+      closed = true;
       return;
     }
     sink.addError(e, st);
   }
 
   @override
-  FutureOr<void> onCancel(EventSink<S> sink) => onCancelCallback?.call();
+  FutureOr<void> onCancel() => onCancelCallback?.call();
 
   @override
-  void onListen(EventSink<S> sink) {
+  void onListen() {
     try {
       onListenCallback?.call();
     } catch (e, s) {
       sink.addError(e, s);
       sink.close();
+      closed = true;
     }
   }
+
+  @override
+  void onPause() {}
+
+  @override
+  void onResume() {}
 }
 
 /// Extends the Single class with the ability to execute a callback function
@@ -71,7 +88,8 @@ extension DoSingleExtensions<T> on Single<T> {
   ///
   ///     subscription.cancel(); // prints 'hi'
   Single<T> doOnCancel(FutureOr<void> Function() onCancel) =>
-      forwardSingleWithSink(_DoStreamSingleSink(onCancelCallback: onCancel));
+      forwardSingleWithSink(
+          () => _DoStreamSingleSink(onCancelCallback: onCancel), true);
 
   /// Invokes the given callback function when the Single emits an item. In
   /// other implementations, this is called doOnNext.
@@ -81,8 +99,8 @@ extension DoSingleExtensions<T> on Single<T> {
   ///     Single.value(1)
   ///       .doOnData(print)
   ///       .listen(null); // prints 1
-  Single<T> doOnData(void Function(T event) onData) =>
-      forwardSingleWithSink(_DoStreamSingleSink(onDataCallback: onData));
+  Single<T> doOnData(void Function(T event) onData) => forwardSingleWithSink(
+      () => _DoStreamSingleSink(onDataCallback: onData), true);
 
   /// Invokes the given callback function when the Single emits an error.
   ///
@@ -92,7 +110,8 @@ extension DoSingleExtensions<T> on Single<T> {
   ///       .doOnError((error, stacktrace) => print('oh no'))
   ///       .listen(null); // prints 'Oh no'
   Single<T> doOnError(void Function(Object, StackTrace) onError) =>
-      forwardSingleWithSink(_DoStreamSingleSink(onErrorCallback: onError));
+      forwardSingleWithSink(
+          () => _DoStreamSingleSink(onErrorCallback: onError), true);
 
   /// Invokes the given callback function when the Single is first listened to.
   ///
@@ -101,6 +120,6 @@ extension DoSingleExtensions<T> on Single<T> {
   ///     Single.value(1)
   ///       .doOnListen(() => print('Is someone there?'))
   ///       .listen(null); // prints 'Is someone there?'
-  Single<T> doOnListen(void Function() onListen) =>
-      forwardSingleWithSink(_DoStreamSingleSink(onListenCallback: onListen));
+  Single<T> doOnListen(void Function() onListen) => forwardSingleWithSink(
+      () => _DoStreamSingleSink(onListenCallback: onListen), true);
 }

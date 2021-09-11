@@ -128,5 +128,58 @@ void main() {
         }
       });
     });
+
+    group('doOnError', () {
+      test('.success', () async {
+        final build = () => Single.value(1).doOnError((e, s) {});
+        await singleRule(build(), Either.right(1));
+        broadcastRule(build(), false);
+        await cancelRule(build());
+      });
+
+      test('.failure', () async {
+        {
+          final build =
+              () => Single<int>.error(Exception()).doOnError((e, s) {});
+          await singleRule(build(), exceptionLeft);
+          broadcastRule(build(), false);
+          await cancelRule(build());
+        }
+
+        {
+          final build = () => Single<int>.error(StateError(''))
+              .doOnError((e, s) => throw Exception());
+          await singleRule(build(), exceptionLeft);
+          broadcastRule(build(), false);
+          await cancelRule(build());
+        }
+      });
+    });
+
+    group('doOnListen', () {
+      test('.success', () async {
+        final build = () => Single.value(1).doOnListen(() {});
+        await singleRule(build(), Either.right(1));
+        broadcastRule(build(), false);
+        await cancelRule(build());
+      });
+
+      test('.failure', () async {
+        {
+          final build = () => Single<int>.error(Exception()).doOnListen(() {});
+          await singleRule(build(), exceptionLeft);
+          broadcastRule(build(), false);
+          await cancelRule(build());
+        }
+
+        {
+          final build = () => Single<int>.error(StateError(''))
+              .doOnListen(() => throw Exception());
+          await singleRule(build(), exceptionLeft);
+          broadcastRule(build(), false);
+          await cancelRule(build());
+        }
+      });
+    });
   });
 }
