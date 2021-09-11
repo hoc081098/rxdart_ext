@@ -42,8 +42,18 @@ extension FlatMapBatchesStreamExtension<T> on Stream<T> {
   }
 
   /// Similar to [flatMapBatches], but collect all output result batches into a [List],
-  /// and emit final result when source [Stream] emits done event.
+  /// and emit final result as a [Single] when source [Stream] emits done event.
+  ///
+  /// If source [Stream] is empty, returns a [Single] that emits a empty list.
+  /// Errors will be forwarded downstream, the first will cause the returned [Single]
+  /// completes with that error.
+  ///
   /// ```text
+  /// input     : --|
+  /// transform : a -> a| (Single.value)
+  /// size      : 2
+  /// output    : --[]|
+  ///
   /// input     : --a---b---c----d--e--|
   /// transform : a -> a| (Single.value)
   /// size      : 3
@@ -72,9 +82,11 @@ extension FlatMapBatchesStreamExtension<T> on Stream<T> {
       );
     }
 
+    final seed = <R>[];
     return bufferCount(size)
         .asyncExpand(convert)
-        .scan<List<R>>((acc, value, _) => acc..addAll(value), [])
+        .startWith(seed)
+        .scan<List<R>>((acc, value, _) => acc..addAll(value), seed)
         .takeLast(1)
         .map((value) => List<R>.unmodifiable(value))
         .doneOnError()

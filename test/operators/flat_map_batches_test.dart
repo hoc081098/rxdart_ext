@@ -157,13 +157,14 @@ void main() {
   });
 
   group('flatMapBatchesSingle', () {
-    test('empty Stream emits APIContractViolationError', () {
-      singleRule(
-        Stream<int>.empty()
-            .flatMapBatchesSingle((value) => Single.value(value), 1),
-        buildAPIContractViolationErrorWithMessage(
-            "Stream doesn't contains any data or error event."),
-      );
+    test('empty Stream emits empty List', () async {
+      Single<List<int>> build() => Stream<int>.empty()
+          .toSingleSubscriptionStream()
+          .flatMapBatchesSingle((value) => Single.value(value), 1);
+
+      await singleRule(build(), Either.right(<int>[]));
+      broadcastRule(build(), false);
+      await cancelRule(build());
     });
 
     test('emits event batches', () async {
