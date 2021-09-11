@@ -4,7 +4,7 @@ import 'dart:async';
 
 import '../not_replay_value_stream/not_replay_value_stream.dart';
 
-/// An [Stream] that provides synchronous access to the last emitted item,
+/// A [Stream] that provides synchronous access to the last emitted item,
 /// and two consecutive values are not equal.
 /// The equality between previous data event and current data event is determined by [equals].
 /// This [Stream] always has no error.

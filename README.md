@@ -22,7 +22,7 @@ Some extension methods and classes built on top of `RxDart` - `RxDart` extension
 
 ## API
 
-### [Single](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single-class.html)
+### 1. [Single](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single-class.html)
 
 A Stream which emits single event, either data or error, and then close with a done-event.
 
@@ -88,7 +88,7 @@ Single<User> fetchUser(String id) {
     -   [mapTo](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/MapToSingleExtension/mapTo.html)
     -   [asVoid](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsVoidSingleExtension/asVoid.html)
 
-### Operators for Stream
+### 2. Operators for Stream
 
 - [debug](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DebugStreamExtension/debug.html), [collect](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/CollectStreamExtension/collect.html)
 - [distinctUniqueBy](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DistinctUniqueByStreamExtension/distinctUniqueBy.html)
@@ -96,24 +96,95 @@ Single<User> fetchUser(String id) {
 - [doOn](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DoOnStreamExtensions/doOn.html)
 - [doneOnError](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DoneOnErrorStreamExtension/doneOnError.html)
 - [flatMapBatches](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/FlatMapBatchesStreamExtension/flatMapBatches.html)
+- [flatMapBatchesSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/FlatMapBatchesStreamExtension/flatMapBatchesSingle.html)
 - [ignoreErrors](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/IgnoreErrorsStreamExtension/ignoreErrors.html)
 - [mapNotNull](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/MapNotNullStreamExtension/mapNotNull.html)
 - [toSingleSubscription](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ToSingleSubscriptionStreamExtension/toSingleSubscriptionStream.html)
 - [asVoid](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsVoidStreamExtension/asVoid.html)
 - [whereNotNull](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/WhereNotNullStreamExtension/whereNotNull.html)
 
-### [NotReplayValueStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/NotReplayValueStream-class.html)
+### 3. [StateStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateStream-class.html)
+
+A Stream that provides synchronous access to the last emitted item,
+and two consecutive values are not equal.
+The equality between previous data event and current data event is determined by [StateStream.equals]((https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateStream/equals.html)).
+This Stream always has no error.
+
+-   Broadcast
+    - [StateSubject](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateSubject-class.html)
+    - [StateConnectableStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateConnectableStream-class.html)
+        - [publishState](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateConnectableExtensions/publishState.html)
+        - [shareState](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateConnectableExtensions/shareState.html)
+-   Single-subscription
+    -   [toStateStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ToStateStreamExtension/toStateStream.html)
+
+#### Example
+
+Useful for `Flutter BLoC pattern` - `StreamBuilder`, expose broadcast state stream to UI, can synchronous access to the last emitted item, and distinct until changed
+
+-   [x] `Distinct`: distinct until changed.
+-   [x] `Value`: can synchronous access to the last emitted item.
+-   [x] `NotReplay`: not replay the latest value.
+-   [x] `Connectable`: broadcast stream - can be listened to multiple time.
+
+```
+                                Stream (dart:core)
+                                   ^
+                                   |
+                                   |
+            |--------------------------------------------|
+            |                                            |
+            |                                            |
+        ValueStream (rxdart)                             |
+            ^                                            |
+            |                                            |
+            |                                            |
+    NotReplayValueStream (rxdart_ext)                    |
+            ^                                    ConnectableStream (rxdart)
+            |                                            ^
+            |                                            |
+       StateStream (rxdart_ext)                          |
+            ^                                            |
+            |                                            |
+            |------------                     -----------|
+                        |                     |
+                        |                     |
+                     StateConnectableStream (rxdart_ext)
+```
+
+```dart
+class UiState { ... }
+
+final Stream<UiState> state$ = ...;
+
+final StateConnectableStream<UiState> state$ = state$.publishState(UiState.initial());
+final connection = state$.connect();
+
+StreamBuilder<UiState>(
+  initialData: state$.value,
+  stream: state$,
+  builder: (context, snapshot) {
+    final UiState state = snapshot.requireData;
+    
+    return ...;
+  },
+);
+
+```
+
+### 4. [NotReplayValueStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/NotReplayValueStream-class.html)
 
 A Stream that provides synchronous access to the last emitted item, but not replay the latest value.
 
 -   Broadcast
-    -   [ValueSubject](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ValueSubject-class.html)
-    -   [NotReplayValueConnectableStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/NotReplayValueConnectableStream-class.html), [publishValueNotReplay](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ValueConnectableNotReplayStreamExtensions/publishValueNotReplay.html), [shareValueNotReplay](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ValueConnectableNotReplayStreamExtensions/shareValueNotReplay.html)
+    - [ValueSubject](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ValueSubject-class.html)
+    - [NotReplayValueConnectableStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/NotReplayValueConnectableStream-class.html)
+        - [publishValueNotReplay](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ValueConnectableNotReplayStreamExtensions/publishValueNotReplay.html)
+        - [shareValueNotReplay](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ValueConnectableNotReplayStreamExtensions/shareValueNotReplay.html)
 -   Single-subscription
     -   [ValueStreamController](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ValueStreamController-class.html)
     -   [toNotReplayValueStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ToNotReplayValueStreamExtension/toNotReplayValueStream.html)
     
-
 ## License
 
     MIT License

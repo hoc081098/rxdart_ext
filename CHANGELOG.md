@@ -8,11 +8,15 @@
     - `utils`
     - `rxdart_ext`: includes all the above.
 - **utils**: Add `Sink<void>.addNull()` extension.
-- **state_stream**: Add `StateStream`, `StateSubject`.
+- **state_stream**:
+    - Add `StateStream`
+    - Add `StateSubject`.
+    - Add `StateConnectableStream`, `Stream.publishState()`, `Stream.shareState()`.
 - **single**: Add `Single.retry()`.
 - **operators**:
     - Add `Stream.doneOnError()`.
     - Add `Stream.flatMapBatches()`.
+    - Add `Stream.flatMapBatchesSingle()`.
 
 ## 0.1.1 - Jul 8, 2021
 
