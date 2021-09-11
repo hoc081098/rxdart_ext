@@ -209,108 +209,78 @@ void main() {
         await cancelRule(build());
       }
     });
-    //
-    // test('hangs if earlier batch does not complete', () {
-    //   Stream.fromIterable([
-    //     Rx.never<int>().startWith(1),
-    //     Rx.never<int>().startWith(2),
-    //     Stream.value(3),
-    //     Stream.value(4),
-    //   ]).flatMapBatchesSingle(identity, 2).listen(
-    //         expectAsync1(
-    //           (v) {
-    //             expect(v, [1, 2]);
-    //           },
-    //           count: 1,
-    //         ),
-    //         onDone: expectAsync0(
-    //           () {},
-    //           count: 0,
-    //         ),
-    //       );
-    // }, timeout: const Timeout(Duration(milliseconds: 500)));
-    //
-    // test('batch size larger than count', () {
-    //   expect(
-    //     Stream.value(Stream.value(1)).flatMapBatchesSingle(identity, 10),
-    //     emitsInOrder(<Object>[
-    //       [1],
-    //       emitsDone,
-    //     ]),
-    //   );
-    // });
-    //
-    // test('every Stream emits multiple values', () {
-    //   Stream<void> delay(int v) =>
-    //       Rx.timer(null, Duration(milliseconds: v * 100));
-    //
-    //   final stream = Stream.fromIterable([
-    //     Stream.fromIterable([1, 2]).delayWhen(delay),
-    //     Stream.fromIterable([3, 4]).delayWhen(delay),
-    //     Stream.value(5),
-    //     Stream.value(6),
-    //   ]).flatMapBatchesSingle(identity, 2);
-    //
-    //   expect(
-    //     stream,
-    //     emitsInOrder(<Object>[
-    //       [1, 3],
-    //       [2, 4],
-    //       [5, 6],
-    //       emitsDone,
-    //     ]),
-    //   );
-    // });
-    //
-    // test('asBroadcastStream', () {
-    //   {
-    //     final stream = Stream.value(1)
-    //         .flatMapBatchesSingle((v) => Stream.value(v), 1)
-    //         .asBroadcastStream();
-    //
-    //     // listen twice on same stream
-    //     stream.listen(null);
-    //     stream.listen(null);
-    //
-    //     // code should reach here
-    //     expect(true, true);
-    //   }
-    //
-    //   {
-    //     final stream = Rx.fromCallable(() => 1, reusable: true)
-    //         .flatMapBatchesSingle((v) => Stream.value(v), 1);
-    //
-    //     // listen twice on same stream
-    //     stream.listen(null);
-    //     stream.listen(null);
-    //
-    //     // code should reach here
-    //     expect(true, true);
-    //   }
-    // });
-    //
-    // test('singleSubscription', () {
-    //   final stream = StreamController<int>()
-    //       .stream
-    //       .flatMapBatchesSingle((value) => Stream.value(value), 1);
-    //
-    //   expect(stream.isBroadcast, isFalse);
-    //   stream.listen(null);
-    //   expect(() => stream.listen(null), throwsStateError);
-    // });
-    //
-    // test('pause and resume', () async {
-    //   final subscription = Stream.fromIterable([1, 2, 3, 4, 5, 6])
-    //       .flatMapBatchesSingle((value) => Stream.value(value), 2)
-    //       .listen(null);
-    //
-    //   subscription
-    //     ..pause()
-    //     ..onData(expectAsync1((data) {
-    //       subscription.cancel();
-    //       expect(data, [1, 2]);
-    //     }))
-    //     ..resume();
-    // });
+
+    test('batch size larger than count', () async {
+      Single<List<int>> build() =>
+          Stream.value(Single.value(1)).flatMapBatchesSingle(identity, 10);
+
+      await singleRule(build(), Either.right([1]));
+      broadcastRule(build(), false);
+      await cancelRule(build());
+    });
+
+    test('delay', () async {
+      Single<List<int>> build() => Stream.fromIterable([
+            Single.value(1).delay(const Duration(milliseconds: 100)),
+            Single.value(2).delay(const Duration(milliseconds: 200)),
+            Single.value(3),
+            Single.value(4),
+          ]).flatMapBatchesSingle(identity, 2);
+
+      await singleRule(build(), Either.right([1, 2, 3, 4]));
+      broadcastRule(build(), false);
+      await cancelRule(build());
+    });
+
+    test('asBroadcastStream', () {
+      {
+        final stream = Stream.value(1)
+            .flatMapBatchesSingle((v) => Single.value(v), 1)
+            .asBroadcastStream();
+
+        // listen twice on same stream
+        stream.listen(null);
+        stream.listen(null);
+
+        // code should reach here
+        expect(true, true);
+      }
+
+      {
+        final stream = Rx.fromCallable(() => 1, reusable: true)
+            .flatMapBatchesSingle((v) => Single.value(v), 1);
+
+        // listen twice on same stream
+        stream.listen(null);
+        stream.listen(null);
+
+        // code should reach here
+        expect(true, true);
+      }
+    });
+
+    test('singleSubscription', () {
+      final stream = StreamController<int>()
+          .stream
+          .flatMapBatchesSingle((value) => Single.value(value), 1);
+
+      expect(stream.isBroadcast, isFalse);
+      stream.listen(null);
+      expect(() => stream.listen(null), throwsStateError);
+    });
+
+    test('pause and resume', () async {
+      final subscription = Stream.fromIterable([1, 2, 3, 4, 5, 6])
+          .flatMapBatchesSingle((value) => Single.value(value), 2)
+          .listen(null);
+
+      subscription
+        ..pause()
+        ..onData(expectAsync1((data) {
+          subscription.cancel();
+          expect(data, [1, 2, 3, 4, 5, 6]);
+        }))
+        ..resume();
+    });
   });
 }
