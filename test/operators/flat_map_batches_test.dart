@@ -1,8 +1,11 @@
 import 'dart:async';
 
+import 'package:dart_either/dart_either.dart';
 import 'package:quiver/iterables.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
+
+import '../single/utils.dart';
 
 void main() {
   group('flatMapBatches', () {
@@ -39,6 +42,12 @@ void main() {
       expect(
         Stream<int>.error(Exception())
             .flatMapBatches((value) => Stream.value(value), 2),
+        emitsInOrder(<Object>[emitsError(isException), emitsDone]),
+      );
+
+      expect(
+        Stream.value(1)
+            .flatMapBatches((value) => Stream<int>.error(Exception()), 2),
         emitsInOrder(<Object>[emitsError(isException), emitsDone]),
       );
     });
@@ -142,6 +151,134 @@ void main() {
         ..onData(expectAsync1((data) {
           subscription.cancel();
           expect(data, [1, 2]);
+        }))
+        ..resume();
+    });
+  });
+
+  group('flatMapBatchesSingle', () {
+    test('empty Stream emits APIContractViolationError', () {
+      singleRule(
+        Stream<int>.empty()
+            .flatMapBatchesSingle((value) => Single.value(value), 1),
+        buildAPIContractViolationErrorWithMessage(
+            "Stream doesn't contains any data or error event."),
+      );
+    });
+
+    test('emits event batches', () async {
+      final size = 5;
+      final elements = [1, 2, size, 4, 5, 6, 7, 8, 9, 10];
+
+      Single<List<int>> build() => Stream.fromIterable(elements)
+          .flatMapBatchesSingle((value) => Single.value(value), size);
+
+      await singleRule(build(), Either.right(elements));
+      broadcastRule(build(), false);
+      await cancelRule(build());
+    });
+
+    test('emits uneven batches', () async {
+      final size = 3;
+      final elements = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+      Single<List<int>> build() => Stream.fromIterable(elements)
+          .flatMapBatchesSingle((value) => Single.value(value), size);
+
+      await singleRule(build(), Either.right(elements));
+      broadcastRule(build(), false);
+      await cancelRule(build());
+    });
+
+    test('forward error', () async {
+      {
+        Single<List<int>> build() => Stream<int>.error(Exception())
+            .flatMapBatchesSingle((value) => Single.value(value), 2);
+
+        await singleRule(build(), exceptionLeft);
+        broadcastRule(build(), false);
+        await cancelRule(build());
+      }
+
+      {
+        Single<List<int>> build() => Stream.value(1)
+            .flatMapBatchesSingle((value) => Single<int>.error(Exception()), 2);
+
+        await singleRule(build(), exceptionLeft);
+        broadcastRule(build(), false);
+        await cancelRule(build());
+      }
+    });
+
+    test('batch size larger than count', () async {
+      Single<List<int>> build() =>
+          Stream.value(Single.value(1)).flatMapBatchesSingle(identity, 10);
+
+      await singleRule(build(), Either.right([1]));
+      broadcastRule(build(), false);
+      await cancelRule(build());
+    });
+
+    test('delay', () async {
+      Single<List<int>> build() => Stream.fromIterable([
+            Single.value(1).delay(const Duration(milliseconds: 100)),
+            Single.value(2).delay(const Duration(milliseconds: 200)),
+            Single.value(3),
+            Single.value(4),
+          ]).flatMapBatchesSingle(identity, 2);
+
+      await singleRule(build(), Either.right([1, 2, 3, 4]));
+      broadcastRule(build(), false);
+      await cancelRule(build());
+    });
+
+    test('asBroadcastStream', () {
+      {
+        final stream = Stream.value(1)
+            .flatMapBatchesSingle((v) => Single.value(v), 1)
+            .asBroadcastStream();
+
+        // listen twice on same stream
+        stream.listen(null);
+        stream.listen(null);
+
+        // code should reach here
+        expect(true, true);
+      }
+
+      {
+        final stream = Rx.fromCallable(() => 1, reusable: true)
+            .flatMapBatchesSingle((v) => Single.value(v), 1);
+
+        // listen twice on same stream
+        stream.listen(null);
+        stream.listen(null);
+
+        // code should reach here
+        expect(true, true);
+      }
+    });
+
+    test('singleSubscription', () {
+      final stream = StreamController<int>()
+          .stream
+          .flatMapBatchesSingle((value) => Single.value(value), 1);
+
+      expect(stream.isBroadcast, isFalse);
+      stream.listen(null);
+      expect(() => stream.listen(null), throwsStateError);
+    });
+
+    test('pause and resume', () async {
+      final subscription = Stream.fromIterable([1, 2, 3, 4, 5, 6])
+          .flatMapBatchesSingle((value) => Single.value(value), 2)
+          .listen(null);
+
+      subscription
+        ..pause()
+        ..onData(expectAsync1((data) {
+          subscription.cancel();
+          expect(data, [1, 2, 3, 4, 5, 6]);
         }))
         ..resume();
     });
