@@ -1,5 +1,8 @@
-## 0.1.2 - TODO
+## 0.1.2 - Sep 11, 2021
 
+- Update dependencies
+    - `rxdart` to `0.27.2` 
+    - `meta` to `1.7.0`
 - Split into multiple libraries:
     - `not_replay_value_stream`
     - `operators`
@@ -17,6 +20,7 @@
     - Add `Stream.doneOnError()`.
     - Add `Stream.flatMapBatches()`.
     - Add `Stream.flatMapBatchesSingle()`.
+- Internal: migrated from `pedantic` to `lints`.
 
 ## 0.1.1 - Jul 8, 2021
 

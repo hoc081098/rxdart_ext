@@ -10,7 +10,7 @@ environment:
 
 dependencies:
   rxdart: ^0.27.2
-  meta: ^1.3.0
+  meta: ^1.7.0
   stack_trace: ^1.10.0
   path: ^1.8.0
 
