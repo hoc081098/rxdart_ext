@@ -3,7 +3,6 @@
 import 'dart:async';
 
 import 'package:dart_either/dart_either.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
 
