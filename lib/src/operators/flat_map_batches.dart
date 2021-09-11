@@ -1,8 +1,9 @@
 import 'package:rxdart/rxdart.dart';
 
-import '../single/internal.dart';
 import '../single/single.dart';
+import '../single/single_or_error.dart';
 import '../utils/identity.dart';
+import 'done_on_error.dart';
 
 /// Extends the Stream class with the ability to convert each element to a [Stream],
 /// then listen to at most `size` [Stream](s) at a time
@@ -76,6 +77,7 @@ extension FlatMapBatchesStreamExtension<T> on Stream<T> {
         .scan<List<R>>((acc, value, _) => acc..addAll(value), [])
         .takeLast(1)
         .map((value) => List<R>.unmodifiable(value))
-        .takeFirstDataOrFirstErrorAndClose();
+        .doneOnError()
+        .singleOrError();
   }
 }
