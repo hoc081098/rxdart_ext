@@ -190,14 +190,25 @@ void main() {
       await cancelRule(build());
     });
 
-    //
-    // test('forward error', () {
-    //   expect(
-    //     Stream<int>.error(Exception())
-    //         .flatMapBatchesSingle((value) => Stream.value(value), 2),
-    //     emitsInOrder(<Object>[emitsError(isException), emitsDone]),
-    //   );
-    // });
+    test('forward error', () async {
+      {
+        Single<List<int>> build() => Stream<int>.error(Exception())
+            .flatMapBatchesSingle((value) => Single.value(value), 2);
+
+        await singleRule(build(), exceptionLeft);
+        broadcastRule(build(), false);
+        await cancelRule(build());
+      }
+
+      {
+        Single<List<int>> build() => Stream.value(1)
+            .flatMapBatchesSingle((value) => Single<int>.error(Exception()), 2);
+
+        await singleRule(build(), exceptionLeft);
+        broadcastRule(build(), false);
+        await cancelRule(build());
+      }
+    });
     //
     // test('hangs if earlier batch does not complete', () {
     //   Stream.fromIterable([
