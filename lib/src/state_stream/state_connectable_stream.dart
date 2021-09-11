@@ -10,7 +10,7 @@ import 'state_subject.dart';
 /// A [ConnectableStream] that converts a single-subscription Stream into
 /// a broadcast [Stream], and provides synchronous access to the latest emitted value.
 ///
-/// This is a combine of [ConnectableStream], [ValueStream], [ValueSubject] and [Stream.distinct].
+/// This is a combination of [ConnectableStream], [ValueStream], [ValueSubject] and [Stream.distinct].
 @sealed
 abstract class StateConnectableStream<T> extends ConnectableStream<T>
     implements StateStream<T> {
