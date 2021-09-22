@@ -24,3 +24,9 @@ dev_dependencies:
   dart_either: ^0.0.1
 
 #  pub run build_runner build --delete-conflicting-outputs
+
+dependency_overrides:
+  rxdart:
+    git:
+      url: https://github.com/ReactiveX/rxdart.git
+      ref: ac0f56bebce7cb4452f3e32c2cba19e118ad1094

@@ -46,72 +46,21 @@ abstract class StateConnectableStream<T> extends ConnectableStream<T>
   StateStream<T> refCount();
 }
 
-class _StateConnectableStream<T> extends StateConnectableStream<T>
-    with StateStreamMixin<T> {
-  final Stream<T> _source;
+class _StateConnectableStream<T>
+    extends AbstractConnectableStream<T, StateSubject<T>, StateStream<T>>
+    with StateStreamMixin<T>
+    implements StateConnectableStream<T> {
   final StateSubject<T> _subject;
-  var _used = false;
 
   @override
   final bool Function(T, T) equals;
 
   _StateConnectableStream._(
-    this._source,
+    Stream<T> source,
     this._subject,
     bool Function(T, T)? equals,
   )   : equals = equals ?? StateStream.defaultEquals,
-        super._(_subject);
-
-  late final _connection = ConnectableStreamSubscription<T>(
-    _source.listen(
-      _subject.add,
-      onError: null,
-      onDone: _subject.close,
-    ),
-    _subject,
-  );
-
-  void _checkUsed() {
-    if (_used) {
-      throw StateError('Cannot reuse this stream. This causes many problems.');
-    }
-    _used = true;
-  }
-
-  @override
-  StateStream<T> autoConnect({
-    void Function(StreamSubscription<T> subscription)? connection,
-  }) {
-    _checkUsed();
-
-    _subject.onListen = () {
-      final subscription = _connection;
-      connection?.call(subscription);
-    };
-    _subject.onCancel = null;
-
-    return this;
-  }
-
-  @override
-  StreamSubscription<T> connect() {
-    _checkUsed();
-
-    _subject.onListen = _subject.onCancel = null;
-    return _connection;
-  }
-
-  @override
-  StateStream<T> refCount() {
-    _checkUsed();
-
-    ConnectableStreamSubscription<T>? subscription;
-
-    _subject.onListen = () => subscription = _connection;
-    _subject.onCancel = () => subscription?.cancel();
-
-    return this;
-  }
+        super(source, _subject);
 
   @override
   T get value => _subject.value;

@@ -51,7 +51,7 @@ void main() {
 
     test('addError', () {
       final s = StateSubject(0);
-      expect(() => s.addError(0), throwsStateError);
+      expect(() => s.addError(0), throwsUnsupportedError);
     });
 
     test('addStream', () async {
@@ -85,7 +85,7 @@ void main() {
 
         await runZonedGuarded(
           () => s.addStream(Stream.error(Exception())),
-          (e, s) => expect(e, isA<StateError>()),
+          (e, s) => expect(e, isUnsupportedError),
         );
       }
     });

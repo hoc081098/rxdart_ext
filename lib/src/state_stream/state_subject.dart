@@ -89,8 +89,8 @@ class StateSubject<T> extends Subject<T>
   Future<void> close() => _subject.close();
 
   @override
-  Never addError(Object error, [StackTrace? stackTrace]) =>
-      throw StateError('Cannot add error to StateSubject');
+  Never addError(Object error, [StackTrace? stackTrace]) => throw UnsupportedError(
+      'Cannot add error to StateSubject, error: $error, stackTrace: $stackTrace');
 
   @override
   Future<void> addStream(Stream<T> source, {bool? cancelOnError}) {

@@ -43,7 +43,7 @@ void main() {
 
       final call = stream.calls.single;
       expect(call['onData'], isNotNull);
-      expect(call['onError'], isNull);
+      expect(call['onError'], isNotNull);
       expect(call['onDone'], isNotNull);
     });
 
@@ -227,7 +227,7 @@ void main() {
     test('throws error', () {
       runZonedGuarded(
         () => Stream<void>.error(Exception()).shareState(null).collect(),
-        (e, s) => expect(e, isException),
+        (e, s) => expect(e, isUnsupportedError),
       );
 
       runZonedGuarded(
@@ -236,15 +236,6 @@ void main() {
             .collect(),
         (e, s) => expect(e, isException),
       );
-    });
-
-    test('cannot reuse', () {
-      final stream = Stream.value(2).publishState(1);
-      stream.connect();
-
-      expect(() => stream.connect(), throwsStateError);
-      expect(() => stream.refCount(), throwsStateError);
-      expect(() => stream.autoConnect(), throwsStateError);
     });
 
     test('nullable generic type', () {

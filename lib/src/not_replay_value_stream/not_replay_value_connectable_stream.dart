@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:rxdart/rxdart.dart'
-    show ConnectableStream, ConnectableStreamSubscription;
+    show ConnectableStream, AbstractConnectableStream;
 
 import 'not_replay_value_stream.dart';
 import 'not_replay_value_stream_mixin.dart';
@@ -12,15 +12,14 @@ import 'value_subject.dart';
 /// a broadcast [Stream], and provides synchronous access to the latest emitted value.
 ///
 /// See [NotReplayValueStream].
-class NotReplayValueConnectableStream<T> extends ConnectableStream<T>
+class NotReplayValueConnectableStream<T> extends AbstractConnectableStream<T,
+        ValueSubject<T>, NotReplayValueStream<T>>
     with NotReplayValueStreamMixin<T>
     implements NotReplayValueStream<T> {
   final ValueSubject<T> _subject;
-  final Stream<T> _source;
-  var _used = false;
 
-  NotReplayValueConnectableStream._(this._source, this._subject)
-      : super(_subject);
+  NotReplayValueConnectableStream._(Stream<T> source, this._subject)
+      : super(source, _subject);
 
   /// Constructs a [Stream] which only begins emitting events when
   /// the [connect] method is called, this [Stream] acts like a [ValueSubject].
@@ -30,54 +29,6 @@ class NotReplayValueConnectableStream<T> extends ConnectableStream<T>
         source,
         ValueSubject(seedValue, sync: sync),
       );
-
-  void _checkUsed() {
-    if (_used) {
-      throw StateError('Cannot reuse this stream. This causes many problems.');
-    }
-    _used = true;
-  }
-
-  late final _connection = ConnectableStreamSubscription<T>(
-    _source.listen(
-      _subject.add,
-      onError: _subject.addError,
-      onDone: _subject.close,
-    ),
-    _subject,
-  );
-
-  @override
-  NotReplayValueStream<T> autoConnect(
-      {void Function(StreamSubscription<T> subscription)? connection}) {
-    _checkUsed();
-
-    _subject.onListen = () {
-      final subscription = _connection;
-      connection?.call(subscription);
-    };
-    _subject.onCancel = null;
-
-    return _subject;
-  }
-
-  @override
-  StreamSubscription<T> connect() {
-    _checkUsed();
-    _subject.onListen = _subject.onCancel = null;
-    return _connection;
-  }
-
-  @override
-  NotReplayValueStream<T> refCount() {
-    _checkUsed();
-    ConnectableStreamSubscription<T>? subscription;
-
-    _subject.onListen = () => subscription = _connection;
-    _subject.onCancel = () => subscription?.cancel();
-
-    return _subject;
-  }
 
   @override
   StreamEvent<T> get event => _subject.event;
