@@ -14,8 +14,6 @@ import 'state_subject.dart';
 @sealed
 abstract class StateConnectableStream<T> extends ConnectableStream<T>
     implements StateStream<T> {
-  StateConnectableStream._(Stream<T> stream) : super(stream);
-
   /// Constructs a [Stream] which only begins emitting events when
   /// the [connect] method is called, this [Stream] acts like a
   /// [ValueSubject] and distinct until changed.
