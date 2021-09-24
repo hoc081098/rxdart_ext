@@ -1,4 +1,5 @@
-import '../../rxdart_ext.dart';
+import 'package:rxdart/rxdart.dart' show MapToExtension;
+
 import 'single.dart';
 
 /// Extends the Single class with the ability to convert the item to the same value.
