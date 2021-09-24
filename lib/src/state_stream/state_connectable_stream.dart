@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'internal/state_stream_mixin.dart';
 import 'state_stream.dart';
+import 'state_stream_mixin.dart';
 import 'state_subject.dart';
 
 /// A [ConnectableStream] that converts a single-subscription Stream into

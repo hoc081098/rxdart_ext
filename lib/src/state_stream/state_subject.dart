@@ -4,8 +4,8 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart' show PublishSubject, Subject;
 
 import '../not_replay_value_stream/value_subject.dart';
-import 'internal/state_stream_mixin.dart';
 import 'state_stream.dart';
+import 'state_stream_mixin.dart';
 
 /// A special [StreamController] that captures the latest item that has been
 /// added to the controller.

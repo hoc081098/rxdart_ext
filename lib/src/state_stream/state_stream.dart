@@ -36,10 +36,4 @@ abstract class StateStream<T> extends NotReplayValueStream<T> {
 
   @override
   Null get stackTrace;
-
-  @override
-  StateStream<T> asBroadcastStream({
-    void Function(StreamSubscription<T> subscription)? onListen,
-    void Function(StreamSubscription<T> subscription)? onCancel,
-  });
 }

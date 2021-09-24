@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
+import 'package:rxdart_ext/src/state_stream/state_stream_mixin.dart';
 
-import '../state_stream.dart';
-import 'state_stream_mixin.dart';
+import 'state_stream.dart';
 
 /// Convert a [StateStream] to a broadcast [StateStream].
 extension BroadcastStateStreamExtensions<T> on StateStream<T> {
@@ -17,18 +17,18 @@ extension BroadcastStateStreamExtensions<T> on StateStream<T> {
   /// emitted value.
   @internal
   StateStream<T> asBroadcastStateStream({
-    required void Function(StreamSubscription<T> subscription)? onListen,
-    required void Function(StreamSubscription<T> subscription)? onCancel,
+    void Function(StreamSubscription<T> subscription)? onListen,
+    void Function(StreamSubscription<T> subscription)? onCancel,
   }) =>
-      _AsBroadcastStream(this, onListen: onListen, onCancel: onCancel);
+      _AsBroadcastStateStream(this, onListen: onListen, onCancel: onCancel);
 }
 
-class _AsBroadcastStream<T> extends StreamView<T>
+class _AsBroadcastStateStream<T> extends StreamView<T>
     with StateStreamMixin<T>
     implements StateStream<T> {
   final StateStream<T> source;
 
-  _AsBroadcastStream(
+  _AsBroadcastStateStream(
     this.source, {
     void Function(StreamSubscription<T> subscription)? onListen,
     void Function(StreamSubscription<T> subscription)? onCancel,
@@ -39,11 +39,4 @@ class _AsBroadcastStream<T> extends StreamView<T>
 
   @override
   T get value => source.value;
-
-  @override
-  StateStream<T> asBroadcastStream({
-    void Function(StreamSubscription<T> subscription)? onListen,
-    void Function(StreamSubscription<T> subscription)? onCancel,
-  }) =>
-      this;
 }

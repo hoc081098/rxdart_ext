@@ -33,6 +33,7 @@ import 'single/switch_flat_exhaust_map_test.dart'
 
 import 'utils/add_null_test.dart' as add_null_test;
 
+import 'state_stream/as_broadcast_test.dart' as as_broadcast_test;
 import 'state_stream/state_connectable_stream_test.dart'
     as state_connectable_stream_test;
 import 'state_stream/to_state_stream_test.dart' as to_state_stream_test;
@@ -70,6 +71,7 @@ void main() {
 
   add_null_test.main();
 
+  as_broadcast_test.main();
   state_connectable_stream_test.main();
   to_state_stream_test.main();
   state_subject_test.main();
