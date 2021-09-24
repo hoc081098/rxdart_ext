@@ -16,11 +16,7 @@ extension BroadcastStateStreamExtensions<T> on StateStream<T> {
   /// broadcast Stream. It's also useful for providing sync access to the latest
   /// emitted value.
   @internal
-  StateStream<T> asBroadcastStateStream({
-    void Function(StreamSubscription<T> subscription)? onListen,
-    void Function(StreamSubscription<T> subscription)? onCancel,
-  }) =>
-      _AsBroadcastStateStream(this, onListen: onListen, onCancel: onCancel);
+  StateStream<T> asBroadcastStateStream() => _AsBroadcastStateStream(this);
 }
 
 class _AsBroadcastStateStream<T> extends StreamView<T>
@@ -28,11 +24,8 @@ class _AsBroadcastStateStream<T> extends StreamView<T>
     implements StateStream<T> {
   final StateStream<T> source;
 
-  _AsBroadcastStateStream(
-    this.source, {
-    void Function(StreamSubscription<T> subscription)? onListen,
-    void Function(StreamSubscription<T> subscription)? onCancel,
-  }) : super(source.asBroadcastStream(onListen: onListen, onCancel: onCancel));
+  _AsBroadcastStateStream(this.source)
+      : super(source.asBroadcastStream(onCancel: (s) => s.cancel()));
 
   @override
   bool Function(T p1, T p2) get equals => source.equals;
