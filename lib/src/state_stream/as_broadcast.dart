@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:rxdart_ext/src/state_stream/state_stream_mixin.dart';
 
 import 'state_stream.dart';
+import 'state_stream_mixin.dart';
 
 /// Convert a [StateStream] to a broadcast [StateStream].
 extension BroadcastStateStreamExtensions<T> on StateStream<T> {
