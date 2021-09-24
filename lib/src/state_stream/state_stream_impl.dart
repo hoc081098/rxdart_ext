@@ -2,7 +2,7 @@ import 'dart:async';
 
 import '../not_replay_value_stream/value_stream_controller.dart';
 import 'state_stream.dart';
-import 'state_stream_mixin.dart';
+import 'internal/state_stream_mixin.dart';
 
 /// Convert this [Stream] to a [StateStream].
 extension ToStateStreamExtension<T> on Stream<T> {
