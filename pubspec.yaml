@@ -29,4 +29,4 @@ dependency_overrides:
   rxdart:
     git:
       url: https://github.com/ReactiveX/rxdart.git
-      ref: ac0f56bebce7cb4452f3e32c2cba19e118ad1094
+      ref: 4774fab55ccac6b5299c01896643a6ae10cf5854
