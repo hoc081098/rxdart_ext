@@ -3,11 +3,11 @@
 ## Author: [Petrus Nguyễn Thái Học](https://github.com/hoc081098)
 
 [![codecov](https://codecov.io/gh/hoc081098/rxdart_ext/branch/master/graph/badge.svg?token=OYMVzeUB1m)](https://codecov.io/gh/hoc081098/rxdart_ext)
-![Dart CI](https://github.com/hoc081098/rxdart_ext/workflows/Dart%20CI/badge.svg)
+[![Dart CI](https://github.com/hoc081098/rxdart_ext/actions/workflows/dart.yml/badge.svg)](https://github.com/hoc081098/rxdart_ext/actions/workflows/dart.yml)
 [![Pub Version (including pre-releases)](https://img.shields.io/pub/v/rxdart_ext?include_prereleases)](https://pub.dev/packages/rxdart_ext)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fhoc081098%2Frxdart_ext&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 [![GitHub](https://img.shields.io/github/license/hoc081098/rxdart_ext?color=4EB1BA)](https://opensource.org/licenses/MIT)
-[![Style](https://img.shields.io/badge/style-pedantic-40c4ff.svg)](https://github.com/dart-lang/pedantic)
+[![Style](https://img.shields.io/badge/lints-40c4ff.svg)](https://pub.dev/packages/lints)
 
 Some extension methods and classes built on top of [`RxDart`](https://pub.dev/packages/rxdart) - [`RxDart`](https://pub.dev/packages/rxdart) extension.
 
