@@ -1,5 +1,5 @@
 name: check_urls
-description: Check urls in README.md is valid
+description: Check if the urls in README.md are valid
 version: 1.0.0
 
 environment:
