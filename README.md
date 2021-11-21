@@ -71,8 +71,8 @@ Single<User> fetchUser(String id) {
         -   [`(FutureOr<T> Function())`.asSingle](https://pub.dev/documentation/rxdart_ext/latest/single/AsSingleFunctionExtension/asSingle.html)
 
 -   Operators for Single (returns a Single instead of Stream)
-    -   [flatMapSingle](https://pub.dev/documentation/rxdart_ext/latest/single/FlatMapSingleExtension/flatMapSingle.html)
-    -   [asyncExpandSingle](https://pub.dev/documentation/rxdart_ext/latest/single/AsyncExpandSingleExtension/asyncExpandSingle.html)
+    -   [flatMapSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/FlatMapSingleExtension/flatMapSingle.html)
+    -   [asyncExpandSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsyncExpandSingleExtension/asyncExpandSingle.html)
     -   [switchMapSingle](https://pub.dev/documentation/rxdart_ext/latest/single/SwitchMapSingleExtension/switchMapSingle.html)
     -   [exhaustMapSingle](https://pub.dev/documentation/rxdart_ext/latest/single/ExhaustMapSingleExtension/exhaustMapSingle.html)
     -   [debug](https://pub.dev/documentation/rxdart_ext/latest/single/DebugSingleExtension/debug.html)
