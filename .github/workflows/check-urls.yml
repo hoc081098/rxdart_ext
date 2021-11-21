@@ -1,0 +1,32 @@
+name: Check URLs
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  check-urls:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: stable
+
+      - name: Print Dart version
+        run: dart --version
+
+      - name: CD check_urls
+        run: cd check_urls
+
+      - name: Install dependencies
+        run: pub get
+
+      - name: Run check_urls/main.dart
+        run: dart run main.dart 
