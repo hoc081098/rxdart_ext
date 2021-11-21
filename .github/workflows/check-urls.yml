@@ -7,9 +7,13 @@ on:
     branches: [ master ]
 
 jobs:
+  
   check-urls:
-
     runs-on: ubuntu-latest
+   
+    defaults:
+      run:
+        working-directory: ./check_urls
     
     steps:
       - uses: actions/checkout@v2
@@ -21,9 +25,6 @@ jobs:
 
       - name: Print Dart version
         run: dart --version
-
-      - name: CD check_urls
-        run: cd check_urls
 
       - name: Install dependencies
         run: pub get
