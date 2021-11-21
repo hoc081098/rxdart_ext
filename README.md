@@ -107,7 +107,7 @@ Single<User> fetchUser(String id) {
 
 A Stream that provides synchronous access to the last emitted item,
 and two consecutive values are not equal.
-The equality between previous data event and current data event is determined by [StateStream.equals]((https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateStream/equals.html)).
+The equality between previous data event and current data event is determined by [StateStream.equals]((https://pub.dev/documentation/rxdart_ext/latest/state_stream/StateStream/equals.html)).
 This Stream always has no error.
 
 -   Broadcast
