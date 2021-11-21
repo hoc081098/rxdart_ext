@@ -5,6 +5,7 @@ analyzer:
     implicit-dynamic: false
   exclude:
     - 'example/**'
+    - 'check_urls/**'
 linter:
   rules:
     - public_member_api_docs
