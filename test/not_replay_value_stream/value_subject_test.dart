@@ -5,6 +5,8 @@ import 'dart:async';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
 
+import '../utils.dart';
+
 // ignore_for_file: close_sinks
 
 void main() {
