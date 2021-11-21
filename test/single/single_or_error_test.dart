@@ -7,6 +7,7 @@ import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
 
 import 'utils.dart';
+import '../utils.dart';
 
 void main() {
   group('singleOrError', () {
