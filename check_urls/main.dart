@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 void main() async {
-  final text = File('README.md').readAsStringSync();
+  final text = File('../README.md').readAsStringSync();
   print('[START] text.length=${text.length}');
 
   final regex = RegExp(
