@@ -1,3 +1,9 @@
+## 0.1.3 - Nov 23, 2021
+
+- Update `rxdart` to `0.27.3`.
+- Refactor `NotReplayValueConnectableStream` and `StateConnectableStream` by using `rxdart`'s `AbstractConnectableStream`.
+- Add `StateStream.asBroadcastStateStream` extension method.
+
 ## 0.1.2 - Sep 11, 2021
 
 - Update dependencies
