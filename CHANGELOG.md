@@ -3,6 +3,7 @@
 - Update `rxdart` to `0.27.3`.
 - Refactor `NotReplayValueConnectableStream` and `StateConnectableStream` by using `rxdart`'s `AbstractConnectableStream`.
 - Add `StateStream.asBroadcastStateStream` extension method.
+- Add `Future<void> delay(int milliseconds)` function.
 
 ## 0.1.2 - Sep 11, 2021
 
