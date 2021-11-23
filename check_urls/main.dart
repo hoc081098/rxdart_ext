@@ -37,10 +37,24 @@ Future<bool> testUrl(Uri url) async {
   return success;
 }
 
+Future<bool> testUrlWithRetry(Uri url) async {
+  var retryCount = 0;
+  while (true) {
+    final success = await testUrl(url);
+    if (success) {
+      return true;
+    }
+    if (retryCount++ >= 3) {
+      return false;
+    }
+  }
+}
+
 Future<List<Uri>> test(Iterable<String> urls) {
   return Stream.fromIterable(urls)
       .map(Uri.parse)
-      .asyncMap((url) => testUrl(url).then((success) => success ? null : url))
+      .asyncMap((url) =>
+          testUrlWithRetry(url).then((success) => success ? null : url))
       .where((url) => url != null)
       .cast<Uri>()
       .toList();
