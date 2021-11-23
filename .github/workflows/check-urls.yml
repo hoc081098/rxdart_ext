@@ -3,10 +3,10 @@ name: Check URLs
 on:
   push:
     branches: [ master ]
-    paths: [ 'README.md' ]
+    paths: [ 'README.md', 'check_urls/**', 'example/**' ]
   pull_request:
     branches: [ master ]
-    paths: [ 'README.md' ]
+    paths: [ 'README.md', 'check_urls/**', 'example/**' ]
 
 jobs:
 
