@@ -36,3 +36,25 @@ jobs:
 
       - name: Run example/lib/rxdart_ext_example.dart
         run: dart run example/lib/rxdart_ext_example.dart
+
+  run-example:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./example
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: stable
+
+      - name: Print Dart version
+        run: dart --version
+
+      - name: Install dependencies
+        run: pub get
+
+      - name: Run example/lib/rxdart_ext_example.dart
+        run: dart run lib/rxdart_ext_example.dart
