@@ -7,6 +7,7 @@ on:
   pull_request:
     branches: [ master ]
     paths: [ 'README.md', 'check_urls/**', 'example/**' ]
+  workflow_dispatch:
 
 jobs:
 
