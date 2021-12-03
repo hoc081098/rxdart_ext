@@ -185,7 +185,25 @@ A Stream that provides synchronous access to the last emitted item, but not repl
 -   Single-subscription
     -   [ValueStreamController](https://pub.dev/documentation/rxdart_ext/latest/not_replay_value_stream/ValueStreamController-class.html)
     -   [toNotReplayValueStream](https://pub.dev/documentation/rxdart_ext/latest/not_replay_value_stream/ToNotReplayValueStreamExtension/toNotReplayValueStream.html)
-    
+
+### 5. Disposable
+
+A mixin that makes it easay to dispose streams without having to store and close a [StreamSubscription] variable.
+
+Typical usage is as follows:
+```dart
+class DisposableExample with Disposable {
+  DisposableExample({
+    required Stream<DateTime> dateTimeStream,
+  }) {
+    dateTimeStream.takeUntil(dispose$).listen(
+          (value) => print('Disposable example: $value'),
+        );
+  }
+}
+```
+
+
 ## License
 
     MIT License
