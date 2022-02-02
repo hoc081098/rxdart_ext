@@ -27,6 +27,10 @@ void main() async {
     (int p0, int p1) => p0 + p1,
   ).doOnData(state$.add).forEach((_) => print('<<State>> ${state$.value}'));
 
+  await runDisposableMixinExample();
+}
+
+Future<void> runDisposableMixinExample() async {
   final dateTimeStream = BehaviorSubject<DateTime>.seeded(
     DateTime.now().toUtc(),
   );
@@ -50,7 +54,7 @@ void main() async {
   print('Periodic stream disposed');
 }
 
-class DisposableExample with Disposable {
+class DisposableExample with DisposableMixin {
   DisposableExample({
     required Stream<DateTime> dateTimeStream,
   }) {
