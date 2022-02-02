@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:rxdart_ext/utils.dart';
 import 'package:test/test.dart';
 
-class _MockClass with Disposable {
+class _MockClass with DisposableMixin {
   _MockClass(
     this.completer,
   ) {
@@ -14,10 +14,11 @@ class _MockClass with Disposable {
 }
 
 void main() {
-  test('Disposable', () async {
+  test('DisposableMixin', () async {
     final completer = Completer<void>();
     final disposable = _MockClass(completer);
 
+    disposable.dispose();
     disposable.dispose();
     await completer.future.timeout(Duration(milliseconds: 100));
 

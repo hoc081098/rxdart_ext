@@ -15,15 +15,18 @@ import 'package:rxdart/rxdart.dart';
 /// }
 /// ```
 /// {@end-tool}
-mixin Disposable {
+mixin DisposableMixin {
   final _dispose$ = PublishSubject<void>();
 
-  /// The [PublishSubject] that emits null when the dispose method is called.
-  Stream<void> get dispose$ => _dispose$.stream.asBroadcastStream();
+  /// The [Stream] that emits `null` when the [dispose] method is called.
+  Stream<void> get dispose$ => _dispose$.stream;
 
   /// Dispose the object and emit null to the [dispose$] stream.
   @mustCallSuper
   void dispose() {
+    if (_dispose$.isClosed) {
+      return;
+    }
     _dispose$
       ..add(null)
       ..close();
