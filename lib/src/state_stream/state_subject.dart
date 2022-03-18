@@ -106,4 +106,6 @@ class StateSubject<T> extends Subject<T>
 
   @override
   T get value => _subject.value;
+
+  set value(T newValue) => add(newValue);
 }
