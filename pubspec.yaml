@@ -23,6 +23,7 @@ dev_dependencies:
   build_runner: ^2.1.2
   dart_either: ^0.0.1
   built_collection: ^5.1.1
+  tuple: ^2.0.0
 
 #  pub run build_runner build --delete-conflicting-outputs
 

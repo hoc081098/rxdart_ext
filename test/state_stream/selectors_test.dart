@@ -1,6 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
+import 'package:tuple/tuple.dart';
 
 class _State {
   final bool isLoading;
@@ -145,180 +146,172 @@ void main() {
       expect(projectorCount,
           2 + 1); // 2 [*] and inc. calling to produce seed value
     });
-    //
-    // test('select3', () async {
-    //   final store = RxReduxStore<int, _State>(
-    //     initialState: _State(true, null, <String>[].build(), 2),
-    //     sideEffects: [],
-    //     reducer: (s, a) {
-    //       // items [*]
-    //       if (a == 0) {
-    //         return _State(
-    //           s.isLoading,
-    //           s.term,
-    //           List.generate(10, (i) => i.toString()).build(),
-    //           s.otherState,
-    //         );
-    //       }
-    //
-    //       // loading
-    //       if (a == 1) {
-    //         return _State(!s.isLoading, s.term, s.items, s.otherState);
-    //       }
-    //
-    //       // loading
-    //       if (a == 2) {
-    //         return _State(!s.isLoading, s.term, s.items, s.otherState);
-    //       }
-    //
-    //       // term [*]
-    //       if (a == 3) {
-    //         return _State(s.isLoading, '4', s.items, s.otherState);
-    //       }
-    //
-    //       // otherState [*]
-    //       if (a == 4) {
-    //         return _State(s.isLoading, s.term, s.items, s.otherState + 2);
-    //       }
-    //
-    //       // loading & otherState [*]
-    //       if (a == 5) {
-    //         return _State(!s.isLoading, s.term, s.items, s.otherState - 1);
-    //       }
-    //
-    //       throw a;
-    //     },
-    //   );
-    //
-    //   await pumpEventQueue(times: 50);
-    //
-    //   var termCount = 0;
-    //   var itemsCount = 0;
-    //   var otherStateCount = 0;
-    //   var projectorCount = 0;
-    //
-    //   final filtered = store.select3(
-    //         (s) {
-    //       ++termCount;
-    //       return s.term;
-    //     },
-    //         (s) {
-    //       ++itemsCount;
-    //       return s.items;
-    //     },
-    //         (s) {
-    //       ++otherStateCount;
-    //       return s.otherState.round();
-    //     },
-    //         (String? term, BuiltList<String> items, int otherState) {
-    //       ++projectorCount;
-    //       return items
-    //           .where((i) => i.contains(term ?? ''))
-    //           .take(otherState)
-    //           .toBuiltList();
-    //     },
-    //     equals3: (int prev, int next) => prev == next,
-    //   );
-    //
-    //   expect(filtered.value, <String>[].build());
-    //   final future = expectLater(
-    //     filtered,
-    //     emitsInOrder(<Object>[
-    //       ['0', '1'].build(),
-    //       ['4'].build(),
-    //       emitsDone,
-    //     ]),
-    //   );
-    //
-    //   final numberOfActions = 6;
-    //   for (var i = 0; i < numberOfActions; i++) {
-    //     store.dispatch(i);
-    //   }
-    //   await pumpEventQueue(times: 50);
-    //   await store.dispose();
-    //   await future;
-    //
-    //   expect(termCount,
-    //       numberOfActions + 1); // inc. calling to produce seed value
-    //   expect(itemsCount,
-    //       numberOfActions + 1); // inc. calling to produce seed value
-    //   expect(otherStateCount,
-    //       numberOfActions + 1); // inc. calling to produce seed value
-    //   expect(projectorCount,
-    //       4 + 1); // 4 [*] and inc. calling to produce seed value
-    // });
-    //
-    // test('select4', () async {
-    //   final initial = Tuple5(0, 1.0, '', true, <String>[].build());
-    //
-    //   final store = RxReduxStore<int,
-    //       Tuple5<int, double, String, bool, BuiltList<String>>>(
-    //     initialState: initial,
-    //     sideEffects: [],
-    //     reducer: (s, a) {
-    //       switch (a) {
-    //         case 0:
-    //           return s;
-    //         case 1:
-    //           return s.withItem5(s.item5.rebuild((b) => b.remove('01')));
-    //         case 2:
-    //           return s.withItem1(s.item1 + 1);
-    //         case 3:
-    //           return s.withItem2(s.item2 + 2);
-    //         case 4:
-    //           return s.withItem5(s.item5.rebuild((b) => b.add('01')));
-    //         case 5:
-    //           return s;
-    //         case 6:
-    //           return s.withItem3(s.item3 + '3');
-    //         case 7:
-    //           return s.withItem4(!s.item4);
-    //         case 8:
-    //           return s.withItem5(s.item5.rebuild((b) => b.add('5')));
-    //         default:
-    //           throw a;
-    //       }
-    //     },
-    //   );
-    //
-    //   final tuple$ = store.select4(
-    //     expectAsync1((state) => state.item1, count: 7 + 1),
-    //     // 7 action causes state changed
-    //     expectAsync1((state) => state.item2, count: 7 + 1),
-    //     // 7 action causes state changed
-    //     expectAsync1((state) => state.item3, count: 7 + 1),
-    //     // 7 action causes state changed
-    //     expectAsync1((state) => state.item4, count: 7 + 1),
-    //     // 7 action causes state changed
-    //     expectAsync4(
-    //           (int subState1, double subState2, String subState3,
-    //           bool subState4) =>
-    //           Tuple4(subState1, subState2, subState3, subState4),
-    //       count: 4 + 1, // inc. calling to produce seed value
-    //     ),
-    //     equals3: (String prev, String next) => prev == next,
-    //   );
-    //
-    //   final tuple4 = Tuple4<int, double, String, bool>(0, 1.0, '', true);
-    //   expect(tuple$.value, tuple4);
-    //   final future = expectLater(
-    //     tuple$,
-    //     emitsInOrder(<Object>[
-    //       Tuple4(0, 1.0, '', false), // 7
-    //       Tuple4(0, 1.0, '3', false), // 6
-    //       Tuple4(0, 3.0, '3', false), // 3
-    //       Tuple4(1, 3.0, '3', false), // 2
-    //       emitsDone,
-    //     ]),
-    //   );
-    //
-    //   for (var i = 8; i >= 0; i--) {
-    //     i.dispatchTo(store);
-    //   }
-    //   await pumpEventQueue(times: 100);
-    //   await store.dispose();
-    //   await future;
-    // });
+
+    test('select3', () async {
+      final state$ = StateSubject(_State(true, null, <String>[].build(), 2));
+      _State reducer(_State s, int a) {
+        // items [*]
+        if (a == 0) {
+          return _State(
+            s.isLoading,
+            s.term,
+            List.generate(10, (i) => i.toString()).build(),
+            s.otherState,
+          );
+        }
+
+        // loading
+        if (a == 1) {
+          return _State(!s.isLoading, s.term, s.items, s.otherState);
+        }
+
+        // loading
+        if (a == 2) {
+          return _State(!s.isLoading, s.term, s.items, s.otherState);
+        }
+
+        // term [*]
+        if (a == 3) {
+          return _State(s.isLoading, '4', s.items, s.otherState);
+        }
+
+        // otherState [*]
+        if (a == 4) {
+          return _State(s.isLoading, s.term, s.items, s.otherState + 2);
+        }
+
+        // loading & otherState [*]
+        if (a == 5) {
+          return _State(!s.isLoading, s.term, s.items, s.otherState - 1);
+        }
+
+        throw a;
+      }
+
+      await pumpEventQueue(times: 50);
+
+      var termCount = 0;
+      var itemsCount = 0;
+      var otherStateCount = 0;
+      var projectorCount = 0;
+
+      final filtered$ = state$.select3(
+        (s) {
+          ++termCount;
+          return s.term;
+        },
+        (s) {
+          ++itemsCount;
+          return s.items;
+        },
+        (s) {
+          ++otherStateCount;
+          return s.otherState.round();
+        },
+        (String? term, BuiltList<String> items, int otherState) {
+          ++projectorCount;
+          return items
+              .where((i) => i.contains(term ?? ''))
+              .take(otherState)
+              .toBuiltList();
+        },
+        equals3: (int prev, int next) => prev == next,
+      );
+
+      expect(filtered$.value, <String>[].build());
+      final future = expectLater(
+        filtered$,
+        emitsInOrder(<Object>[
+          ['0', '1'].build(),
+          ['4'].build(),
+          emitsDone,
+        ]),
+      );
+
+      final numberOfActions = 6;
+      for (var i = 0; i < numberOfActions; i++) {
+        state$.value = reducer(state$.value, i);
+      }
+      await pumpEventQueue(times: 50);
+      await state$.close();
+      await future;
+
+      expect(
+          termCount, numberOfActions + 1); // inc. calling to produce seed value
+      expect(itemsCount,
+          numberOfActions + 1); // inc. calling to produce seed value
+      expect(otherStateCount,
+          numberOfActions + 1); // inc. calling to produce seed value
+      expect(projectorCount,
+          4 + 1); // 4 [*] and inc. calling to produce seed value
+    });
+
+    test('select4', () async {
+      final state$ = StateSubject(Tuple5(0, 1.0, '', true, <String>[].build()));
+
+      Tuple5<int, double, String, bool, BuiltList<String>> reducer(
+          Tuple5<int, double, String, bool, BuiltList<String>> s, int a) {
+        switch (a) {
+          case 0:
+            return s;
+          case 1:
+            return s.withItem5(s.item5.rebuild((b) => b.remove('01')));
+          case 2:
+            return s.withItem1(s.item1 + 1);
+          case 3:
+            return s.withItem2(s.item2 + 2);
+          case 4:
+            return s.withItem5(s.item5.rebuild((b) => b.add('01')));
+          case 5:
+            return s;
+          case 6:
+            return s.withItem3(s.item3 + '3');
+          case 7:
+            return s.withItem4(!s.item4);
+          case 8:
+            return s.withItem5(s.item5.rebuild((b) => b.add('5')));
+          default:
+            throw a;
+        }
+      }
+
+      final tuple$ = state$.select4(
+        expectAsync1((state) => state.item1, count: 7 + 1),
+        // 7 action causes state changed
+        expectAsync1((state) => state.item2, count: 7 + 1),
+        // 7 action causes state changed
+        expectAsync1((state) => state.item3, count: 7 + 1),
+        // 7 action causes state changed
+        expectAsync1((state) => state.item4, count: 7 + 1),
+        // 7 action causes state changed
+        expectAsync4(
+          (int subState1, double subState2, String subState3, bool subState4) =>
+              Tuple4(subState1, subState2, subState3, subState4),
+          count: 4 + 1, // inc. calling to produce seed value
+        ),
+        equals3: (String prev, String next) => prev == next,
+      );
+
+      final tuple4 = Tuple4<int, double, String, bool>(0, 1.0, '', true);
+      expect(tuple$.value, tuple4);
+      final future = expectLater(
+        tuple$,
+        emitsInOrder(<Object>[
+          Tuple4(0, 1.0, '', false), // 7
+          Tuple4(0, 1.0, '3', false), // 6
+          Tuple4(0, 3.0, '3', false), // 3
+          Tuple4(1, 3.0, '3', false), // 2
+          emitsDone,
+        ]),
+      );
+
+      for (var i = 8; i >= 0; i--) {
+        state$.value = reducer(state$.value, i);
+      }
+      await pumpEventQueue(times: 100);
+      await state$.close();
+      await future;
+    });
     //
     // test('select5', () async {
     //   final initial = Tuple6(
