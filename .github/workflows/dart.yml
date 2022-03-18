@@ -8,10 +8,10 @@ on:
     branches: [ master ]
     paths-ignore: [ '**.md' ]
   schedule:
-      # Runs at 02:00 UTC on the 1, 4, 7, 10, 13, 16, 19, 22, 25, 28 and 31st of every month.
+    # Runs at 02:00 UTC on the 1, 4, 7, 10, 13, 16, 19, 22, 25, 28 and 31st of every month.
     - cron: "0 2 */3 * *"
   workflow_dispatch:
-  
+
 jobs:
   build:
 
@@ -19,7 +19,7 @@ jobs:
     
     strategy:
       matrix:
-        sdk: [ stable, beta, dev, 2.12.0 ]
+        sdk: [ beta, stable, 2.15.0, 2.12.0 ]
 
     steps:
       - uses: actions/checkout@v3
