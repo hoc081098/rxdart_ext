@@ -516,8 +516,9 @@ void main() {
         <String>[].build(),
         <String, int>{}.build(),
         <String>{}.build(),
-        BuiltListMultimap<String, int>.build(
-            (b) => b..add('@', 1)..add('@', 2)),
+        BuiltListMultimap<String, int>.build((b) => b
+          ..add('@', 1)
+          ..add('@', 2)),
       );
       final state$ = StateSubject(initial);
 
