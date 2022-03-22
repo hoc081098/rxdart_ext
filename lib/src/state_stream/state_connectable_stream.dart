@@ -24,7 +24,7 @@ abstract class StateConnectableStream<T> extends ConnectableStream<T>
   factory StateConnectableStream(
     Stream<T> source,
     T seedValue, {
-    bool Function(T previous, T next)? equals,
+    Equality<T>? equals,
     bool sync = true,
   }) =>
       _StateConnectableStream<T>._(
@@ -51,13 +51,13 @@ class _StateConnectableStream<T>
   final StateSubject<T> _subject;
 
   @override
-  final bool Function(T, T) equals;
+  final Equality<T> equals;
 
   _StateConnectableStream._(
     Stream<T> source,
     this._subject,
-    bool Function(T, T)? equals,
-  )   : equals = equals ?? StateStream.defaultEquals,
+    Equality<T>? equals,
+  )   : equals = equals ?? StateStream.defaultEquality,
         super(source, _subject);
 
   @override
@@ -101,7 +101,7 @@ extension StateConnectableExtensions<T> on Stream<T> {
   /// ```
   StateConnectableStream<T> publishState(
     T seedValue, {
-    bool Function(T previous, T next)? equals,
+    Equality<T>? equals,
     bool sync = true,
   }) =>
       StateConnectableStream<T>(this, seedValue, equals: equals, sync: sync);
@@ -140,7 +140,7 @@ extension StateConnectableExtensions<T> on Stream<T> {
   /// ```
   StateStream<T> shareState(
     T seedValue, {
-    bool Function(T previous, T next)? equals,
+    Equality<T>? equals,
     bool sync = true,
   }) =>
       publishState(seedValue, equals: equals, sync: sync).refCount();

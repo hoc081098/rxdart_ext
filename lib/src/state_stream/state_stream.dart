@@ -3,6 +3,8 @@
 import 'dart:async';
 
 import '../not_replay_value_stream/not_replay_value_stream.dart';
+import '../utils/equality.dart';
+export '../utils/equality.dart';
 
 /// A [Stream] that provides synchronous access to the last emitted item,
 /// and two consecutive values are not equal.
@@ -10,11 +12,11 @@ import '../not_replay_value_stream/not_replay_value_stream.dart';
 /// This [Stream] always has no error.
 abstract class StateStream<T> extends NotReplayValueStream<T> {
   /// Determined equality between previous data event and current data event.
-  bool Function(T, T) get equals;
+  Equality<T> get equals;
 
   /// Default [equals] function.
   /// Use '==' operator on the last provided data element.
-  static bool defaultEquals(Object? lhs, Object? rhs) => lhs == rhs;
+  static bool defaultEquality(Object? lhs, Object? rhs) => lhs == rhs;
 
   @override
   T get value;

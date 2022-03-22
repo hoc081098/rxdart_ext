@@ -9,10 +9,11 @@ import '../state_stream/state_stream.dart';
 // ignore_for_file: public_member_api_docs
 
 /// Default equals comparison, uses [Object.==].
-bool Function(Object? lhs, Object? rhs) get defaultEquals =>
-    StateStream.defaultEquals;
+@internal
+Equality<Object?> get defaultEquals => StateStream.defaultEquality;
 
 /// Default hash code. returns [Object.hashCode].
+@internal
 int defaultHashCode(Object? o) => o.hashCode;
 
 @internal
@@ -25,7 +26,9 @@ extension FormattedFrameExtension on Frame {
   }
 }
 
+@internal
 extension StringTakeExtensions on String {
+  @internal
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
   String take(int n) {
@@ -39,6 +42,7 @@ extension StringTakeExtensions on String {
     return substring(0, math.min(n, length));
   }
 
+  @internal
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
   String takeLast(int n) {
