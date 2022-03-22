@@ -1543,7 +1543,6 @@ void main() {
         await future;
       });
 
-      /*
       test('~= select5', () async {
         final initial = Tuple6(
           0,
@@ -1553,43 +1552,43 @@ void main() {
           <String>[].build(),
           <String, int>{}.build(),
         );
+        final state$ = StateSubject(initial);
 
-        final store = RxReduxStore<
-            int,
-            Tuple6<int, double, String, bool, BuiltList<String>,
-                BuiltMap<String, int>>>(
-          initialState: initial,
-          sideEffects: [],
-          reducer: (s, a) {
-            switch (a) {
-              case 0:
-                return s;
-              case 1:
-                return s.withItem1(s.item1 + a); // [item 1]
-              case 2:
-                return s.withItem2(s.item2 + a); // [item 2]
-              case 3:
-                return s.withItem6(
-                    s.item6.rebuild((b) => b['@'] = a)); // ------------
-              case 4:
-                return s.withItem3(s.item3 + a.toString()); // [item 3]
-              case 5:
-                return s.withItem4(!s.item4); // [item 4]
-              case 6:
-                return s.withItem6(
-                    s.item6.rebuild((b) => b.remove('@'))); // ------------
-              case 7:
-                return s.withItem5(
-                    s.item5.rebuild((b) => b.add(a.toString()))); // [item 5]
-              case 8:
-                return s;
-              default:
-                throw a;
-            }
-          },
-        );
+        Tuple6<int, double, String, bool, BuiltList<String>,
+                BuiltMap<String, int>>
+            reducer(
+                Tuple6<int, double, String, bool, BuiltList<String>,
+                        BuiltMap<String, int>>
+                    s,
+                int a) {
+          switch (a) {
+            case 0:
+              return s;
+            case 1:
+              return s.withItem1(s.item1 + a); // [item 1]
+            case 2:
+              return s.withItem2(s.item2 + a); // [item 2]
+            case 3:
+              return s.withItem6(
+                  s.item6.rebuild((b) => b['@'] = a)); // ------------
+            case 4:
+              return s.withItem3(s.item3 + a.toString()); // [item 3]
+            case 5:
+              return s.withItem4(!s.item4); // [item 4]
+            case 6:
+              return s.withItem6(
+                  s.item6.rebuild((b) => b.remove('@'))); // ------------
+            case 7:
+              return s.withItem5(
+                  s.item5.rebuild((b) => b.add(a.toString()))); // [item 5]
+            case 8:
+              return s;
+            default:
+              throw a;
+          }
+        }
 
-        final tuple$ = store.selectMany(
+        final tuple$ = state$.selectMany(
           [
             expectAsync1((state) => state.item1, count: 7 + 1),
             // 7 action causes state changed
@@ -1631,10 +1630,10 @@ void main() {
         );
 
         for (var i = 0; i <= 8; i++) {
-          i.dispatchTo(store);
+          state$.value = reducer(state$.value, i);
         }
         await pumpEventQueue(times: 100);
-        await store.dispose();
+        await state$.close();
         await future;
       });
 
@@ -1648,46 +1647,46 @@ void main() {
           <String, int>{}.build(),
           <String>{}.build(),
         );
+        final state$ = StateSubject(initial);
 
-        final store = RxReduxStore<
-            int,
-            Tuple7<int, double, String, bool, BuiltList<String>,
-                BuiltMap<String, int>, BuiltSet<String>>>(
-          initialState: initial,
-          sideEffects: [],
-          reducer: (s, a) {
-            switch (a) {
-              case 0:
-                return s;
-              case 1:
-                return s.withItem1(s.item1 + a); // [item 1]
-              case 2:
-                return s.withItem2(s.item2 + a); // [item 2]
-              case 3:
-                return s.withItem7(s.item7
-                    .rebuild((b) => b.add(a.toString()))); // ------------
-              case 4:
-                return s.withItem3(s.item3 + a.toString()); // [item 3]
-              case 5:
-                return s.withItem4(!s.item4); // [item 4]
-              case 6:
-                return s.withItem7(s.item7
-                    .rebuild((b) => b.add(a.toString()))); // ------------
-              case 7:
-                return s.withItem5(
-                    s.item5.rebuild((b) => b.add(a.toString()))); // [item 5]
-              case 8:
-                return s
-                    .withItem6(s.item6.rebuild((b) => b['@'] = a)); // [item 6]
-              case 9:
-                return s;
-              default:
-                throw a;
-            }
-          },
-        );
+        Tuple7<int, double, String, bool, BuiltList<String>,
+                BuiltMap<String, int>, BuiltSet<String>>
+            reducer(
+                Tuple7<int, double, String, bool, BuiltList<String>,
+                        BuiltMap<String, int>, BuiltSet<String>>
+                    s,
+                int a) {
+          switch (a) {
+            case 0:
+              return s;
+            case 1:
+              return s.withItem1(s.item1 + a); // [item 1]
+            case 2:
+              return s.withItem2(s.item2 + a); // [item 2]
+            case 3:
+              return s.withItem7(
+                  s.item7.rebuild((b) => b.add(a.toString()))); // ------------
+            case 4:
+              return s.withItem3(s.item3 + a.toString()); // [item 3]
+            case 5:
+              return s.withItem4(!s.item4); // [item 4]
+            case 6:
+              return s.withItem7(
+                  s.item7.rebuild((b) => b.add(a.toString()))); // ------------
+            case 7:
+              return s.withItem5(
+                  s.item5.rebuild((b) => b.add(a.toString()))); // [item 5]
+            case 8:
+              return s
+                  .withItem6(s.item6.rebuild((b) => b['@'] = a)); // [item 6]
+            case 9:
+              return s;
+            default:
+              throw a;
+          }
+        }
 
-        final tuple$ = store.selectMany(
+        final tuple$ = state$.selectMany(
           [
             expectAsync1((state) => state.item1, count: 8 + 1),
             // 8 action causes state changed
@@ -1740,10 +1739,10 @@ void main() {
         );
 
         for (var i = 0; i <= 9; i++) {
-          i.dispatchTo(store);
+          state$.value = reducer(state$.value, i);
         }
         await pumpEventQueue(times: 100);
-        await store.dispose();
+        await state$.close();
         await future;
       });
 
@@ -1760,10 +1759,9 @@ void main() {
             ..add('@', 1)
             ..add('@', 2)),
         );
+        final state$ = StateSubject(initial);
 
-        final store = RxReduxStore<
-            int,
-            Tuple8<
+        Tuple8<
                 int,
                 double,
                 String,
@@ -1771,50 +1769,58 @@ void main() {
                 BuiltList<String>,
                 BuiltMap<String, int>,
                 BuiltSet<String>,
-                BuiltListMultimap<String, int>>>(
-          initialState: initial,
-          sideEffects: [],
-          reducer: (s, a) {
-            switch (a) {
-              case 0:
-                return s;
-              case 1:
-                return s.withItem1(s.item1 + a); // [item 1]
-              case 2:
-                return s.withItem2(s.item2 + a); // [item 2]
-              case 3:
-                return s.withItem8(
-                    s.item8.rebuild((b) => b.remove('@', 1))); // ------------
-              case 4:
-                return s.withItem3(s.item3 + a.toString()); // [item 3]
-              case 5:
-                return s.withItem4(!s.item4); // [item 4]
-              case 6:
-                return s.withItem8(
-                    s.item8.rebuild((b) => b.removeAll('@'))); // ------------
-              case 7:
-                return s.withItem5(
-                    s.item5.rebuild((b) => b.add(a.toString()))); // [item 5]
-              case 8:
-                return s
-                    .withItem6(s.item6.rebuild((b) => b['@'] = a)); // [item 6]
-              case 9:
-                return s.withItem8(
-                    s.item8.rebuild((b) => b.add('#', a))); // ------------
-              case 10:
-                return s.withItem7(
-                    s.item7.rebuild((b) => b.add(a.toString()))); // [item 7]
-              case 11:
-                return s;
-              default:
-                throw a;
-            }
-          },
-        );
+                BuiltListMultimap<String, int>>
+            reducer(
+                Tuple8<
+                        int,
+                        double,
+                        String,
+                        bool,
+                        BuiltList<String>,
+                        BuiltMap<String, int>,
+                        BuiltSet<String>,
+                        BuiltListMultimap<String, int>>
+                    s,
+                int a) {
+          switch (a) {
+            case 0:
+              return s;
+            case 1:
+              return s.withItem1(s.item1 + a); // [item 1]
+            case 2:
+              return s.withItem2(s.item2 + a); // [item 2]
+            case 3:
+              return s.withItem8(
+                  s.item8.rebuild((b) => b.remove('@', 1))); // ------------
+            case 4:
+              return s.withItem3(s.item3 + a.toString()); // [item 3]
+            case 5:
+              return s.withItem4(!s.item4); // [item 4]
+            case 6:
+              return s.withItem8(
+                  s.item8.rebuild((b) => b.removeAll('@'))); // ------------
+            case 7:
+              return s.withItem5(
+                  s.item5.rebuild((b) => b.add(a.toString()))); // [item 5]
+            case 8:
+              return s
+                  .withItem6(s.item6.rebuild((b) => b['@'] = a)); // [item 6]
+            case 9:
+              return s.withItem8(
+                  s.item8.rebuild((b) => b.add('#', a))); // ------------
+            case 10:
+              return s.withItem7(
+                  s.item7.rebuild((b) => b.add(a.toString()))); // [item 7]
+            case 11:
+              return s;
+            default:
+              throw a;
+          }
+        }
 
         var projectCount = 0;
 
-        final tuple$ = store.selectMany(
+        final tuple$ = state$.selectMany(
           [
             expectAsync1((state) => state.item1, count: 10 + 1),
             // 10 action causes state changed
@@ -1930,10 +1936,10 @@ void main() {
         );
 
         for (var i = 0; i <= 11; i++) {
-          i.dispatchTo(store);
+          state$.value = reducer(state$.value, i);
         }
         await pumpEventQueue(times: 100);
-        await store.dispose();
+        await state$.close();
         await future;
 
         expect(projectCount, 7 + 1); // seed value + 7 items.
@@ -1955,10 +1961,9 @@ void main() {
             ..add('@', 1)
             ..add('@', 2)),
         );
+        final state$ = StateSubject(initial);
 
-        final store = RxReduxStore<
-            int,
-            Tuple9<
+        Tuple9<
                 int,
                 double,
                 String,
@@ -1967,53 +1972,62 @@ void main() {
                 BuiltMap<String, int>,
                 BuiltSet<String>,
                 BuiltListMultimap<String, int>,
-                BuiltSetMultimap<String, int>>>(
-          initialState: initial,
-          sideEffects: [],
-          reducer: (s, a) {
-            switch (a) {
-              case 0:
-                return s;
-              case 1:
-                return s.withItem1(s.item1 + a); // [item 1]
-              case 2:
-                return s.withItem2(s.item2 + a); // [item 2]
-              case 3:
-                return s.withItem9(
-                    s.item9.rebuild((b) => b.remove('@', 1))); // ------------
-              case 4:
-                return s.withItem3(s.item3 + a.toString()); // [item 3]
-              case 5:
-                return s.withItem4(!s.item4); // [item 4]
-              case 6:
-                return s.withItem9(
-                    s.item9.rebuild((b) => b.removeAll('@'))); // ------------
-              case 7:
-                return s.withItem5(
-                    s.item5.rebuild((b) => b.add(a.toString()))); // [item 5]
-              case 8:
-                return s
-                    .withItem6(s.item6.rebuild((b) => b['@'] = a)); // [item 6]
-              case 9:
-                return s.withItem9(
-                    s.item9.rebuild((b) => b.add('#', a))); // ------------
-              case 10:
-                return s.withItem7(
-                    s.item7.rebuild((b) => b.add(a.toString()))); // [item 7]
-              case 11:
-                return s.withItem8(
-                    s.item8.rebuild((b) => b.add('#', a))); // [item 8]
-              case 12:
-                return s;
-              default:
-                throw a;
-            }
-          },
-        );
+                BuiltSetMultimap<String, int>>
+            reducer(
+                Tuple9<
+                        int,
+                        double,
+                        String,
+                        bool,
+                        BuiltList<String>,
+                        BuiltMap<String, int>,
+                        BuiltSet<String>,
+                        BuiltListMultimap<String, int>,
+                        BuiltSetMultimap<String, int>>
+                    s,
+                int a) {
+          switch (a) {
+            case 0:
+              return s;
+            case 1:
+              return s.withItem1(s.item1 + a); // [item 1]
+            case 2:
+              return s.withItem2(s.item2 + a); // [item 2]
+            case 3:
+              return s.withItem9(
+                  s.item9.rebuild((b) => b.remove('@', 1))); // ------------
+            case 4:
+              return s.withItem3(s.item3 + a.toString()); // [item 3]
+            case 5:
+              return s.withItem4(!s.item4); // [item 4]
+            case 6:
+              return s.withItem9(
+                  s.item9.rebuild((b) => b.removeAll('@'))); // ------------
+            case 7:
+              return s.withItem5(
+                  s.item5.rebuild((b) => b.add(a.toString()))); // [item 5]
+            case 8:
+              return s
+                  .withItem6(s.item6.rebuild((b) => b['@'] = a)); // [item 6]
+            case 9:
+              return s.withItem9(
+                  s.item9.rebuild((b) => b.add('#', a))); // ------------
+            case 10:
+              return s.withItem7(
+                  s.item7.rebuild((b) => b.add(a.toString()))); // [item 7]
+            case 11:
+              return s
+                  .withItem8(s.item8.rebuild((b) => b.add('#', a))); // [item 8]
+            case 12:
+              return s;
+            default:
+              throw a;
+          }
+        }
 
         var projectCount = 0;
 
-        final tuple$ = store.selectMany(
+        final tuple$ = state$.selectMany(
           [
             expectAsync1((state) => state.item1, count: 11 + 1),
             // 11 action causes state changed
@@ -2168,10 +2182,10 @@ void main() {
         );
 
         for (var i = 0; i <= 12; i++) {
-          i.dispatchTo(store);
+          state$.value = reducer(state$.value, i);
         }
         await pumpEventQueue(times: 100);
-        await store.dispose();
+        await state$.close();
         await future;
 
         expect(projectCount, 8 + 1); // seed value + 8 items.
@@ -2194,10 +2208,9 @@ void main() {
             ..add('@', 2)),
           DateTime(1998, DateTime.october, 8),
         );
+        final state$ = StateSubject(initial);
 
-        final store = RxReduxStore<
-            int,
-            Tuple10<
+        Tuple10<
                 int,
                 double,
                 String,
@@ -2207,56 +2220,66 @@ void main() {
                 BuiltSet<String>,
                 BuiltListMultimap<String, int>,
                 BuiltSetMultimap<String, int>,
-                DateTime>>(
-          initialState: initial,
-          sideEffects: [],
-          reducer: (s, a) {
-            switch (a) {
-              case 0:
-                return s;
-              case 1:
-                return s.withItem1(s.item1 + a); // [item 1]
-              case 2:
-                return s.withItem2(s.item2 + a); // [item 2]
-              case 3:
-                return s.withItem10(
-                    s.item10.add(const Duration(hours: 1))); // ------------
-              case 4:
-                return s.withItem3(s.item3 + a.toString()); // [item 3]
-              case 5:
-                return s.withItem4(!s.item4); // [item 4]
-              case 6:
-                return s.withItem10(
-                    s.item10.add(const Duration(hours: 1))); // ------------
-              case 7:
-                return s.withItem5(
-                    s.item5.rebuild((b) => b.add(a.toString()))); // [item 5]
-              case 8:
-                return s
-                    .withItem6(s.item6.rebuild((b) => b['@'] = a)); // [item 6]
-              case 9:
-                return s.withItem10(
-                    s.item10.add(const Duration(hours: 1))); // ------------
-              case 10:
-                return s.withItem7(
-                    s.item7.rebuild((b) => b.add(a.toString()))); // [item 7]
-              case 11:
-                return s.withItem8(
-                    s.item8.rebuild((b) => b.add('#', a))); // [item 8]
-              case 12:
-                return s.withItem9(
-                    s.item9.rebuild((b) => b.add('#', a))); // [item 9]
-              case 13:
-                return s;
-              default:
-                throw a;
-            }
-          },
-        );
+                DateTime>
+            reducer(
+                Tuple10<
+                        int,
+                        double,
+                        String,
+                        bool,
+                        BuiltList<String>,
+                        BuiltMap<String, int>,
+                        BuiltSet<String>,
+                        BuiltListMultimap<String, int>,
+                        BuiltSetMultimap<String, int>,
+                        DateTime>
+                    s,
+                int a) {
+          switch (a) {
+            case 0:
+              return s;
+            case 1:
+              return s.withItem1(s.item1 + a); // [item 1]
+            case 2:
+              return s.withItem2(s.item2 + a); // [item 2]
+            case 3:
+              return s.withItem10(
+                  s.item10.add(const Duration(hours: 1))); // ------------
+            case 4:
+              return s.withItem3(s.item3 + a.toString()); // [item 3]
+            case 5:
+              return s.withItem4(!s.item4); // [item 4]
+            case 6:
+              return s.withItem10(
+                  s.item10.add(const Duration(hours: 1))); // ------------
+            case 7:
+              return s.withItem5(
+                  s.item5.rebuild((b) => b.add(a.toString()))); // [item 5]
+            case 8:
+              return s
+                  .withItem6(s.item6.rebuild((b) => b['@'] = a)); // [item 6]
+            case 9:
+              return s.withItem10(
+                  s.item10.add(const Duration(hours: 1))); // ------------
+            case 10:
+              return s.withItem7(
+                  s.item7.rebuild((b) => b.add(a.toString()))); // [item 7]
+            case 11:
+              return s
+                  .withItem8(s.item8.rebuild((b) => b.add('#', a))); // [item 8]
+            case 12:
+              return s
+                  .withItem9(s.item9.rebuild((b) => b.add('#', a))); // [item 9]
+            case 13:
+              return s;
+            default:
+              throw a;
+          }
+        }
 
         var projectCount = 0;
 
-        final tuple$ = store.selectMany(
+        final tuple$ = state$.selectMany(
           [
             expectAsync1((state) => state.item1, count: 12 + 1),
             // 12 action causes state changed
@@ -2459,14 +2482,14 @@ void main() {
         );
 
         for (var i = 0; i <= 13; i++) {
-          i.dispatchTo(store);
+          state$.value = reducer(state$.value, i);
         }
         await pumpEventQueue(times: 100);
-        await store.dispose();
+        await state$.close();
         await future;
 
         expect(projectCount, 9 + 1); // seed value + 9 items.
-      });*/
+      });
     });
   });
 }
