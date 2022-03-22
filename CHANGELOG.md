@@ -1,14 +1,37 @@
+## 0.2.0 - Mar 23, 2022
+
+- **utils**:
+    - Add `DisposableMixin`. This mixin adds an easy option to dispose Streams without having to store
+      a `StreamSubscription` variable. (Thanks to [Jop Middelkamp](https://github.com/jopmiddelkamp)).
+    - Add `Equality` typedef.
+
+- **state_stream**:
+    - Rename `StateStream.defaultEquals` to `StateStream.defaultEquality`.
+    - Add `StateStream` selectors (`SelectorsStateStreamExtensions`): `StateStream.select`, `StateStream.select2`
+      to `StateStream.select9`
+      and `StateStream.selectMany`.
+        - Select a sub state slice from state stream. Inspirited
+          by [NgRx memoized selector](https://ngrx.io/guide/store/selectors)
+        - Selectors can compute derived data, to store the minimal possible state.
+        - Selectors are efficient. A selector is not recomputed unless one of its arguments changes.
+        - When using the `select`, `select2` to `select9`, `selectMany` functions, keeps track of the latest arguments
+          in which your selector function was invoked. Because selectors are pure functions, the last result can be
+          returned when the arguments match without re-invoking your selector function. This can provide performance
+          benefits, particularly with selectors that perform expensive computation. This practice is known as
+          memoization.
+
 ## 0.1.3 - Nov 23, 2021
 
 - Update `rxdart` to `0.27.3`.
-- Refactor `NotReplayValueConnectableStream` and `StateConnectableStream` by using `rxdart`'s `AbstractConnectableStream`.
+- Refactor `NotReplayValueConnectableStream` and `StateConnectableStream` by using `rxdart`'
+  s `AbstractConnectableStream`.
 - Add `StateStream.asBroadcastStateStream` extension method.
 - Add `Future<void> delay(int milliseconds)` function.
 
 ## 0.1.2 - Sep 11, 2021
 
 - Update dependencies
-    - `rxdart` to `0.27.2` 
+    - `rxdart` to `0.27.2`
     - `meta` to `1.7.0`
 - Split into multiple libraries:
     - `not_replay_value_stream`

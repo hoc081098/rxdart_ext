@@ -14,10 +14,10 @@ import 'state_stream_impl.dart';
 ///   This practice is known as memoization.
 typedef Selector<State, V> = V Function(State state);
 
-/// Select a sub state slice from state stream of [RxReduxStore].
+/// Select a sub state slice from state stream.
 ///
 /// Inspirited by [NgRx memoized selector](https://ngrx.io/guide/store/selectors)
-/// - Selectors can compute derived data, allowing Redux to store the minimal possible state.
+/// - Selectors can compute derived data, to store the minimal possible state.
 /// - Selectors are efficient. A selector is not recomputed unless one of its arguments changes.
 /// - When using the [select], [select2] to [select9], [selectMany] functions,
 ///   keeps track of the latest arguments in which your selector function was invoked.
@@ -25,7 +25,7 @@ typedef Selector<State, V> = V Function(State state);
 ///   when the arguments match without re-invoking your selector function.
 ///   This can provide performance benefits, particularly with selectors that perform expensive computation.
 ///   This practice is known as memoization.
-extension SelectorsExtension<State> on StateStream<State> {
+extension SelectorsStateStreamExtensions<State> on StateStream<State> {
   /// Observe a value of type [Result] exposed from a state stream, and listen only partially to changes.
   ///
   /// The returned Stream is a single-subscription Stream.
