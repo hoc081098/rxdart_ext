@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../utils/default_sink.dart';
+import '../utils/equality.dart';
 import 'api_contract_violation_error.dart';
 import 'internal.dart';
 
@@ -124,7 +125,7 @@ class Single<T> extends StreamView<T> {
       Rx.retry(singleFactory, count).takeFirstDataOrFirstErrorAndClose();
 
   @override
-  Single<T> distinct([bool Function(T previous, T next)? equals]) => this;
+  Single<T> distinct([Equality<T>? equals]) => this;
 
   @override
   Single<S> map<S>(S Function(T event) convert) =>

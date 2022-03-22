@@ -18,9 +18,9 @@ extension ToStateStreamExtension<T> on Stream<T> {
   /// This stream is a single-subscription stream.
   StateStream<T> toStateStream(
     T value, {
-    bool Function(T p1, T p2)? equals,
+    Equality<T>? equals,
   }) =>
-      _StateStream(this, value, equals ?? StateStream.defaultEquals);
+      _StateStream(this, value, equals ?? StateStream.defaultEquality);
 }
 
 /// Default implementation of [StateStream].
@@ -36,7 +36,7 @@ class _StateStream<T> extends Stream<T>
     with StateStreamMixin<T>
     implements StateStream<T> {
   @override
-  final bool Function(T p1, T p2) equals;
+  final Equality<T> equals;
 
   final ValueStreamController<T> controller;
 

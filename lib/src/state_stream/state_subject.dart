@@ -47,7 +47,7 @@ class StateSubject<T> extends Subject<T>
   final ValueSubject<T> _subject;
 
   @override
-  final bool Function(T p1, T p2) equals;
+  final Equality<T> equals;
 
   StateSubject._(
     this.equals,
@@ -63,7 +63,7 @@ class StateSubject<T> extends Subject<T>
   /// See also [StreamController.broadcast],  [ValueSubject].
   factory StateSubject(
     T seedValue, {
-    bool Function(T p1, T p2)? equals,
+    Equality<T>? equals,
     void Function()? onListen,
     FutureOr<void> Function()? onCancel,
     bool sync = false,
@@ -74,7 +74,7 @@ class StateSubject<T> extends Subject<T>
       onCancel: onCancel,
       sync: sync,
     );
-    return StateSubject._(equals ?? StateStream.defaultEquals, subject);
+    return StateSubject._(equals ?? StateStream.defaultEquality, subject);
   }
 
   @nonVirtual

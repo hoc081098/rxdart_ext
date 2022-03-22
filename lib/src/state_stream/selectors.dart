@@ -14,9 +14,6 @@ import 'state_stream_impl.dart';
 ///   This practice is known as memoization.
 typedef Selector<State, V> = V Function(State state);
 
-/// Determine equality.
-typedef Equality<T> = bool Function(T previous, T next);
-
 /// Select a sub state slice from state stream of [RxReduxStore].
 ///
 /// Inspirited by [NgRx memoized selector](https://ngrx.io/guide/store/selectors)
@@ -505,7 +502,7 @@ extension SelectorsExtension<State> on StateStream<State> {
         selectors.map((s) => s(state)).toList(growable: false);
 
     final eqs = subStateEquals
-        .map((e) => e ?? StateStream.defaultEquals)
+        .map((e) => e ?? StateStream.defaultEquality)
         .toList(growable: false);
 
     late final indices = Iterable<int>.generate(length);
@@ -542,8 +539,8 @@ StateStream<Result> _select2Internal<State, SubState1, SubState2, Result>(
   Equality<SubState2>? equals2,
   Equality<Result>? equals,
 ) {
-  final eq1 = equals1 ?? StateStream.defaultEquals;
-  final eq2 = equals2 ?? StateStream.defaultEquals;
+  final eq1 = equals1 ?? StateStream.defaultEquality;
+  final eq2 = equals2 ?? StateStream.defaultEquality;
 
   final controller = StreamController<Result>(sync: true);
   StreamSubscription<State>? subscription;
@@ -593,9 +590,9 @@ StateStream<Result>
   Equality<SubState3>? equals3,
   Equality<Result>? equals,
 ) {
-  final eq1 = equals1 ?? StateStream.defaultEquals;
-  final eq2 = equals2 ?? StateStream.defaultEquals;
-  final eq3 = equals3 ?? StateStream.defaultEquals;
+  final eq1 = equals1 ?? StateStream.defaultEquality;
+  final eq2 = equals2 ?? StateStream.defaultEquality;
+  final eq3 = equals3 ?? StateStream.defaultEquality;
 
   final controller = StreamController<Result>(sync: true);
   StreamSubscription<State>? subscription;
@@ -657,10 +654,10 @@ StateStream<Result>
   Equality<SubState4>? equals4,
   Equality<Result>? equals,
 ) {
-  final eq1 = equals1 ?? StateStream.defaultEquals;
-  final eq2 = equals2 ?? StateStream.defaultEquals;
-  final eq3 = equals3 ?? StateStream.defaultEquals;
-  final eq4 = equals4 ?? StateStream.defaultEquals;
+  final eq1 = equals1 ?? StateStream.defaultEquality;
+  final eq2 = equals2 ?? StateStream.defaultEquality;
+  final eq3 = equals3 ?? StateStream.defaultEquality;
+  final eq4 = equals4 ?? StateStream.defaultEquality;
 
   final controller = StreamController<Result>(sync: true);
   StreamSubscription<State>? subscription;

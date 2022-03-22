@@ -28,7 +28,7 @@ class _AsBroadcastStateStream<T> extends StreamView<T>
       : super(source.asBroadcastStream(onCancel: (s) => s.cancel()));
 
   @override
-  bool Function(T p1, T p2) get equals => source.equals;
+  Equality<T> get equals => source.equals;
 
   @override
   T get value => source.value;

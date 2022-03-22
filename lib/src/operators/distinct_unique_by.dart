@@ -1,5 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 
+import '../utils/equality.dart';
 import '../utils/internal.dart';
 
 /// WARNING: More commonly known as distinct in other Rx implementations.
@@ -35,7 +36,7 @@ extension DistinctUniqueByStreamExtension<T> on Stream<T> {
   /// [Interactive marble diagram](http://rxmarbles.com/#distinct)
   Stream<T> distinctUniqueBy<R>(
     R Function(T) keySelector, {
-    bool Function(R e1, R e2)? equals,
+    Equality<R>? equals,
     int Function(R e)? hashCode,
   }) {
     final eq = equals ?? defaultEquals;
