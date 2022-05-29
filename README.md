@@ -209,6 +209,6 @@ class DisposableExample with DisposableMixin {
 
     MIT License
 
-    Copyright (c) 2020-2021 Petrus Nguyễn Thái Học
+    Copyright (c) 2020-2022 Petrus Nguyễn Thái Học
 
 ![Tim Cook dancing to the sound of a permissive license.](http://i.imgur.com/mONiWzj.gif)
