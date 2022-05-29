@@ -98,10 +98,10 @@ Single<User> fetchUser(String id) {
 - [flatMapBatches](https://pub.dev/documentation/rxdart_ext/latest/operators/FlatMapBatchesStreamExtension/flatMapBatches.html)
 - [flatMapBatchesSingle](https://pub.dev/documentation/rxdart_ext/latest/operators/FlatMapBatchesStreamExtension/flatMapBatchesSingle.html)
 - [ignoreErrors](https://pub.dev/documentation/rxdart_ext/latest/operators/IgnoreErrorsStreamExtension/ignoreErrors.html)
-- [mapNotNull](https://pub.dev/documentation/rxdart_ext/latest/operators/MapNotNullStreamExtension/mapNotNull.html)
+- `mapNotNull` (moved to `rxdart 0.27.4` as standard operator: [mapNotNull](https://pub.dev/documentation/rxdart/latest/rx/MapNotNullExtension/mapNotNull.html))
 - [toSingleSubscription](https://pub.dev/documentation/rxdart_ext/latest/operators/ToSingleSubscriptionStreamExtension/toSingleSubscriptionStream.html)
 - [asVoid](https://pub.dev/documentation/rxdart_ext/latest/operators/AsVoidStreamExtension/asVoid.html)
-- [whereNotNull](https://pub.dev/documentation/rxdart_ext/latest/operators/WhereNotNullStreamExtension/whereNotNull.html)
+- `whereNotNull` (moved to `rxdart 0.27.4` as standard operator: [whereNotNull](https://pub.dev/documentation/rxdart/latest/rx/WhereNotNullExtension/whereNotNull.html))
 
 ### 3. [StateStream](https://pub.dev/documentation/rxdart_ext/latest/state_stream/StateStream-class.html)
 

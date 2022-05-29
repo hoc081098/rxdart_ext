@@ -30,7 +30,7 @@ jobs:
         run: dart --version
 
       - name: Install dependencies
-        run: pub get
+        run: dart pub get
 
       - name: Run check_urls/main.dart
         run: dart run main.dart
@@ -52,7 +52,7 @@ jobs:
         run: dart --version
 
       - name: Install dependencies
-        run: pub get
+        run: dart pub get
 
       - name: Run example/lib/rxdart_ext_example.dart
         run: dart run lib/rxdart_ext_example.dart

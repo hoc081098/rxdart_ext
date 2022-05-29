@@ -9,17 +9,17 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
-  rxdart: ^0.27.3
+  rxdart: ^0.27.4
   meta: ^1.7.0
   stack_trace: ^1.10.0
-  path: ^1.8.0
+  path: ^1.8.2
 
 dev_dependencies:
   lints: ^1.0.1
   test: ^1.17.12
-  collection: ^1.15.0
-  quiver: ^3.0.1
-  mockito: ^5.0.15
+  collection: ^1.16.0
+  quiver: ^3.1.0
+  mockito: ^5.2.0
   build_runner: ^2.1.2
   dart_either: ^0.0.1
   built_collection: ^5.1.1
