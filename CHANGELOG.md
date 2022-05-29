@@ -1,3 +1,14 @@
+## unreleased
+
+- Update `rxdart` to `0.27.4`.
+- Update `path` to `1.8.2`.
+
+- **operators**:
+    - Remove `Stream.whereNotNull()` (moved to `rxdart 0.27.4` as standard
+      operator: [mapNotNull](https://pub.dev/documentation/rxdart/latest/rx/MapNotNullExtension/mapNotNull.html)).
+    - Remove `Stream.mapNotNull()` (moved to `rxdart 0.27.4` as standard
+      operator: [whereNotNull](https://pub.dev/documentation/rxdart/latest/rx/WhereNotNullExtension/whereNotNull.html)).
+
 ## 0.2.0 - Mar 23, 2022
 
 - **utils**:
