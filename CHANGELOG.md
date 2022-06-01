@@ -1,3 +1,7 @@
+## 0.2.2 - Jun 1, 2022
+
+- Revert `path` to `^1.8.0` (because `flutter_test` from Flutter sdk (`>= 2.5.0`) depends on path `1.8.0` or `1.8.1`).
+
 ## 0.2.1 - Jun 1, 2022
 
 - Update `rxdart` to `0.27.4`.

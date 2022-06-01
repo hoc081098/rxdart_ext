@@ -19,7 +19,7 @@ Some extension methods and classes built on top of [`RxDart`](https://pub.dev/pa
 | `from 0.27.0 to 0.27.1` | `from 0.1.0 to 0.1.1` |
 |        `0.27.2`         |        `0.1.2`        |
 |        `0.27.3`         | `from 0.1.3 to 0.2.0` |
-|        `0.27.4`         |        `0.2.1`        |
+|        `0.27.4`         | `from 0.2.1 to 0.2.2` |
 
 ## API
 
