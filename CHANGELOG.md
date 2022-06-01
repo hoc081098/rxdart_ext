@@ -1,4 +1,4 @@
-## unreleased
+## 0.2.1 - Jun 1, 2022
 
 - Update `rxdart` to `0.27.4`.
 - Update `path` to `1.8.2`.
