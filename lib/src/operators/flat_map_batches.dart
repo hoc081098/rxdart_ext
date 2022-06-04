@@ -2,7 +2,6 @@ import 'package:rxdart/rxdart.dart';
 
 import '../single/single.dart';
 import '../single/single_or_error.dart';
-import '../utils/identity.dart';
 import 'done_on_error.dart';
 
 /// Extends the Stream class with the ability to convert each element to a [Stream],
@@ -31,12 +30,8 @@ extension FlatMapBatchesStreamExtension<T> on Stream<T> {
     Stream<R> Function(T value) transform,
     int size,
   ) {
-    Stream<List<R>> convert(List<T> streams) {
-      return Rx.zip(
-        streams.map(transform).toList(growable: false),
-        identity,
-      );
-    }
+    Stream<List<R>> convert(List<T> streams) =>
+        Rx.zipList(streams.map(transform).toList(growable: false));
 
     return bufferCount(size).asyncExpand(convert);
   }
@@ -75,12 +70,8 @@ extension FlatMapBatchesStreamExtension<T> on Stream<T> {
     Single<R> Function(T value) transform,
     int size,
   ) {
-    Stream<List<R>> convert(List<T> streams) {
-      return Rx.forkJoin(
-        streams.map(transform).toList(growable: false),
-        identity,
-      );
-    }
+    Stream<List<R>> convert(List<T> streams) =>
+        Rx.forkJoinList(streams.map(transform).toList(growable: false));
 
     final seed = <R>[];
     return bufferCount(size)
