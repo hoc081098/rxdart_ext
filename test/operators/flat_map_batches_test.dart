@@ -52,6 +52,36 @@ void main() {
       );
     });
 
+    test('forward inner errors', () {
+      const size = 3;
+
+      final stream = Stream.fromIterable([0, 1, 2, 3, 4, 5, 6]).flatMapBatches(
+        (value) {
+          final r = value % size;
+
+          if (r == 0) {
+            return Rx.timer(value, const Duration(milliseconds: 200));
+          } else if (r == 1) {
+            return Stream<int>.error(Exception())
+                .delay(const Duration(milliseconds: 100));
+          } else {
+            return Rx.timer(value, const Duration(milliseconds: 50));
+          }
+        },
+        size,
+      );
+
+      expect(
+        stream,
+        emitsInOrder(<Object>[
+          emitsError(isException),
+          emitsError(isException),
+          emits([6]),
+          emitsDone,
+        ]),
+      );
+    });
+
     test('hangs if earlier batch does not complete', () {
       Stream.fromIterable([
         Rx.never<int>().startWith(1),
@@ -209,6 +239,31 @@ void main() {
         broadcastRule(build(), false);
         await cancelRule(build());
       }
+    });
+
+    test('forward inner errors', () async {
+      const size = 3;
+
+      Single<List<int>> build() =>
+          Stream.fromIterable([0, 1, 2, 3, 4, 5, 6]).flatMapBatchesSingle(
+            (value) {
+              final r = value % size;
+
+              if (r == 0) {
+                return Single.timer(value, const Duration(milliseconds: 200));
+              } else if (r == 1) {
+                return Single<int>.error(Exception())
+                    .delay(const Duration(milliseconds: 100));
+              } else {
+                return Single.timer(value, const Duration(milliseconds: 50));
+              }
+            },
+            size,
+          );
+
+      await singleRule(build(), exceptionLeft);
+      broadcastRule(build(), false);
+      await cancelRule(build());
     });
 
     test('batch size larger than count', () async {
