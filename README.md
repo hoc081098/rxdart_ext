@@ -11,6 +11,12 @@
 
 Some extension methods and classes built on top of [`RxDart`](https://pub.dev/packages/rxdart) - [`RxDart`](https://pub.dev/packages/rxdart) extension.
 
+## Buy me a coffee
+Liked some of my work? Buy me a coffee (or more likely a beer)
+
+[!["Buy Me A Coffee"](https://cdn.buymeacoffee.com/buttons/default-orange.png)](https://www.buymeacoffee.com/hoc081098)
+
+
 ## RxDart compatibility
 
 |       **rxdart**        |    **rxdart_ext**     |
