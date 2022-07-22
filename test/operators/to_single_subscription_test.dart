@@ -20,7 +20,7 @@ void main() {
         final stream = Stream.value(1);
         final singleSubscriptionStream = stream.toSingleSubscriptionStream();
 
-        expect(singleSubscriptionStream, stream);
+        expect(singleSubscriptionStream, isNot(equals(stream)));
         expect(singleSubscriptionStream.isBroadcast, isFalse);
 
         singleSubscriptionStream.listen(null);
