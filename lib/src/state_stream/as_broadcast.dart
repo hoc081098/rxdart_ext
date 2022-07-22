@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:meta/meta.dart';
-
 import 'state_stream.dart';
 import 'state_stream_mixin.dart';
 
@@ -15,7 +13,6 @@ extension BroadcastStateStreamExtensions<T> on StateStream<T> {
   /// This is useful for converting a single-subscription stream into a
   /// broadcast Stream. It's also useful for providing sync access to the latest
   /// emitted value.
-  @internal
   StateStream<T> asBroadcastStateStream() => _AsBroadcastStateStream(this);
 }
 

@@ -1,3 +1,7 @@
+## 0.2.3 - Jul 22, 2022
+
+- Fix: remove `@internal` on `StateStream.asBroadcastStateStream` extension method.
+
 ## 0.2.2 - Jun 1, 2022
 
 - Revert `path` to `^1.8.0` (because `flutter_test` from Flutter sdk (`>= 2.5.0`) depends on path `1.8.0` or `1.8.1`).
