@@ -79,11 +79,17 @@ void main() {
 
     test('from multiple data events Stream (data -> data)', () async {
       await singleRule(
-        Stream.fromIterable([1, 2, 3]).singleOrError(),
+        Stream.fromIterable([1, 2, 3])
+            .toSingleSubscriptionStream() // dart 2.18.0: The Stream.fromIterable stream can now be listened to more than once.
+            .singleOrError(),
         buildAPIContractViolationErrorWithMessage(
             'Stream contains more than one data event.'),
       );
-      broadcastRule(Stream.fromIterable([1, 2, 3]).singleOrError(), false);
+      broadcastRule(
+          Stream.fromIterable([1, 2, 3])
+              .toSingleSubscriptionStream() // dart 2.18.0: The Stream.fromIterable stream can now be listened to more than once.
+              .singleOrError(),
+          false);
     });
 
     test('from both data and error events Stream (data -> error)', () async {
