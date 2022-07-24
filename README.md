@@ -25,7 +25,7 @@ Liked some of my work? Buy me a coffee (or more likely a beer)
 | `from 0.27.0 to 0.27.1`  | `from 0.1.0 to 0.1.1` |
 |         `0.27.2`         |        `0.1.2`        |
 |         `0.27.3`         | `from 0.1.3 to 0.2.0` |
-| `from 0.27.4 to 0.27.5`  | `from 0.2.1 to 0.2.3` |
+| `from 0.27.4 to 0.27.5`  | `from 0.2.1 to 0.2.4` |
 
 ## API
 

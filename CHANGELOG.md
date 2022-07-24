@@ -1,5 +1,10 @@
+## 0.2.4 - Jul 24, 2022
+
+- Fix `StateStream.select5..select9`: miss passing `equals` param.
+
 ## 0.2.3 - Jul 24, 2022
 
+- Update `rxdart` to `^0.27.5`.
 - Fix: remove `@internal` on `StateStream.asBroadcastStateStream` extension method.
 - `Stream.toSingleSubscriptionStream()` now returns a new `Stream` every call
   instead of the input stream even if it's a single-subscription Stream.
