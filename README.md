@@ -19,13 +19,21 @@ Liked some of my work? Buy me a coffee (or more likely a beer)
 
 ## RxDart compatibility
 
-|        **rxdart**        |    **rxdart_ext**     |
-|:------------------------:|:---------------------:|
-|         `0.26.0`         |     `below 0.0.1`     |
-| `from 0.27.0 to 0.27.1`  | `from 0.1.0 to 0.1.1` |
-|         `0.27.2`         |        `0.1.2`        |
-|         `0.27.3`         | `from 0.1.3 to 0.2.0` |
-| `from 0.27.4 to 0.27.5`  | `from 0.2.1 to 0.2.4` |
+| **rxdart** | **rxdart_ext**  |
+|:----------:|:---------------:|
+| `^0.27.2`  |     `0.1.2`     |
+| `^0.27.3`  | `0.1.3 → 0.2.0` |
+| `^0.27.4`  | `0.2.1 → 0.2.2` |
+| `^0.27.5`  | `0.2.3 → 0.2.4` |
+
+- For example: `rxdart: ^0.27.4` → `rxdart_ext: ^v`, `v` in `0.2.1 → 0.2.2` and `0.2.3 → 0.2.4`
+  (all rows since `^0.27.4` row in the above table).
+
+- But in some cases there is any **conflict** between `rxdart` version and `rxdart_ext` version,
+  you must use **stricter version**, eg. `rxdart: ^0.27.4` → `rxdart_ext: ^v`, `v` in `0.2.1 → 0.2.2`
+  (**same row** in the above table)
+
+- **The latest version of `rxdart_ext` always works fine with the latest version of `rxdart`.**
 
 ## API
 
