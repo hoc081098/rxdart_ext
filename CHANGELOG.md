@@ -2,7 +2,7 @@
 
 - Fix: remove `@internal` on `StateStream.asBroadcastStateStream` extension method.
 - `Stream.toSingleSubscriptionStream()` now returns a new `Stream` every call
-  instead of the input stream when it is a single-subscription Stream.
+  instead of the input stream even if it's a single-subscription Stream.
 
 ## 0.2.2 - Jun 1, 2022
 
