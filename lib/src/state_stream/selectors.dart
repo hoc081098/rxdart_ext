@@ -166,6 +166,7 @@ extension SelectorsStateStreamExtensions<State> on StateStream<State> {
         subStates[3] as SubState4,
         subStates[4] as SubState5,
       ),
+      equals: equals,
     );
   }
 
@@ -222,6 +223,7 @@ extension SelectorsStateStreamExtensions<State> on StateStream<State> {
         subStates[4] as SubState5,
         subStates[5] as SubState6,
       ),
+      equals: equals,
     );
   }
 
@@ -284,6 +286,7 @@ extension SelectorsStateStreamExtensions<State> on StateStream<State> {
         subStates[5] as SubState6,
         subStates[6] as SubState7,
       ),
+      equals: equals,
     );
   }
 
@@ -352,6 +355,7 @@ extension SelectorsStateStreamExtensions<State> on StateStream<State> {
         subStates[6] as SubState7,
         subStates[7] as SubState8,
       ),
+      equals: equals,
     );
   }
 
@@ -426,6 +430,7 @@ extension SelectorsStateStreamExtensions<State> on StateStream<State> {
         subStates[7] as SubState8,
         subStates[8] as SubState9,
       ),
+      equals: equals,
     );
   }
 
