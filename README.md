@@ -184,7 +184,21 @@ StreamBuilder<UiState>(
     return ...;
   },
 );
+```
 
+See also [flutter_bloc_pattern/RxStreamBuilder](https://pub.dev/documentation/flutter_bloc_pattern/latest/flutter_bloc_pattern/RxStreamBuilder-class.html),
+it can be used with [StateStream] perfectly and more easily (don't require `initialData` and don't need to call `snapshot.requireData`).
+
+```dart
+final StateStream<UiState> state$;
+
+RxStreamBuilder<UiState>(
+  stream: state$,
+  builder: (context, UiState state) {
+    // use state directly
+    return ...;
+  }
+);
 ```
 
 ### 4. [NotReplayValueStream](https://pub.dev/documentation/rxdart_ext/latest/not_replay_value_stream/NotReplayValueStream-class.html)
