@@ -95,6 +95,22 @@ void main() {
       expect(StateSubject(0).stackTrace, isNull);
     });
 
+    test('get stream', () {
+      final s = StateSubject(0);
+
+      expect(s.stream, isA<StateStream<int>>());
+      expect(s.stream, same(s));
+      expect(s.stream.value, 0);
+      expect(s.stream, emitsInOrder(<Object>[1, 2]));
+
+      s.add(0);
+      s.add(0);
+      s.add(1);
+      s.add(1);
+      s.add(2);
+      s.add(2);
+    });
+
     test('Rx', () {
       {
         final s = StateSubject(0);
