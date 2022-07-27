@@ -1,3 +1,9 @@
+## 0.2.5 - Jul 27, 2022
+
+- **state_stream**:
+    - `StateSubject.stream` now returns a `StateStream`.
+    - Update docs for `StateSubject` and `StateStream`.
+
 ## 0.2.4 - Jul 24, 2022
 
 - Fix `StateStream.select5..select9`: miss passing `equals` param.
