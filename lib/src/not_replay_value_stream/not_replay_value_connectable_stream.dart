@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart'
     show ConnectableStream, AbstractConnectableStream;
 
@@ -30,6 +31,8 @@ class NotReplayValueConnectableStream<T> extends AbstractConnectableStream<T,
         ValueSubject(seedValue, sync: sync),
       );
 
+  @visibleForOverriding
+  @internal
   @override
   StreamEvent<T> get event => _subject.event;
 }

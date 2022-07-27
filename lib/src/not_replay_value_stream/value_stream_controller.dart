@@ -151,6 +151,8 @@ class _ValueStreamControllerStream<T> extends Stream<T>
         cancelOnError: cancelOnError,
       );
 
+  @visibleForOverriding
+  @internal
   @override
   StreamEvent<T> get event => controller._dataOrError;
 }

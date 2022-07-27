@@ -1,14 +1,21 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart' show PublishSubject, Subject;
+import 'package:rxdart/rxdart.dart'
+    show PublishSubject, Subject, BehaviorSubject;
 
 import '../not_replay_value_stream/value_subject.dart';
 import 'state_stream.dart';
 import 'state_stream_mixin.dart';
+import '../not_replay_value_stream/not_replay_value_stream.dart';
 
-/// A special [StreamController] that captures the latest item that has been
+/// A special [Subject] / [StreamController] that captures the latest item that has been
 /// added to the controller.
+///
+/// It is very useful for State Management in Flutter, can be used with `StreamBuilder` perfectly.
+/// The [StateSubject] avoid rebuilding the widget when the newest event is equals to the latest state of [StateSubject],
+/// and it does not rebuild the widget twice on listen,
+/// because it does not replay the latest state, compare to [BehaviorSubject].
 ///
 /// [StateSubject] is the same as [PublishSubject] and [ValueSubject], with the ability to capture
 /// the latest item has been added to the controller.
@@ -16,8 +23,10 @@ import 'state_stream_mixin.dart';
 /// [StateSubject] is a [StateStream], that provides synchronous access to the last emitted item,
 /// and two consecutive values are not equal.
 /// The equality between previous data event and current data event is determined by [equals].
+/// [StateSubject] do **not replay** the latest value, see [NotReplayValueStream].
 ///
-/// [StateSubject] allows only data event and close event, error event cannot be added to it.
+/// [StateSubject] always has **no error**.
+/// [StateSubject] allows only data events and close events, error event cannot be added to it.
 ///
 /// [StateSubject] is, by default, a broadcast (aka hot) controller, in order
 /// to fulfill the Rx Subject contract. This means the Subject's `stream` can
@@ -88,6 +97,8 @@ class StateSubject<T> extends Subject<T>
   @override
   Future<void> close() => _subject.close();
 
+  /// Cannot send an error to this subject.
+  /// **Always throws** an [UnsupportedError].
   @override
   Never addError(Object error, [StackTrace? stackTrace]) => throw UnsupportedError(
       'Cannot add error to StateSubject, error: $error, stackTrace: $stackTrace');
@@ -103,6 +114,9 @@ class StateSubject<T> extends Subject<T>
     );
     return completer.future;
   }
+
+  @override
+  StateStream<T> get stream => this;
 
   @override
   T get value => _subject.value;

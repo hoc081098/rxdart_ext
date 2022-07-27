@@ -76,6 +76,8 @@ class ValueSubject<T> extends Subject<T>
   @override
   NotReplayValueStream<T> get stream => this;
 
+  @visibleForOverriding
+  @internal
   @override
   StreamEvent<T> get event => _dataOrError;
 }
