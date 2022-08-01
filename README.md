@@ -35,7 +35,7 @@ Liked some of my work? Buy me a coffee (or more likely a beer)
 
 - **The latest version of `rxdart_ext` always works fine with the latest version of `rxdart`.**
 
-## API
+## API - [Documentation](https://pub.dev/documentation/rxdart_ext/latest/)
 
 ### 1. [Single](https://pub.dev/documentation/rxdart_ext/latest/single/Single-class.html)
 
