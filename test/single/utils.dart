@@ -22,7 +22,7 @@ Future<void> singleRule<T>(Single<T> single, Either<Object, T> e) {
   return expectLater(
     single,
     emitsInOrder(<dynamic>[
-      e.fold((e) => emitsError(e), (v) => emits(v)),
+      e.fold(ifLeft: (e) => emitsError(e), ifRight: (v) => emits(v)),
       emitsDone,
     ]),
   );
