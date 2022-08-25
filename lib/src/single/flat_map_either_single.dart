@@ -14,6 +14,17 @@ extension FlatMapEitherSingleExtension<L, R1> on Single<Either<L, R1>> {
   /// returns a [Single] that emits a [Left] which containing original [Left.value].
   ///
   /// This operator does not handle any errors. See [flatMapSingle].
+  ///
+  /// ### Example
+  /// ```dart
+  /// Single.value(1.right<String>())
+  ///     .flatMapEitherSingle((v) => Single.value(v.toString().right<String>()))
+  ///     .listen(print); // Prints Either.Right(1)
+  ///
+  /// Single.value(2.left<String>())
+  ///     .flatMapEitherSingle((v) => Single.value(v.toString().right<int>()))
+  ///     .listen(print); // Prints Either.Left(2)
+  /// ```
   Single<Either<L, R2>> flatMapEitherSingle<R2>(
     Single<Either<L, R2>> Function(R1 value) transform,
   ) =>
