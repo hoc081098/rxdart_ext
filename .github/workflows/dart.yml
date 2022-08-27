@@ -37,7 +37,7 @@ jobs:
 
       - name: Analyze
         if: ${{ matrix.sdk == 'stable' }}
-        run: dart analyze --fatal-infos --fatal-warnings
+        run: dart analyze lib --fatal-infos --fatal-warnings
 
       - name: Format code
         if: ${{ matrix.sdk == 'stable' }}
