@@ -3,11 +3,8 @@ analyzer:
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false
-  exclude:
-    - 'check_urls/**'
 linter:
   rules:
-    - public_member_api_docs
     - prefer_final_locals
     - prefer_relative_imports
     # https://github.com/dart-lang/lints#migrating-from-packagepedantic

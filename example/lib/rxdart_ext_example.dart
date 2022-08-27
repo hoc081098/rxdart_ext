@@ -39,7 +39,7 @@ Future<void> runDisposableMixinExample() async {
     dateTimeStream: dateTimeStream,
   );
   print('Periodic stream created');
-  final periodicStreamSub = Stream.periodic(
+  final periodicStreamSub = Stream<void>.periodic(
     const Duration(milliseconds: 100),
   ).listen((_) {
     final value = DateTime.now().toUtc();
@@ -50,7 +50,7 @@ Future<void> runDisposableMixinExample() async {
   disposableExample.dispose();
   print('Disposable example disposed');
   await delay(500);
-  periodicStreamSub.cancel();
+  await periodicStreamSub.cancel();
   print('Periodic stream disposed');
 }
 
