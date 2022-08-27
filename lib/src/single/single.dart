@@ -37,10 +37,29 @@ class Single<T> extends StreamView<T> {
 
   /// Create a [Single] from a [Stream].
   ///
-  /// The [Single] emits a [APIContractViolationError]
-  /// if this [Stream] does not emit exactly one data event or one error event before successfully completing.
+  /// If the source [Stream] does not emit exactly **ONE** data event or **ONE** error event before successfully completing,
+  /// the returned [Single] will emit a [APIContractViolationError]
   ///
+  /// **NOTE**: Consider using `take(1).doneOnError()` before using this operator to create a [Single] safety.
   /// Otherwise, it emits single event, either data or error, and then close with a done-event.
+  ///
+  /// ### Example
+  /// ```dart
+  /// Single.fromStream(Stream.value(1)); // Single of 1
+  ///
+  /// Single.fromStream(Stream<int>.error(Exception())); // Single of Exception()
+  ///
+  /// Single.fromStream(
+  ///     Rx.concat<int>([
+  ///       Stream.fromIterable([1, 2, 3, 4]),
+  ///       Stream<int>.error(Exception()),
+  ///       Stream.value(1),
+  ///       Stream<int>.error(Exception()),
+  ///     ])
+  ///      .take(1)
+  ///      .doneOnError()
+  /// ); // Single of 1
+  /// ```
   factory Single.fromStream(Stream<T> source) => source is Single<T>
       ? source
       : Single.safe(Stream<T>.eventTransformed(

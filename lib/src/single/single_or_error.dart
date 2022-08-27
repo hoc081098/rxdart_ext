@@ -5,16 +5,16 @@ import 'single.dart';
 extension SingleOrErrorStreamExtension<T> on Stream<T> {
   /// Converts this [Stream] into a [Single].
   ///
-  /// The returned [Single] emits a [APIContractViolationError]
-  /// if this [Stream] does not emit exactly **ONE** data event or **ONE** error event before successfully completing.
-  /// Consider using `take(1).doneOnError()` before using this operator to create a [Single] safety.
+  /// If this [Stream] does not emit exactly **ONE** data event or **ONE** error event before successfully completing,
+  /// the returned [Single] will emit a [APIContractViolationError].
   ///
+  /// **NOTE**: Consider using `take(1).doneOnError()` before using this operator to create a [Single] safety.
   /// Otherwise, it emits single event, either data or error, and then close with a done-event.
   ///
   /// ### Example
   ///
-  ///     Stream.value(1).singleOrError()
-  ///     Stream<int>.error(Exception()).singleOrError()
+  ///     Stream.value(1).singleOrError(); // Single of 1
+  ///     Stream<int>.error(Exception()).singleOrError(); // Single of Exception()
   ///
   ///     Rx.concat<int>([
   ///       Stream.fromIterable([1, 2, 3, 4]),
@@ -23,7 +23,7 @@ extension SingleOrErrorStreamExtension<T> on Stream<T> {
   ///       Stream<int>.error(Exception()),
   ///     ]).take(1)
   ///       .doneOnError()
-  ///       .singleOrError();
+  ///       .singleOrError(); // Single of 1
   Single<T> singleOrError() => Single.fromStream(this);
 }
 

@@ -55,4 +55,6 @@ jobs:
         run: dart pub get
 
       - name: Run example/lib/rxdart_ext_example.dart
-        run: dart run lib/rxdart_ext_example.dart
+        run: |
+          dart run lib/rxdart_ext_example.dart
+          dart run lib/http.dart

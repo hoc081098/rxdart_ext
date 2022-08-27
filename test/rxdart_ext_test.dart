@@ -25,6 +25,7 @@ import 'single/async_expand_test.dart' as async_expand_test;
 import 'single/debug_test.dart' as single_debug_test;
 import 'single/delay_test.dart' as delay_test;
 import 'single/do_test.dart' as do_test;
+import 'single/flat_map_either_single_test.dart' as flat_map_either_single_test;
 import 'single/map_to_test.dart' as map_to_test;
 import 'single/on_error_resume_test.dart' as on_error_resume_test;
 import 'single/rx_singles_test.dart' as rx_singles_test;
@@ -32,6 +33,7 @@ import 'single/single_or_error_test.dart' as single_or_error_test;
 import 'single/single_test.dart' as single_test;
 import 'single/switch_flat_exhaust_map_test.dart'
     as switch_flat_exhaust_map_test;
+import 'single/to_either_single_test.dart' as to_either_single_test;
 
 //
 import 'state_stream/as_broadcast_test.dart' as as_broadcast_test;
@@ -68,12 +70,14 @@ void main() {
   single_debug_test.main();
   delay_test.main();
   do_test.main();
+  flat_map_either_single_test.main();
   map_to_test.main();
   on_error_resume_test.main();
   single_or_error_test.main();
   single_test.main();
   rx_singles_test.main();
   switch_flat_exhaust_map_test.main();
+  to_either_single_test.main();
 
   add_null_test.main();
   disposable_test.main();
