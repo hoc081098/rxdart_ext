@@ -58,4 +58,4 @@ jobs:
       - name: Format coverage
         run: dart pub global run coverage:format_coverage --lcov --in=coverage.json --out=lcov.info --report-on=lib
 
-      - uses: codecov/codecov-action@v3.1.0
+      - uses: codecov/codecov-action@v3.1.1
