@@ -1,9 +1,11 @@
 name: rxdart_ext
 description: Some extension methods and classes built on top of RxDart - RxDart extension.
-version: 0.2.5
+version: 0.2.6
 homepage: https://github.com/hoc081098/rxdart_ext.git
 repository: https://github.com/hoc081098/rxdart_ext.git
 issue_tracker: https://github.com/hoc081098/rxdart_ext/issues
+funding:
+  - https://www.buymeacoffee.com/hoc081098
 
 environment:
   sdk: '>=2.12.0 <3.0.0'

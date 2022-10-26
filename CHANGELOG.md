@@ -1,3 +1,11 @@
+## 0.2.6 - Oct 26, 2022
+
+- **single**:
+    - Add `Single.toEitherSingle()`.
+    - Add `Single.flatMapEitherSingle()`.
+
+- Update docs.
+
 ## 0.2.5 - Jul 27, 2022
 
 - **state_stream**:
