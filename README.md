@@ -87,6 +87,7 @@ Single<User> fetchUser(String id) {
 
 -   Operators for Single (returns a Single instead of Stream)
     -   [flatMapSingle](https://pub.dev/documentation/rxdart_ext/latest/single/FlatMapSingleExtension/flatMapSingle.html)
+    -   [flatMapEitherSingle](https://pub.dev/documentation/rxdart_ext/latest/single/FlatMapEitherSingleExtension/flatMapEitherSingle.html)
     -   [asyncExpandSingle](https://pub.dev/documentation/rxdart_ext/latest/single/AsyncExpandSingleExtension/asyncExpandSingle.html)
     -   [switchMapSingle](https://pub.dev/documentation/rxdart_ext/latest/single/SwitchMapSingleExtension/switchMapSingle.html)
     -   [exhaustMapSingle](https://pub.dev/documentation/rxdart_ext/latest/single/ExhaustMapSingleExtension/exhaustMapSingle.html)
@@ -101,6 +102,7 @@ Single<User> fetchUser(String id) {
     -   [onErrorResumeSingle](https://pub.dev/documentation/rxdart_ext/latest/single/OnErrorResumeSingleExtensions/onErrorResumeSingle.html)
     -   [onErrorResumeNextSingle](https://pub.dev/documentation/rxdart_ext/latest/single/OnErrorResumeSingleExtensions/onErrorResumeNextSingle.html)
     -   [mapTo](https://pub.dev/documentation/rxdart_ext/latest/single/MapToSingleExtension/mapTo.html)
+    -   [toEitherSingle](https://pub.dev/documentation/rxdart_ext/latest/single/ToEitherSingleExtension/toEitherSingle.html)
     -   [asVoid](https://pub.dev/documentation/rxdart_ext/latest/single/AsVoidSingleExtension/asVoid.html)
 
 ### 2. Operators for Stream
