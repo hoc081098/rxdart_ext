@@ -138,7 +138,7 @@ void main() {
           .listen(null);
 
       controller.add(true);
-      await Future<void>.delayed(Duration.zero);
+      await delay(0);
       await controller.close();
 
       expect(isCanceled.future, completes);

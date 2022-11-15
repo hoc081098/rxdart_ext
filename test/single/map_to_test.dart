@@ -11,14 +11,14 @@ void main() {
     test('.success', () async {
       final build = () => Single.value(1).mapTo(2);
       await singleRule(build(), Either.right(2));
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
     test('.failure', () async {
       final build = () => Single<int>.error(Exception());
       await singleRule(build(), exceptionLeft);
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
   });

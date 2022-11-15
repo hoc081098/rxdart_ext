@@ -60,7 +60,7 @@ void main() {
       test('.success', () async {
         final build = () => Single.value(1).doOnCancel(() => null);
         await singleRule(build(), Either.right(1));
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
 
         await runZonedGuarded(
@@ -68,7 +68,7 @@ void main() {
             final build =
                 () => Single.value(1).doOnCancel(() => throw stateError);
             await singleRule(build(), Either.right(1));
-            broadcastRule(build(), false);
+            await broadcastRule(build(), false);
             await cancelRule(build());
           },
           expectStateError,
@@ -79,7 +79,7 @@ void main() {
         final build =
             () => Single<int>.error(Exception()).doOnCancel(() => null);
         await singleRule(build(), exceptionLeft);
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
 
         await runZonedGuarded(
@@ -87,7 +87,7 @@ void main() {
             final build = () => Single<int>.error(Exception())
                 .doOnCancel(() => throw stateError);
             await singleRule(build(), exceptionLeft);
-            broadcastRule(build(), false);
+            await broadcastRule(build(), false);
             await cancelRule(build());
           },
           expectStateError,
@@ -99,7 +99,7 @@ void main() {
       test('.success', () async {
         final build = () => Single.value(1).doOnData((_) {});
         await singleRule(build(), Either.right(1));
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       });
 
@@ -108,14 +108,14 @@ void main() {
           final build =
               () => Single.value(1).doOnData((_) => throw Exception());
           await singleRule(build(), exceptionLeft);
-          broadcastRule(build(), false);
+          await broadcastRule(build(), false);
           await cancelRule(build());
         }
 
         {
           final build = () => Single<int>.error(Exception()).doOnData((_) {});
           await singleRule(build(), exceptionLeft);
-          broadcastRule(build(), false);
+          await broadcastRule(build(), false);
           await cancelRule(build());
         }
 
@@ -123,7 +123,7 @@ void main() {
           final build = () =>
               Single<int>.error(Exception()).doOnData((_) => throw stateError);
           await singleRule(build(), exceptionLeft);
-          broadcastRule(build(), false);
+          await broadcastRule(build(), false);
           await cancelRule(build());
         }
       });
@@ -133,7 +133,7 @@ void main() {
       test('.success', () async {
         final build = () => Single.value(1).doOnError((e, s) {});
         await singleRule(build(), Either.right(1));
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       });
 
@@ -142,7 +142,7 @@ void main() {
           final build =
               () => Single<int>.error(Exception()).doOnError((e, s) {});
           await singleRule(build(), exceptionLeft);
-          broadcastRule(build(), false);
+          await broadcastRule(build(), false);
           await cancelRule(build());
         }
 
@@ -150,7 +150,7 @@ void main() {
           final build = () => Single<int>.error(StateError(''))
               .doOnError((e, s) => throw Exception());
           await singleRule(build(), exceptionLeft);
-          broadcastRule(build(), false);
+          await broadcastRule(build(), false);
           await cancelRule(build());
         }
       });
@@ -160,7 +160,7 @@ void main() {
       test('.success', () async {
         final build = () => Single.value(1).doOnListen(() {});
         await singleRule(build(), Either.right(1));
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       });
 
@@ -168,7 +168,7 @@ void main() {
         {
           final build = () => Single<int>.error(Exception()).doOnListen(() {});
           await singleRule(build(), exceptionLeft);
-          broadcastRule(build(), false);
+          await broadcastRule(build(), false);
           await cancelRule(build());
         }
 
@@ -176,7 +176,7 @@ void main() {
           final build = () => Single<int>.error(StateError(''))
               .doOnListen(() => throw Exception());
           await singleRule(build(), exceptionLeft);
-          broadcastRule(build(), false);
+          await broadcastRule(build(), false);
           await cancelRule(build());
         }
       });

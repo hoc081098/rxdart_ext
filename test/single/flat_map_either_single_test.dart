@@ -14,7 +14,7 @@ void main() {
             .flatMapEitherSingle(
                 (e) => Single.value(Either<int, int>.right(e + 1)));
         await singleRule(build(), 2.right<Object>().right());
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       });
 
@@ -23,7 +23,7 @@ void main() {
             .flatMapEitherSingle(
                 (e) => Single.value(Either<int, int>.left(e + 1)));
         await singleRule(build(), 2.left<Object>().right());
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       });
 
@@ -32,7 +32,7 @@ void main() {
             .flatMapEitherSingle(
                 (e) => Single<Either<int, int>>.error(Exception()));
         await singleRule(build(), exceptionLeft);
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       });
 
@@ -41,7 +41,7 @@ void main() {
             .flatMapEitherSingle(
                 (e) => Single.value(Either<int, int>.right(e + 1)));
         await singleRule(build(), 1.left<Object>().right());
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       });
 
@@ -50,7 +50,7 @@ void main() {
             .flatMapEitherSingle(
                 (e) => Single.value(Either<int, int>.left(e + 1)));
         await singleRule(build(), 1.left<Object>().right());
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       });
 
@@ -59,7 +59,7 @@ void main() {
             .flatMapEitherSingle(
                 (e) => Single<Either<int, int>>.error(Exception()));
         await singleRule(build(), 1.left<Object>().right());
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       });
     });
@@ -70,7 +70,7 @@ void main() {
             .flatMapEitherSingle(
                 (e) => Single.value(Either<int, int>.right(e + 1)));
         await singleRule(build(), exceptionLeft);
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       });
 
@@ -79,7 +79,7 @@ void main() {
             .flatMapEitherSingle(
                 (e) => Single.value(Either<int, int>.left(e + 1)));
         await singleRule(build(), exceptionLeft);
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       });
 
@@ -88,7 +88,7 @@ void main() {
             .flatMapEitherSingle(
                 (e) => Single<Either<int, int>>.error(Exception()));
         await singleRule(build(), exceptionLeft);
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       });
     });

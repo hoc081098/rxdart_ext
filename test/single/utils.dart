@@ -4,18 +4,26 @@ import 'package:test/test.dart';
 
 import '../utils.dart';
 
-void _ignoreError(Object e) {}
+void _ignore(Object? _, [Object? __]) {}
 
-void broadcastRule<T>(Single<T> single, bool isBroadcast) {
+Future<void> broadcastRule<T>(Single<T> single, bool isBroadcast) async {
+  final subscriptions = CompositeSubscription();
+
   if (isBroadcast) {
     expect(single.isBroadcast, true);
-    single.listen(null, onError: _ignoreError);
-    single.listen(null, onError: _ignoreError);
+    single.listen(null, onError: _ignore).addTo(subscriptions);
+    single.listen(null, onError: _ignore).addTo(subscriptions);
   } else {
     expect(single.isBroadcast, false);
-    single.listen(null, onError: _ignoreError);
-    expect(() => single.listen(null, onError: _ignoreError), throwsStateError);
+    single.listen(null, onError: _ignore).addTo(subscriptions);
+    expect(
+      () => single.listen(null, onError: _ignore),
+      throwsStateError,
+    );
   }
+
+  await delay(0);
+  await subscriptions.cancel().then(_ignore, onError: _ignore);
 }
 
 Future<void> singleRule<T>(Single<T> single, Either<Object, T> e) {

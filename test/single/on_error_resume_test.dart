@@ -11,14 +11,14 @@ void main() {
     test('.success', () async {
       final build = () => Single.value(1).onErrorReturn(99);
       await singleRule(build(), Either.right(1));
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
     test('.failure', () async {
       final build = () => Single<int>.error(Exception()).onErrorReturn(1);
       await singleRule(build(), Either.right(1));
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
   });
@@ -28,7 +28,7 @@ void main() {
       final build = () =>
           Single.value(1).onErrorReturnWith((e, s) => e is Exception ? 99 : 0);
       await singleRule(build(), Either.right(1));
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -36,13 +36,13 @@ void main() {
       final build1 = () => Single<int>.error(Exception())
           .onErrorReturnWith((e, s) => e is Exception ? 99 : 0);
       await singleRule(build1(), Either.right(99));
-      broadcastRule(build1(), false);
+      await broadcastRule(build1(), false);
       await cancelRule(build1());
 
       final build2 = () => Single<int>.error(Exception())
           .onErrorReturnWith((e, s) => e is Exception ? throw e : 0);
       await singleRule(build2(), exceptionLeft);
-      broadcastRule(build2(), false);
+      await broadcastRule(build2(), false);
       await cancelRule(build2());
     });
   });
@@ -52,7 +52,7 @@ void main() {
       final build = () => Single.value(1)
           .onErrorResumeSingle((e, s) => Single.value(e is Exception ? 99 : 0));
       await singleRule(build(), Either.right(1));
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -60,19 +60,19 @@ void main() {
       final build1 = () => Single<int>.error(Exception())
           .onErrorResumeSingle((e, s) => Single.value(e is Exception ? 99 : 0));
       await singleRule(build1(), Either.right(99));
-      broadcastRule(build1(), false);
+      await broadcastRule(build1(), false);
       await cancelRule(build1());
 
       final build2 = () => Single<int>.error(Exception())
           .onErrorResumeSingle((e, s) => Single.error(e, s));
       await singleRule(build2(), exceptionLeft);
-      broadcastRule(build2(), false);
+      await broadcastRule(build2(), false);
       await cancelRule(build2());
 
       final build3 = () =>
           Single<int>.error(Exception()).onErrorResumeSingle((e, s) => throw e);
       await singleRule(build3(), exceptionLeft);
-      broadcastRule(build3(), false);
+      await broadcastRule(build3(), false);
       await cancelRule(build3());
     });
   });
@@ -82,7 +82,7 @@ void main() {
       final build =
           () => Single.value(1).onErrorResumeNextSingle(Single.value(2));
       await singleRule(build(), Either.right(1));
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -91,7 +91,7 @@ void main() {
         final build = () => Single<int>.error(Exception())
             .onErrorResumeNextSingle(Single.value(99));
         await singleRule(build(), Either.right(99));
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       }
 
@@ -99,7 +99,7 @@ void main() {
         final build = () => Single<int>.error(StateError(''))
             .onErrorResumeNextSingle(Single.error(Exception()));
         await singleRule(build(), exceptionLeft);
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       }
     });

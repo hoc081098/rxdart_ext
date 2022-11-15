@@ -11,7 +11,7 @@ void main() {
     test('.success', () async {
       final build = () => Single.value(1).toEitherSingle((e, s) => e);
       await singleRule(build(), 1.right<Object>().right());
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -24,7 +24,7 @@ void main() {
             .having((l) => l.value, 'Left.value', isException)
             .right(),
       );
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
   });

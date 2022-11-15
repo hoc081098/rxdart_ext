@@ -33,7 +33,7 @@ void main() {
         build(),
         Either.right(3),
       );
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -47,7 +47,7 @@ void main() {
         build(),
         exceptionLeft,
       );
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -58,7 +58,7 @@ void main() {
             (int a, int b) => a + b,
           );
       await singleRule(build(), exceptionLeft);
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -69,7 +69,7 @@ void main() {
             (int a, int b) => a + b,
           );
       await singleRule(build(), exceptionLeft);
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
   });
@@ -85,7 +85,7 @@ void main() {
         build(),
         Either.right(3),
       );
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -99,7 +99,7 @@ void main() {
         build(),
         exceptionLeft,
       );
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -110,7 +110,7 @@ void main() {
             (int a, int b) => a + b,
           );
       await singleRule(build(), exceptionLeft);
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -121,7 +121,7 @@ void main() {
             (int a, int b) => a + b,
           );
       await singleRule(build(), exceptionLeft);
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
   });
@@ -135,7 +135,7 @@ void main() {
           );
 
       await singleRule(build(), exceptionLeft);
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -161,7 +161,7 @@ void main() {
       expect(resource!.isClosed, true);
 
       clear();
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
 
       clear();
       await cancelRule(build());
@@ -194,7 +194,7 @@ void main() {
       expect(resource!.isClosed, true);
 
       clear();
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
 
       clear();
       await cancelRule(build());
@@ -220,7 +220,7 @@ void main() {
         () => singleRule(build(), isA<TestResource>().right()),
         onError,
       );
-      runZonedGuarded(
+      await runZonedGuarded(
         () => broadcastRule(build(), false),
         onError,
       );
