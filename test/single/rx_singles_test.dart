@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_function_declarations_over_variables
 
+import 'dart:async';
+
 import 'package:dart_either/dart_either.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
@@ -125,6 +127,18 @@ void main() {
   });
 
   group('RxSingles.using', () {
+    test('resourceFactory throws', () async {
+      final build = () => RxSingles.using<int, TestResource>(
+            () => throw Exception(),
+            (r) => fail('should not be called'),
+            (r) => fail('should not be called'),
+          );
+
+      await singleRule(build(), exceptionLeft);
+      broadcastRule(build(), false);
+      await cancelRule(build());
+    });
+
     test('success', () async {
       TestResource? resource;
 
@@ -156,6 +170,64 @@ void main() {
       clear();
       await cancelRule(build(), Duration.zero);
       expect(resource == null || resource!.isClosed, true);
+    });
+
+    test('failure', () async {
+      TestResource? resource;
+
+      void clear() {
+        resource = null;
+      }
+
+      final build = () {
+        if (resource != null) {
+          throw StateError('Resource already created');
+        }
+        return RxSingles.using<TestResource, TestResource>(
+          () => resource = TestResource(),
+          (r) => Single.error(Exception()),
+          (r) => r.close(),
+        );
+      };
+
+      await singleRule(build(), exceptionLeft);
+      expect(resource!.isClosed, true);
+
+      clear();
+      broadcastRule(build(), false);
+
+      clear();
+      await cancelRule(build());
+      expect(resource == null || resource!.isClosed, true);
+
+      clear();
+      await cancelRule(build(), Duration.zero);
+      expect(resource == null || resource!.isClosed, true);
+    });
+
+    test('disposer throws', () async {
+      final build = () => RxSingles.using<TestResource, TestResource>(
+            () => TestResource(),
+            (r) => Single.value(r),
+            (r) => throw Exception('Disposer'),
+          );
+
+      final onError = (Object error, StackTrace stack) {
+        expect(error, isA<Exception>());
+        expect(error.toString(), 'Exception: Disposer');
+      };
+      await runZonedGuarded(
+        () => singleRule(build(), isA<TestResource>().right()),
+        onError,
+      );
+      runZonedGuarded(
+        () => broadcastRule(build(), false),
+        onError,
+      );
+      await runZonedGuarded(
+        () => cancelRule(build()),
+        onError,
+      );
     });
   });
 }

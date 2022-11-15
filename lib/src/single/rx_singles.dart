@@ -109,13 +109,13 @@ abstract class RxSingles {
   /// See [Rx.using] and [UsingStream].
   static Single<T> using<T, R>(
     R Function() resourceFactory,
-    Single<T> Function(R) streamFactory,
+    Single<T> Function(R) singleFactory,
     FutureOr<void> Function(R) disposer,
   ) =>
       Single.safe(
         Rx.using(
           resourceFactory,
-          streamFactory,
+          singleFactory,
           disposer,
         ),
       );
