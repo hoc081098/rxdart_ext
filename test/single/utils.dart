@@ -30,13 +30,14 @@ Future<void> singleRule<T>(Single<T> single, Either<Object, T> e) {
 
 Future<void> cancelRule<T>(
   Single<T> single, [
-  Duration timeout = const Duration(milliseconds: 800),
+  Duration timeout = const Duration(milliseconds: 10),
 ]) async {
   unawaited(single
       .listen(
-        (v) => expect(false, true),
-        onError: (Object e, StackTrace s) => expect(false, true),
-        onDone: () => expect(false, true),
+        (v) => fail('$single: onData should not be called'),
+        onError: (Object e, StackTrace s) =>
+            fail('$single: onError should not be called'),
+        onDone: () => fail('$single: onDone should not be called'),
       )
       .cancel());
   await Future<void>.delayed(timeout);
