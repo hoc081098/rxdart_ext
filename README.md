@@ -24,7 +24,7 @@ Liked some of my work? Buy me a coffee (or more likely a beer)
 | `^0.27.2`  |     `0.1.2`     |
 | `^0.27.3`  | `0.1.3 → 0.2.0` |
 | `^0.27.4`  | `0.2.1 → 0.2.2` |
-| `^0.27.5`  | `0.2.3 → 0.2.6` |
+| `^0.27.5`  | `0.2.3 → 0.2.7` |
 
 - For example: `rxdart: ^0.27.4` → `rxdart_ext: ^v`, `v` in `0.2.1 → 0.2.2` and `0.2.3 → 0.2.6`
   (all rows since `^0.27.4` row in the above table).

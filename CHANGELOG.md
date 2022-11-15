@@ -1,3 +1,8 @@
+## 0.2.7 - TODO
+
+- **single**:
+    - Add `RxSingles.using`.
+
 ## 0.2.6 - Oct 26, 2022
 
 - **single**:
