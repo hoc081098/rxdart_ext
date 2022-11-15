@@ -9,9 +9,11 @@ import 'single.dart';
 /// A utility class that provides static methods to create the various [Single]s
 /// provided by `rxdart_ext`.
 ///
-/// Similar to [Rx] of `rxdart`, but for [Single].
+/// Similar to [Rx] of `rxdart`, but for [Single]s.
 @sealed
 abstract class RxSingles {
+  RxSingles._();
+
   /// Merges the specified [Single]s into one [Single] sequence using the given
   /// [zipper] function whenever all of the [Single] sequences have produced
   /// an element.
