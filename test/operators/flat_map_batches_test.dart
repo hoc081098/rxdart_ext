@@ -193,7 +193,7 @@ void main() {
           .flatMapBatchesSingle((value) => Single.value(value), 1);
 
       await singleRule(build(), Either.right(<int>[]));
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -205,7 +205,7 @@ void main() {
           .flatMapBatchesSingle((value) => Single.value(value), size);
 
       await singleRule(build(), Either.right(elements));
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -217,7 +217,7 @@ void main() {
           .flatMapBatchesSingle((value) => Single.value(value), size);
 
       await singleRule(build(), Either.right(elements));
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -227,7 +227,7 @@ void main() {
             .flatMapBatchesSingle((value) => Single.value(value), 2);
 
         await singleRule(build(), exceptionLeft);
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       }
 
@@ -236,7 +236,7 @@ void main() {
             .flatMapBatchesSingle((value) => Single<int>.error(Exception()), 2);
 
         await singleRule(build(), exceptionLeft);
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       }
     });
@@ -262,7 +262,7 @@ void main() {
           );
 
       await singleRule(build(), exceptionLeft);
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -271,7 +271,7 @@ void main() {
           Stream.value(Single.value(1)).flatMapBatchesSingle(identity, 10);
 
       await singleRule(build(), Either.right([1]));
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -284,7 +284,7 @@ void main() {
           ]).flatMapBatchesSingle(identity, 2);
 
       await singleRule(build(), Either.right([1, 2, 3, 4]));
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 

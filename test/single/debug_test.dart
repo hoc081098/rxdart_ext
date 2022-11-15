@@ -152,7 +152,7 @@ void main() {
       subscription.onData((data) => expect(data, 1));
 
       subscription.pause();
-      await Future<void>.delayed(const Duration(milliseconds: 500));
+      await delay(500);
       subscription.resume();
     });
   });

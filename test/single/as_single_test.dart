@@ -29,13 +29,13 @@ void main() {
   group('Future.asSingle', () {
     test('.success', () async {
       await singleRule(Future.value(1).asSingle(), Either.right(1));
-      broadcastRule(Future.value(1).asSingle(), false);
+      await broadcastRule(Future.value(1).asSingle(), false);
     });
 
     test('.failure', () async {
       await singleRule(
           Future<void>.error(Exception()).asSingle(), exceptionLeft);
-      broadcastRule(Future<void>.error(Exception()).asSingle(), false);
+      await broadcastRule(Future<void>.error(Exception()).asSingle(), false);
     });
   });
 }

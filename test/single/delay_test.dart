@@ -11,7 +11,7 @@ void main() {
         Single.value(1).delay(const Duration(milliseconds: 100)),
         Either.right(1),
       );
-      broadcastRule(
+      await broadcastRule(
         Single.value(1).delay(const Duration(milliseconds: 100)),
         false,
       );
@@ -32,7 +32,7 @@ void main() {
         Single<int>.error(Exception()).delay(const Duration(milliseconds: 100)),
         exceptionLeft,
       );
-      broadcastRule(
+      await broadcastRule(
         Single<int>.error(Exception()).delay(const Duration(milliseconds: 100)),
         false,
       );

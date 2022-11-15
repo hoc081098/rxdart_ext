@@ -13,7 +13,7 @@ void main() {
       final build = () => Single.value(1).asVoid();
       expect(build(), isA<Single<void>>());
       await singleRule(build(), Either.right(null));
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
 
@@ -21,7 +21,7 @@ void main() {
       final build = () => Single<int>.error(Exception()).asVoid();
       expect(build(), isA<Single<void>>());
       await singleRule(build(), exceptionLeft);
-      broadcastRule(build(), false);
+      await broadcastRule(build(), false);
       await cancelRule(build());
     });
   });

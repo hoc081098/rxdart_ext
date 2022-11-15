@@ -31,7 +31,7 @@ void main() {
         ..pause()
         ..resume();
 
-      await Future<void>.delayed(const Duration(seconds: 10));
+      await delay(10000);
     });
   });
 }

@@ -166,7 +166,7 @@ void main() {
       var count = 0;
       stream.listen((_) => count++);
 
-      await Future<void>.delayed(const Duration(seconds: 1));
+      await delay(1000);
       expect(count, 0);
       expect(stream.value, seedValue);
     });
@@ -184,7 +184,7 @@ void main() {
       var count = 0;
       stream.listen((_) => count++);
 
-      await Future<void>.delayed(Duration(seconds: 1));
+      await delay(1000);
       expect(count, 0);
       expect(stream.value, values2);
     });

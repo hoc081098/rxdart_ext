@@ -20,7 +20,8 @@ void main() {
       final s = Single.value(1);
       expect(
           identical(s, SingleOrErrorStreamExtension(s).singleOrError()), true);
-      broadcastRule(SingleOrErrorStreamExtension(s).singleOrError(), false);
+      await broadcastRule(
+          SingleOrErrorStreamExtension(s).singleOrError(), false);
     });
 
     test('from Stream of Controller', () async {
@@ -36,7 +37,7 @@ void main() {
         buildStream().singleOrError(),
         Either.right(1),
       );
-      broadcastRule(buildStream().singleOrError(), false);
+      await broadcastRule(buildStream().singleOrError(), false);
     });
 
     test('from Stream.value', () async {
@@ -44,7 +45,7 @@ void main() {
         Stream.value(1).singleOrError(),
         Either.right(1),
       );
-      broadcastRule(Stream.value(1).singleOrError(), false);
+      await broadcastRule(Stream.value(1).singleOrError(), false);
     });
 
     test('from Stream.error', () async {
@@ -52,7 +53,8 @@ void main() {
         Stream<void>.error(Exception()).singleOrError(),
         exceptionLeft,
       );
-      broadcastRule(Stream<void>.error(Exception()).singleOrError(), false);
+      await broadcastRule(
+          Stream<void>.error(Exception()).singleOrError(), false);
     });
 
     test('from Stream.empty', () async {
@@ -61,7 +63,7 @@ void main() {
         buildAPIContractViolationErrorWithMessage(
             "Stream doesn't contains any data or error event."),
       );
-      broadcastRule(Stream<int>.empty().singleOrError(), true);
+      await broadcastRule(Stream<int>.empty().singleOrError(), true);
     });
 
     test('from a Broadcast Stream', () async {
@@ -74,7 +76,7 @@ void main() {
       };
       final _s = cb.stream.singleOrError();
       await singleRule(_s, Either.right(1));
-      broadcastRule(_s, true);
+      await broadcastRule(_s, true);
     });
 
     test('from multiple data events Stream (data -> data)', () async {
@@ -85,7 +87,7 @@ void main() {
         buildAPIContractViolationErrorWithMessage(
             'Stream contains more than one data event.'),
       );
-      broadcastRule(
+      await broadcastRule(
           Stream.fromIterable([1, 2, 3])
               .toSingleSubscriptionStream() // dart 2.18.0: The Stream.fromIterable stream can now be listened to more than once.
               .singleOrError(),
@@ -105,7 +107,7 @@ void main() {
         buildAPIContractViolationErrorWithMessage(
             'Stream contains both data and error event.'),
       );
-      broadcastRule(buildSingle(), false);
+      await broadcastRule(buildSingle(), false);
     });
 
     test('from both data and error events Stream (error -> data)', () async {
@@ -121,7 +123,7 @@ void main() {
         buildAPIContractViolationErrorWithMessage(
             'Stream contains both data and error event.'),
       );
-      broadcastRule(buildSingle(), false);
+      await broadcastRule(buildSingle(), false);
     });
 
     test('from multiple error events Stream (error -> error)', () async {
@@ -137,7 +139,7 @@ void main() {
         buildAPIContractViolationErrorWithMessage(
             'Stream contains more than one error event.'),
       );
-      broadcastRule(buildSingle(), false);
+      await broadcastRule(buildSingle(), false);
     });
   });
 }

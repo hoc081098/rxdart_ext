@@ -14,14 +14,14 @@ void main() {
       test('Single.value', () async {
         final build = () => Single.value(1);
         await singleRule(build(), Either.right(1));
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       });
 
       test('Single.error', () async {
         final build = () => Single<int>.error(Exception());
         await singleRule(build(), exceptionLeft);
-        broadcastRule(build(), false);
+        await broadcastRule(build(), false);
         await cancelRule(build());
       });
 
@@ -30,25 +30,25 @@ void main() {
           test('.success', () async {
             final build1 = () => Single.fromCallable(() => 1);
             await singleRule(build1(), Either.right(1));
-            broadcastRule(build1(), false);
+            await broadcastRule(build1(), false);
             await cancelRule(build1());
 
             final build2 = () => Single.fromCallable(() => 1, reusable: true);
             await singleRule(build2(), Either.right(1));
-            broadcastRule(build2(), true);
+            await broadcastRule(build2(), true);
             await cancelRule(build2());
           });
 
           test('failure', () async {
             final build1 = () => Single.fromCallable(() => throw Exception());
             await singleRule(build1(), exceptionLeft);
-            broadcastRule(build1(), false);
+            await broadcastRule(build1(), false);
             await cancelRule(build1());
 
             final build2 = () =>
                 Single.fromCallable(() => throw Exception(), reusable: true);
             await singleRule(build2(), exceptionLeft);
-            broadcastRule(build2(), true);
+            await broadcastRule(build2(), true);
             await cancelRule(build2());
           });
         });
@@ -57,13 +57,13 @@ void main() {
           test('.success', () async {
             final build1 = () => Single.fromCallable(() async => 1);
             await singleRule(build1(), Either.right(1));
-            broadcastRule(build1(), false);
+            await broadcastRule(build1(), false);
             await cancelRule(build1());
 
             final build2 =
                 () => Single.fromCallable(() async => 1, reusable: true);
             await singleRule(build2(), Either.right(1));
-            broadcastRule(build2(), true);
+            await broadcastRule(build2(), true);
             await cancelRule(build2());
           });
 
@@ -71,7 +71,7 @@ void main() {
             final build1 =
                 () => Single.fromCallable(() async => throw Exception());
             await singleRule(build1(), exceptionLeft);
-            broadcastRule(build1(), false);
+            await broadcastRule(build1(), false);
             await cancelRule(build1());
 
             await singleRule(
@@ -79,7 +79,7 @@ void main() {
                   reusable: true),
               exceptionLeft,
             );
-            broadcastRule(
+            await broadcastRule(
                 Single.fromCallable(() async => throw Exception(),
                     reusable: true),
                 true);
@@ -95,14 +95,14 @@ void main() {
             Single.defer(() => Single.value(1)),
             Either.right(1),
           );
-          broadcastRule(Single.defer(() => Single.value(1)), false);
+          await broadcastRule(Single.defer(() => Single.value(1)), false);
           await cancelRule(Single.defer(() => Single.value(1)));
 
           await singleRule(
             Single.defer(() => Single.value(1), reusable: true),
             Either.right(1),
           );
-          broadcastRule(
+          await broadcastRule(
               Single.defer(() => Single.value(1), reusable: true), true);
           await cancelRule(Single.defer(() => Single.value(1), reusable: true));
         });
@@ -112,7 +112,7 @@ void main() {
             Single<String>.defer(() => Single.error(Exception())),
             exceptionLeft,
           );
-          broadcastRule(
+          await broadcastRule(
               Single<String>.defer(() => Single.error(Exception())), false);
           await cancelRule(
               Single<String>.defer(() => Single.error(Exception())));
@@ -122,7 +122,7 @@ void main() {
                 reusable: true),
             exceptionLeft,
           );
-          broadcastRule(
+          await broadcastRule(
               Single<String>.defer(() => Single.error(Exception()),
                   reusable: true),
               true);
@@ -137,7 +137,7 @@ void main() {
             Single.fromFuture(Future.value(1)),
             Either.right(1),
           );
-          broadcastRule(Single.fromFuture(Future.value(1)), false);
+          await broadcastRule(Single.fromFuture(Future.value(1)), false);
           await cancelRule(Single.fromFuture(Future.value(1)));
 
           await singleRule(
@@ -145,7 +145,7 @@ void main() {
                 Future.delayed(Duration(milliseconds: 100), () => 1)),
             Either.right(1),
           );
-          broadcastRule(
+          await broadcastRule(
               Single.fromFuture(
                   Future.delayed(Duration(milliseconds: 100), () => 1)),
               false);
@@ -156,7 +156,7 @@ void main() {
         test('.failure', () async {
           await singleRule(
               Single<int>.fromFuture(Future.error(Exception())), exceptionLeft);
-          broadcastRule(
+          await broadcastRule(
               Single<int>.fromFuture(Future.error(Exception())), false);
           await cancelRule(Single<int>.fromFuture(Future.error(Exception())));
 
@@ -165,7 +165,7 @@ void main() {
                 Duration(milliseconds: 100), () => throw Exception())),
             exceptionLeft,
           );
-          broadcastRule(
+          await broadcastRule(
               Single.fromFuture(Future.delayed(
                   Duration(milliseconds: 100), () => throw Exception())),
               false);
@@ -194,14 +194,14 @@ void main() {
           {
             final build = () => Single.retry(getRetrySingle(3), 3);
             await singleRule(build(), Either.right(1));
-            broadcastRule(build(), false);
+            await broadcastRule(build(), false);
             await cancelRule(build());
           }
 
           {
             final build = () => Single.retry(getRetrySingle(3), 10);
             await singleRule(build(), Either.right(1));
-            broadcastRule(build(), false);
+            await broadcastRule(build(), false);
             await cancelRule(build());
           }
 
@@ -209,7 +209,7 @@ void main() {
             // infinite
             final build = () => Single.retry(getRetrySingle(1000));
             await singleRule(build(), Either.right(1));
-            broadcastRule(build(), false);
+            await broadcastRule(build(), false);
             await cancelRule(build());
           }
         });
@@ -218,7 +218,7 @@ void main() {
           {
             final build = () => Single.retry(getRetrySingle(3), 2);
             await singleRule(build(), exceptionLeft);
-            broadcastRule(build(), false);
+            await broadcastRule(build(), false);
             await cancelRule(build());
           }
 
@@ -246,7 +246,7 @@ void main() {
             Single.value(1).distinct(),
             Either.right(1),
           );
-          broadcastRule(Single.value(1).distinct(), false);
+          await broadcastRule(Single.value(1).distinct(), false);
           await cancelRule(Single.value(1).distinct());
         });
 
@@ -255,7 +255,8 @@ void main() {
             Single<void>.error(Exception()).distinct(),
             exceptionLeft,
           );
-          broadcastRule(Single<void>.error(Exception()).distinct(), false);
+          await broadcastRule(
+              Single<void>.error(Exception()).distinct(), false);
           await cancelRule(Single<void>.error(Exception()).distinct());
         });
       });
@@ -266,7 +267,7 @@ void main() {
             Single.value(1).map((event) => event.toString()),
             Either.right('1'),
           );
-          broadcastRule(
+          await broadcastRule(
               Single.value(1).map((event) => event.toString()), false);
           await cancelRule(Single.value(1).map((event) => event.toString()));
         });
@@ -276,7 +277,7 @@ void main() {
             Single.value(1).map((event) => throw Exception()),
             exceptionLeft,
           );
-          broadcastRule(
+          await broadcastRule(
               Single.value(1).map((event) => throw Exception()), false);
           await cancelRule(Single.value(1).map((event) => throw Exception()));
         });
@@ -289,7 +290,7 @@ void main() {
               Single.value(1).asyncMap((event) => event.toString()),
               Either.right('1'),
             );
-            broadcastRule(
+            await broadcastRule(
                 Single.value(1).asyncMap((event) => event.toString()), false);
             await cancelRule(
                 Single.value(1).asyncMap((event) => event.toString()));
@@ -307,7 +308,7 @@ void main() {
           test('.success', () async {
             await singleRule(
               Single.value(1).asyncMap((event) async {
-                await Future<void>.delayed(const Duration(milliseconds: 100));
+                await delay(100);
                 return event.toString();
               }),
               Either.right('1'),
@@ -317,7 +318,7 @@ void main() {
           test('.failure', () async {
             await singleRule(
               Single.value(1).asyncMap((event) async {
-                await Future<void>.delayed(const Duration(milliseconds: 100));
+                await delay(100);
                 throw Exception();
               }),
               exceptionLeft,
@@ -330,7 +331,7 @@ void main() {
         test('.success', () async {
           final build = () => Single<Object>.value(1).cast<int>();
           await singleRule(build(), Either.right(1));
-          broadcastRule(build(), false);
+          await broadcastRule(build(), false);
           await cancelRule(build());
         });
 
@@ -338,12 +339,12 @@ void main() {
           final build1 = () => Single<Object>.value(1).cast<String>();
           await singleRule(
               build1(), Either<Object, String>.left(isA<TypeError>()));
-          broadcastRule(build1(), false);
+          await broadcastRule(build1(), false);
           await cancelRule(build1());
 
           final build2 = () => Single<int>.error(Exception());
           await singleRule(build2(), exceptionLeft);
-          broadcastRule(build2(), false);
+          await broadcastRule(build2(), false);
           await cancelRule(build2());
         });
       });
