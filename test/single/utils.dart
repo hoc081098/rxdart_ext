@@ -4,17 +4,17 @@ import 'package:test/test.dart';
 
 import '../utils.dart';
 
-void broadcastRule<T>(Single<T> single, bool isBroadcast) {
-  void ignoreError(Object e) {}
+void _ignoreError(Object e) {}
 
+void broadcastRule<T>(Single<T> single, bool isBroadcast) {
   if (isBroadcast) {
     expect(single.isBroadcast, true);
-    single.listen(null, onError: ignoreError);
-    single.listen(null, onError: ignoreError);
+    single.listen(null, onError: _ignoreError);
+    single.listen(null, onError: _ignoreError);
   } else {
     expect(single.isBroadcast, false);
-    single.listen(null, onError: ignoreError);
-    expect(() => single.listen(null, onError: ignoreError), throwsStateError);
+    single.listen(null, onError: _ignoreError);
+    expect(() => single.listen(null, onError: _ignoreError), throwsStateError);
   }
 }
 
