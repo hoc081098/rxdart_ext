@@ -6,6 +6,19 @@ import 'package:test/test.dart';
 
 import 'utils.dart';
 
+class TestResource {
+  var _isClosed = false;
+
+  void close() {
+    if (_isClosed) {
+      throw StateError('Already closed');
+    }
+    _isClosed = true;
+  }
+
+  bool get isClosed => _isClosed;
+}
+
 void main() {
   group('RxSingles.zip2', () {
     test('success + success', () async {
@@ -108,6 +121,41 @@ void main() {
       await singleRule(build(), exceptionLeft);
       broadcastRule(build(), false);
       await cancelRule(build());
+    });
+  });
+
+  group('RxSingles.using', () {
+    test('success', () async {
+      TestResource? resource;
+
+      void clear() {
+        resource = null;
+      }
+
+      final build = () {
+        if (resource != null) {
+          throw StateError('Resource already created');
+        }
+        return RxSingles.using<TestResource, TestResource>(
+          () => resource = TestResource(),
+          (r) => Single.value(r),
+          (r) => r.close(),
+        );
+      };
+
+      await singleRule(build(), isA<TestResource>().right());
+      expect(resource!.isClosed, true);
+
+      clear();
+      broadcastRule(build(), false);
+
+      clear();
+      await cancelRule(build());
+      expect(resource == null || resource!.isClosed, true);
+
+      clear();
+      await cancelRule(build(), Duration.zero);
+      expect(resource == null || resource!.isClosed, true);
     });
   });
 }
