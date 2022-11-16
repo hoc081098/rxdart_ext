@@ -1,5 +1,7 @@
 import 'package:rxdart_ext/rxdart_ext.dart';
 
+import 'utils.dart';
+
 void main() async {
   await runDebugAndCollectOperatorExample();
   printSeparator();
@@ -14,12 +16,6 @@ void main() async {
   printSeparator();
 
   await runDisposableMixinExample();
-}
-
-void printSeparator() {
-  print('');
-  print('-' * 80);
-  print('');
 }
 
 Future<void> runDebugAndCollectOperatorExample() async {

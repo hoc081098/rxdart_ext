@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dart_either/dart_either.dart';
-import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:http/http.dart' as http;
+import 'package:rxdart_ext/rxdart_ext.dart';
+
+import 'utils.dart';
 
 class AppError {
   final Object error;
@@ -58,7 +60,13 @@ Eff<Object?> httpGetEither(String uri) =>
 void main() async {
   await httpGetEither('https://jsonplaceholder.typicode.com/users/1')
       .forEach(print);
+
+  printSeparator();
+
   await httpGetEither('https://jsonplaceholder.typicode.com/user')
       .forEach(print);
+
+  printSeparator();
+
   await httpGetEither('::invalid::').forEach(print);
 }
