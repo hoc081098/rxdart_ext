@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart' show ErrorAndStackTrace;
 
+import '../utils/stream_sink_wrapper.dart';
 import 'not_replay_value_stream.dart';
 import 'not_replay_value_stream_mixin.dart';
 import 'stream_event.dart';
@@ -118,7 +119,7 @@ class ValueStreamController<T> implements StreamController<T> {
   bool get isPaused => _delegate.isPaused;
 
   @override
-  StreamSink<T> get sink => _delegate.sink;
+  StreamSink<T> get sink => StreamSinkWrapper(this);
 
   /// The stream that this controller is controlling.
   /// It is a single-subscription [NotReplayValueStream].

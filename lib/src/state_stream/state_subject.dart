@@ -53,15 +53,18 @@ import 'state_stream_mixin.dart';
 class StateSubject<T> extends Subject<T>
     with StateStreamMixin<T>
     implements StateStream<T> {
-  final ValueSubject<T> _subject;
+  T _value;
+  bool _isAddingStreamItems = false;
+  final StreamController<T> _controller;
 
   @override
   final Equality<T> equals;
 
   StateSubject._(
+    this._value,
     this.equals,
-    this._subject,
-  ) : super(_subject, _subject.stream);
+    this._controller,
+  ) : super(_controller, _controller.stream);
 
   /// Constructs a [StateSubject], optionally pass handlers for
   /// [onListen], [onCancel] and a flag to handle events [sync].
@@ -77,25 +80,46 @@ class StateSubject<T> extends Subject<T>
     FutureOr<void> Function()? onCancel,
     bool sync = false,
   }) {
-    final subject = ValueSubject<T>(
-      seedValue,
+    final controller = StreamController<T>.broadcast(
       onListen: onListen,
       onCancel: onCancel,
       sync: sync,
     );
-    return StateSubject._(equals ?? StateStream.defaultEquality, subject);
+    return StateSubject._(
+      seedValue,
+      equals ?? StateStream.defaultEquality,
+      controller,
+    );
   }
 
   @nonVirtual
   @override
   void add(T event) {
-    if (!equals(value, event)) {
-      _subject.add(event);
+    if (_isAddingStreamItems) {
+      throw StateError(
+          'You cannot add items while items are being added from addStream');
+    }
+
+    _addInternal(event);
+  }
+
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  void _addInternal(T event) {
+    if (!equals(_value, event)) {
+      _value = event;
+      _controller.add(event);
     }
   }
 
   @override
-  Future<void> close() => _subject.close();
+  Future<void> close() {
+    if (_isAddingStreamItems) {
+      throw StateError(
+          'You cannot close the subject while items are being added from addStream');
+    }
+    return _controller.close();
+  }
 
   /// Cannot send an error to this subject.
   /// **Always throws** an [UnsupportedError].
@@ -105,13 +129,27 @@ class StateSubject<T> extends Subject<T>
 
   @override
   Future<void> addStream(Stream<T> source, {bool? cancelOnError}) {
-    final completer = Completer<void>.sync();
+    if (_isAddingStreamItems) {
+      throw StateError(
+          'You cannot add items while items are being added from addStream');
+    }
+    _isAddingStreamItems = true;
+
+    final completer = Completer<void>();
+    void complete() {
+      if (!completer.isCompleted) {
+        _isAddingStreamItems = false;
+        completer.complete();
+      }
+    }
+
     source.listen(
-      add,
+      _addInternal,
       onError: addError,
-      onDone: completer.complete,
+      onDone: complete,
       cancelOnError: cancelOnError,
     );
+
     return completer.future;
   }
 
@@ -119,7 +157,7 @@ class StateSubject<T> extends Subject<T>
   StateStream<T> get stream => _StateSubjectStream<T>(this);
 
   @override
-  T get value => _subject.value;
+  T get value => _value;
 
   set value(T newValue) => add(newValue);
 }

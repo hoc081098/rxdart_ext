@@ -8,6 +8,7 @@ import 'stream_event.dart';
 @internal
 mixin NotReplayValueStreamMixin<T> implements NotReplayValueStream<T> {
   /// Keep latest state.
+  /// **DO NOT USE THIS METHOD**
   @visibleForOverriding
   @internal
   StreamEvent<T> get event;
