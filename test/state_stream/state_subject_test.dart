@@ -99,7 +99,7 @@ void main() {
       final s = StateSubject(0);
 
       expect(s.stream, isA<StateStream<int>>());
-      expect(s.stream, same(s));
+      expect(s.stream, isNot(same(s)));
       expect(s.stream.value, 0);
       expect(s.stream, emitsInOrder(<Object>[1, 2]));
 
@@ -109,6 +109,42 @@ void main() {
       s.add(1);
       s.add(2);
       s.add(2);
+    });
+
+    test('stream returns a read-only stream', () async {
+      final subject = StateSubject<int>(0)..add(1);
+
+      // streams returned by StateSubject are read-only stream,
+      // ie. they don't support adding events.
+      expect(subject.stream, isNot(isA<StateSubject<int>>()));
+      expect(subject.stream, isNot(isA<Sink<int>>()));
+      expect(subject.stream, isNot(same(subject)));
+
+      expect(
+        subject.stream,
+        isA<StateStream<int>>().having(
+          (v) => v.value,
+          'StateSubject.stream.value',
+          1,
+        ),
+      );
+
+      // StateSubject.stream is a broadcast stream
+      {
+        final stream = subject.stream;
+        expect(stream.isBroadcast, isTrue);
+
+        scheduleMicrotask(() => subject.add(2));
+        await expectLater(stream, emitsInOrder(<Object>[2]));
+
+        scheduleMicrotask(() => subject.add(3));
+        await expectLater(stream, emitsInOrder(<Object>[3]));
+      }
+
+      // streams returned by the same subject are considered equal,
+      // but not identical
+      expect(identical(subject.stream, subject.stream), isFalse);
+      expect(subject.stream == subject.stream, isTrue);
     });
 
     test('Rx', () {

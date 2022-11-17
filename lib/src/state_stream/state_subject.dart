@@ -4,10 +4,10 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart'
     show PublishSubject, Subject, BehaviorSubject;
 
+import '../not_replay_value_stream/not_replay_value_stream.dart';
 import '../not_replay_value_stream/value_subject.dart';
 import 'state_stream.dart';
 import 'state_stream_mixin.dart';
-import '../not_replay_value_stream/not_replay_value_stream.dart';
 
 /// A special [Subject] / [StreamController] that captures the latest item that has been
 /// added to the controller.
@@ -116,10 +116,55 @@ class StateSubject<T> extends Subject<T>
   }
 
   @override
-  StateStream<T> get stream => this;
+  StateStream<T> get stream => _StateSubjectStream<T>(this);
 
   @override
   T get value => _subject.value;
 
   set value(T newValue) => add(newValue);
+}
+
+class _StateSubjectStream<T> extends Stream<T>
+    with StateStreamMixin<T>
+    implements StateStream<T> {
+  final StateSubject<T> _subject;
+
+  _StateSubjectStream(this._subject);
+
+  @override
+  bool get isBroadcast => true;
+
+  // Override == and hashCode so that new streams returned by the same
+  // subject are considered equal.
+  // The subject returns a new stream each time it's queried,
+  // but doesn't have to cache the result.
+
+  @override
+  int get hashCode => _subject.hashCode ^ 0x35323532;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is _StateSubjectStream && identical(other._subject, _subject);
+  }
+
+  @override
+  Equality<T> get equals => _subject.equals;
+
+  @override
+  T get value => _subject.value;
+
+  @override
+  StreamSubscription<T> listen(
+    void Function(T event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) =>
+      _subject.listen(
+        onData,
+        onError: onError,
+        onDone: onDone,
+        cancelOnError: cancelOnError,
+      );
 }
