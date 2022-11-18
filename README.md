@@ -27,11 +27,11 @@ Liked some of my work? Buy me a coffee (or more likely a beer)
 | `^0.27.4`  | `0.2.1 → 0.2.2` |
 | `^0.27.5`  | `0.2.3 → 0.2.7` |
 
-- For example: `rxdart: ^0.27.4` → `rxdart_ext: ^v`, `v` in `0.2.1 → 0.2.2` and `0.2.3 → 0.2.6`
-  (all rows since `^0.27.4` row in the above table).
+- For example: when using `rxdart: ^0.27.4` → we can use `rxdart_ext: ^v` where `v` in `0.2.1 → 0.2.7`
+  (i.e. all rows since `^0.27.4` row in the above table).
 
 - But in some cases there is any **conflict** between `rxdart` version and `rxdart_ext` version,
-  you must use **stricter version**, eg. `rxdart: ^0.27.4` → `rxdart_ext: ^v`, `v` in `0.2.1 → 0.2.2`
+  you must use **stricter version**, eg. `rxdart: ^0.27.4` → `rxdart_ext: ^v` where `v` in `0.2.1 → 0.2.2`
   (**same row** in the above table)
 
 - **The latest version of `rxdart_ext` always works fine with the latest version of `rxdart`.**
