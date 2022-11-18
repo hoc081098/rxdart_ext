@@ -1,11 +1,15 @@
 #!/bin/bash --
 
+if [ "$RXDART_VERSION" == "" ];then
+  echo "Missing RXDART_VERSION environment variable"
+  exit 1
+fi
+
 if [ $# -ne 0 ]; then
   echo "Changes rxdart to $RXDART_VERSION"
 fi
 
-
-pubspec=./pubspec.yaml
+pubspec=pubspec.yaml
 echo pubspec
 
 if grep -qv dependency_overrides "$pubspec"; then

@@ -7,9 +7,3 @@ environment:
 
 dependencies:
   http: 0.13.5
-dependency_overrides:
-  rxdart: 0.0.1
-dependency_overrides:
-  rxdart: 0.0.1
-dependency_overrides:
-  rxdart: 0.0.1
