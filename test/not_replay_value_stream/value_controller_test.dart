@@ -132,13 +132,6 @@ void main() {
         expect(valueController.isPaused, false);
         verify(mockController.isPaused).called(1);
       });
-
-      test('sink', () {
-        final sink = StreamController<int>().sink;
-        when(mockController.sink).thenReturn(sink);
-        expect(valueController.sink, sink);
-        verify(mockController.sink).called(1);
-      });
     });
 
     group('stream', () {
@@ -302,6 +295,28 @@ void main() {
           subscription.pause();
           subscription.resume();
         }
+      });
+
+      test(
+          'adding to sink has same behavior as adding to ValueStreamController itself',
+          () async {
+        final controller = ValueStreamController<int>(0);
+
+        scheduleMicrotask(() {
+          controller.sink.add(1);
+          expect(controller.stream.value, 1);
+
+          controller.sink.add(2);
+          expect(controller.stream.value, 2);
+
+          controller.sink.add(3);
+          expect(controller.stream.value, 3);
+
+          controller.sink.close();
+        });
+
+        await expectLater(
+            controller.stream, emitsInOrder(<dynamic>[1, 2, 3, emitsDone]));
       });
     });
   });

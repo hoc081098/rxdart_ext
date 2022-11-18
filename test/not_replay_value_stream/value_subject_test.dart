@@ -262,8 +262,14 @@ void main() {
 
       scheduleMicrotask(() {
         subject.sink.add(1);
+        expect(subject.value, 1);
+
         subject.sink.add(2);
+        expect(subject.value, 2);
+
         subject.sink.add(3);
+        expect(subject.value, 3);
+
         subject.sink.close();
       });
 
