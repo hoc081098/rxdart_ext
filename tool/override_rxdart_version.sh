@@ -5,9 +5,7 @@ if [ "$RXDART_VERSION" = "" ];then
   exit 1
 fi
 
-if [ $# -ne 0 ]; then
-  echo "Changes rxdart to $RXDART_VERSION"
-fi
+echo "Changes rxdart to $RXDART_VERSION"
 
 pubspec=pubspec.yaml
 
