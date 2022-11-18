@@ -8,10 +8,12 @@ import 'stream_event.dart';
 @internal
 mixin NotReplayValueStreamMixin<T> implements NotReplayValueStream<T> {
   /// Keep latest state.
+  /// **DO NOT USE THIS METHOD**
   @visibleForOverriding
   @internal
   StreamEvent<T> get event;
 
+  @nonVirtual
   @override
   Object get error {
     final errorAndSt = event.errorAndStackTrace;
@@ -21,21 +23,27 @@ mixin NotReplayValueStreamMixin<T> implements NotReplayValueStream<T> {
     throw ValueStreamError.hasNoError();
   }
 
+  @nonVirtual
   @override
   Object? get errorOrNull => event.errorAndStackTrace?.error;
 
+  @nonVirtual
   @override
   bool get hasError => event.errorAndStackTrace != null;
 
+  @nonVirtual
   @override
   StackTrace? get stackTrace => event.errorAndStackTrace?.stackTrace;
 
+  @nonVirtual
   @override
   T get value => event.value;
 
+  @nonVirtual
   @override
   T get valueOrNull => event.value;
 
+  @nonVirtual
   @override
   bool get hasValue => true;
 }

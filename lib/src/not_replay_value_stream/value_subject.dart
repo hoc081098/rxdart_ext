@@ -13,6 +13,7 @@ import 'stream_event.dart';
 ///
 /// [ValueSubject] is the same as [PublishSubject], with the ability to capture
 /// the latest item has been added to the controller.
+/// This [ValueSubject] always has the value, ie. [hasValue] is always true.
 ///
 /// [ValueSubject] is, by default, a broadcast (aka hot) controller, in order
 /// to fulfill the Rx Subject contract. This means the Subject's `stream` can
@@ -74,9 +75,51 @@ class ValueSubject<T> extends Subject<T>
       _dataOrError.onError(ErrorAndStackTrace(error, stackTrace));
 
   @override
-  NotReplayValueStream<T> get stream => this;
+  NotReplayValueStream<T> get stream => _ValueSubjectStream(this);
 
   @internal
   @override
   StreamEvent<T> get event => _dataOrError;
+}
+
+class _ValueSubjectStream<T> extends Stream<T>
+    with NotReplayValueStreamMixin<T>
+    implements NotReplayValueStream<T> {
+  final ValueSubject<T> _subject;
+
+  _ValueSubjectStream(this._subject);
+
+  @override
+  bool get isBroadcast => true;
+
+  // Override == and hashCode so that new streams returned by the same
+  // subject are considered equal.
+  // The subject returns a new stream each time it's queried,
+  // but doesn't have to cache the result.
+
+  @override
+  int get hashCode => _subject.hashCode ^ 0x35323532;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is _ValueSubjectStream && identical(other._subject, _subject);
+  }
+
+  @override
+  StreamEvent<T> get event => _subject.event;
+
+  @override
+  StreamSubscription<T> listen(
+    void Function(T event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) =>
+      _subject.listen(
+        onData,
+        onError: onError,
+        onDone: onDone,
+        cancelOnError: cancelOnError,
+      );
 }

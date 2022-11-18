@@ -262,8 +262,14 @@ void main() {
 
       scheduleMicrotask(() {
         subject.sink.add(1);
+        expect(subject.value, 1);
+
         subject.sink.add(2);
+        expect(subject.value, 2);
+
         subject.sink.add(3);
+        expect(subject.value, 3);
+
         subject.sink.close();
       });
 
@@ -310,6 +316,191 @@ void main() {
         subject.addError(i);
         test(i);
       }
+    });
+
+    // ------------------------------------------------------------------------
+
+    group('methods', () {
+      void _expect<T>(ValueSubject<T> s, T value) => expect(s.value, value);
+
+      test('add and close', () {
+        {
+          final s = ValueSubject(0);
+          _expect(s, 0);
+          expect(s, emitsInOrder(<Object>[0, 1, 1, 2, 2, 2, emitsDone]));
+
+          s.add(0);
+          _expect(s, 0);
+          s.add(1);
+          _expect(s, 1);
+          s.add(1);
+          _expect(s, 1);
+          s.add(2);
+          _expect(s, 2);
+          s.add(2);
+          _expect(s, 2);
+          s.add(2);
+          _expect(s, 2);
+
+          s.close();
+        }
+
+        {
+          final s = ValueSubject(0);
+          _expect(s, 0);
+          expect(s, emitsInOrder(<Object>[1, 3, 3, 1, 2, emitsDone]));
+
+          s.add(1);
+          _expect(s, 1);
+          s.add(3);
+          _expect(s, 3);
+          s.add(3);
+          _expect(s, 3);
+          s.add(1);
+          _expect(s, 1);
+          s.add(2);
+          _expect(s, 2);
+
+          s.close();
+        }
+      });
+
+      test('addError', () {
+        final s = ValueSubject(0);
+
+        scheduleMicrotask(() {
+          s.add(1);
+          s.addError(Exception());
+          s.add(2);
+        });
+
+        expect(
+          s,
+          emitsInOrder(<Object>[
+            1,
+            emitsError(isException),
+            2,
+          ]),
+        );
+      });
+
+      test('addStream', () async {
+        {
+          final s = ValueSubject(0);
+          expect(s, emits(0));
+
+          await s.addStream(Stream.value(0));
+          await s.close();
+        }
+
+        {
+          final s = ValueSubject(0);
+          expect(s, emitsInOrder(<Object>[0, 1, 1, 2, 3, 4, emitsDone]));
+
+          await s.addStream(Stream.fromIterable([0, 1, 1, 2, 3, 4]));
+          await s.close();
+        }
+
+        {
+          final s = ValueSubject(0);
+          expect(s, emitsInOrder(<Object>[2, 2, 1, 1, 2, 3, 4, emitsDone]));
+
+          s.add(2);
+          await s.addStream(Stream.fromIterable([2, 1, 1, 2, 3, 4]));
+          await s.close();
+        }
+
+        {
+          final s = ValueSubject(0);
+          expect(s, emitsError(isException));
+
+          await s.addStream(Stream.error(Exception()));
+          await s.close();
+        }
+      });
+
+      test('get error', () {
+        expect(ValueSubject(0).errorOrNull, isNull);
+        expect(ValueSubject(0).stackTrace, isNull);
+      });
+
+      test('get stream', () {
+        final s = ValueSubject(0);
+
+        expect(s.stream, isA<NotReplayValueStream<int>>());
+        expect(s.stream, isNot(same(s)));
+        expect(s.stream.value, 0);
+        expect(s.stream, emitsInOrder(<Object>[0, 0, 1, 1, 2, 2]));
+
+        s.add(0);
+        s.add(0);
+        s.add(1);
+        s.add(1);
+        s.add(2);
+        s.add(2);
+      });
+
+      test('stream returns a read-only stream', () async {
+        final subject = ValueSubject<int>(0)..add(1);
+
+        // streams returned by ValueSubject are read-only stream,
+        // ie. they don't support adding events.
+        expect(subject.stream, isNot(isA<ValueSubject<int>>()));
+        expect(subject.stream, isNot(isA<Sink<int>>()));
+        expect(subject.stream, isNot(same(subject)));
+
+        expect(
+          subject.stream,
+          isA<NotReplayValueStream<int>>().having(
+            (v) => v.value,
+            'ValueSubject.stream.value',
+            1,
+          ),
+        );
+
+        // ValueSubject.stream is a broadcast stream
+        {
+          final stream = subject.stream;
+          expect(stream.isBroadcast, isTrue);
+
+          scheduleMicrotask(() => subject.add(2));
+          await expectLater(stream, emitsInOrder(<Object>[2]));
+
+          scheduleMicrotask(() => subject.add(3));
+          await expectLater(stream, emitsInOrder(<Object>[3]));
+        }
+
+        // streams returned by the same subject are considered equal,
+        // but not identical
+        expect(identical(subject.stream, subject.stream), isFalse);
+        expect(subject.stream == subject.stream, isTrue);
+      });
+
+      test('Rx', () {
+        {
+          final s = ValueSubject(0);
+          expect(
+            s.flatMap((value) => Stream.value(value)),
+            emitsInOrder(<Object>[1, 2, 3]),
+          );
+
+          s.add(1);
+          s.add(2);
+          s.add(3);
+        }
+
+        {
+          final s = ValueSubject(0, sync: true);
+          expect(
+            s.flatMap((value) => Stream.value(value)),
+            emitsInOrder(<Object>[1, 2, 3]),
+          );
+
+          s.add(1);
+          s.add(2);
+          s.add(3);
+        }
+      });
     });
   });
 }
