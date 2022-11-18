@@ -13,6 +13,7 @@ import 'stream_event.dart';
 ///
 /// [ValueSubject] is the same as [PublishSubject], with the ability to capture
 /// the latest item has been added to the controller.
+/// This [ValueSubject] always has the value, ie. [hasValue] is always true.
 ///
 /// [ValueSubject] is, by default, a broadcast (aka hot) controller, in order
 /// to fulfill the Rx Subject contract. This means the Subject's `stream` can
