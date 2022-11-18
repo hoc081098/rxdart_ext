@@ -20,6 +20,7 @@ jobs:
     strategy:
       matrix:
         sdk: [ beta, stable, 2.17.0, 2.15.0, 2.12.0 ]
+        rxdart: [ 0.27.5, 0.27.6, 0.27.7, not_override ]
 
     steps:
       - uses: actions/checkout@v3
@@ -32,30 +33,41 @@ jobs:
       - name: Print Dart version
         run: dart --version
 
+      - name: Override rxdart version to ${{ matrix.rxdart }}
+        if: ${{ matrix.rxdart != 'not_override' }}
+        run: sh tool/override_rxdart_version.sh
+        env:
+          RXDART_VERSION: ${{ matrix.rxdart }}
+
       - name: Install dependencies
         run: dart pub get
 
       - name: Analyze
-        if: ${{ matrix.sdk == 'stable' }}
+        if: ${{ matrix.sdk == 'stable' && matrix.rxdart == 'not_override' }}
         run: dart analyze lib --fatal-infos --fatal-warnings
 
       - name: Format code
-        if: ${{ matrix.sdk == 'stable' }}
+        if: ${{ matrix.sdk == 'stable' && matrix.rxdart == 'not_override' }}
         run: dart format . --set-exit-if-changed
 
       - name: Active coverage
+        if: ${{ matrix.sdk == 'stable' && matrix.rxdart == 'not_override' }}
         run: dart pub global activate coverage
 
       - name: Run tests
         run: dart pub run test test/rxdart_ext_test.dart --chain-stack-traces
 
       - name: Start Observatory
+        if: ${{ matrix.sdk == 'stable' && matrix.rxdart == 'not_override' }}
         run: dart --disable-service-auth-codes --enable-vm-service=8111 --pause-isolates-on-exit --enable-asserts test/rxdart_ext_test.dart &
 
       - name: Collect coverage
+        if: ${{ matrix.sdk == 'stable' && matrix.rxdart == 'not_override' }}
         run: nohup dart pub global run coverage:collect_coverage --port=8111 --out=coverage.json --wait-paused --resume-isolates
 
       - name: Format coverage
+        if: ${{ matrix.sdk == 'stable' && matrix.rxdart == 'not_override' }}
         run: dart pub global run coverage:format_coverage --lcov --in=coverage.json --out=lcov.info --report-on=lib
 
       - uses: codecov/codecov-action@v3.1.1
+        if: ${{ matrix.sdk == 'stable' && matrix.rxdart == 'not_override' }}
