@@ -1,6 +1,6 @@
 #!/bin/bash --
 
-if [ "$RXDART_VERSION" -eq "" ];then
+if [ "$RXDART_VERSION" = "" ];then
   echo "Missing RXDART_VERSION environment variable"
   exit 1
 fi
