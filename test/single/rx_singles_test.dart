@@ -90,130 +90,129 @@ void main() {
     });
   });
 
-  group('RxSingles.forkJoin2', () {
-    test('success + success', () async {
-      final build = () => RxSingles.forkJoin2(
-            Single.value(1),
-            Single.timer(2, Duration(milliseconds: 100)),
-            (int a, int b) => a + b,
-          );
-      await singleRule(
-        build(),
-        Either.right(3),
-      );
-      await broadcastRule(build(), false);
-      await cancelRule(build());
-    });
+  group('RxSingles.forkJoin', () {
+    final getSingle1 = (String c1) =>
+        c1 == 'success' ? Single.value(1) : Single<int>.error(Exception());
 
-    test('success + failure', () async {
-      final build = () => RxSingles.forkJoin2(
-            Single.value(1),
-            Single<int>.error(Exception()),
-            (int a, int b) => a + b,
-          );
-      await singleRule(
-        build(),
-        exceptionLeft,
-      );
-      await broadcastRule(build(), false);
-      await cancelRule(build());
-    });
+    final getSingle2 = (String c2) =>
+        (c2 == 'success' ? Single.value(2) : Single<int>.error(Exception()))
+            .delay(const Duration(milliseconds: 10));
 
-    test('failure + success', () async {
-      final build = () => RxSingles.forkJoin2(
-            Single<int>.error(Exception()),
-            Single.timer(2, Duration(milliseconds: 100)),
-            (int a, int b) => a + b,
-          );
-      await singleRule(build(), exceptionLeft);
-      await broadcastRule(build(), false);
-      await cancelRule(build());
-    });
+    final getSingle3 = (String c3) =>
+        (c3 == 'success' ? Single.value(3) : Single<int>.error(Exception()))
+            .delay(const Duration(milliseconds: 20));
 
-    test('failure + failure', () async {
-      final build = () => RxSingles.forkJoin2(
-            Single<int>.error(Exception()),
-            Single<int>.error(Exception()).delay(Duration(milliseconds: 10)),
-            (int a, int b) => a + b,
-          );
-      await singleRule(build(), exceptionLeft);
-      await broadcastRule(build(), false);
-      await cancelRule(build());
-    });
-  });
+    final getSingle4 = (String c4) =>
+        (c4 == 'success' ? Single.value(4) : Single<int>.error(Exception()))
+            .delay(const Duration(milliseconds: 30));
 
-  group('RxSingles.forkJoin3', () {
-    for (final e in generateAllCasesWithLength(3)) {
-      final c1 = e[0];
-      final c2 = e[1];
-      final c3 = e[2];
-
-      test('$c1 + $c2 + $c3', () async {
-        final s1 = () =>
-            c1 == 'success' ? Single.value(1) : Single<int>.error(Exception());
-
-        final s2 = () =>
-            (c2 == 'success' ? Single.value(2) : Single<int>.error(Exception()))
-                .delay(const Duration(milliseconds: 10));
-
-        final s3 = () =>
-            (c3 == 'success' ? Single.value(3) : Single<int>.error(Exception()))
-                .delay(const Duration(milliseconds: 20));
-
-        final build = () => RxSingles.forkJoin3(
-            s1(), s2(), s3(), (int a, int b, int c) => a + b + c);
-
+    group('forkJoin2', () {
+      test('success + success', () async {
+        final build = () => RxSingles.forkJoin2(
+              Single.value(1),
+              Single.timer(2, Duration(milliseconds: 100)),
+              (int a, int b) => a + b,
+            );
         await singleRule(
           build(),
-          c1 == 'success' && c2 == 'success' && c3 == 'success'
-              ? (1 + 2 + 3).right()
-              : exceptionLeft,
+          Either.right(3),
         );
         await broadcastRule(build(), false);
         await cancelRule(build());
       });
-    }
-  });
 
-  group('RxSingles.forkJoin4', () {
-    for (final e in generateAllCasesWithLength(4)) {
-      final c1 = e[0];
-      final c2 = e[1];
-      final c3 = e[2];
-      final c4 = e[3];
-
-      test('$c1 + $c2 + $c3 + $c4', () async {
-        final s1 = () =>
-            c1 == 'success' ? Single.value(1) : Single<int>.error(Exception());
-
-        final s2 = () =>
-            (c2 == 'success' ? Single.value(2) : Single<int>.error(Exception()))
-                .delay(const Duration(milliseconds: 10));
-
-        final s3 = () =>
-            (c3 == 'success' ? Single.value(3) : Single<int>.error(Exception()))
-                .delay(const Duration(milliseconds: 20));
-
-        final s4 = () =>
-            (c4 == 'success' ? Single.value(4) : Single<int>.error(Exception()))
-                .delay(const Duration(milliseconds: 30));
-
-        final build = () => RxSingles.forkJoin4(s1(), s2(), s3(), s4(),
-            (int a, int b, int c, int d) => a + b + c + d);
-
+      test('success + failure', () async {
+        final build = () => RxSingles.forkJoin2(
+              Single.value(1),
+              Single<int>.error(Exception()),
+              (int a, int b) => a + b,
+            );
         await singleRule(
           build(),
-          c1 == 'success' &&
-                  c2 == 'success' &&
-                  c3 == 'success' &&
-                  c4 == 'success'
-              ? (1 + 2 + 3 + 4).right()
-              : exceptionLeft,
+          exceptionLeft,
         );
         await broadcastRule(build(), false);
         await cancelRule(build());
       });
-    }
+
+      test('failure + success', () async {
+        final build = () => RxSingles.forkJoin2(
+              Single<int>.error(Exception()),
+              Single.timer(2, Duration(milliseconds: 100)),
+              (int a, int b) => a + b,
+            );
+        await singleRule(build(), exceptionLeft);
+        await broadcastRule(build(), false);
+        await cancelRule(build());
+      });
+
+      test('failure + failure', () async {
+        final build = () => RxSingles.forkJoin2(
+              Single<int>.error(Exception()),
+              Single<int>.error(Exception()).delay(Duration(milliseconds: 10)),
+              (int a, int b) => a + b,
+            );
+        await singleRule(build(), exceptionLeft);
+        await broadcastRule(build(), false);
+        await cancelRule(build());
+      });
+    });
+
+    group('forkJoin3', () {
+      for (final e in generateAllCasesWithLength(3)) {
+        final c1 = e[0];
+        final c2 = e[1];
+        final c3 = e[2];
+
+        test('$c1 + $c2 + $c3', () async {
+          final build = () => RxSingles.forkJoin3(
+              getSingle1(c1),
+              getSingle2(c2),
+              getSingle3(c3),
+              (int a, int b, int c) => a + b + c);
+
+          await singleRule(
+            build(),
+            c1 == 'success' && c2 == 'success' && c3 == 'success'
+                ? (1 + 2 + 3).right()
+                : exceptionLeft,
+          );
+          await broadcastRule(build(), false);
+          await cancelRule(build());
+        });
+      }
+    });
+
+    group('forkJoin4', () {
+      for (final e in generateAllCasesWithLength(4)) {
+        final c1 = e[0];
+        final c2 = e[1];
+        final c3 = e[2];
+        final c4 = e[3];
+
+        test('$c1 + $c2 + $c3 + $c4', () async {
+          final build = () => RxSingles.forkJoin4(
+                getSingle1(c1),
+                getSingle2(c2),
+                getSingle3(c3),
+                getSingle4(c4),
+                (int a, int b, int c, int d) => a + b + c + d,
+              );
+
+          await singleRule(
+            build(),
+            c1 == 'success' &&
+                    c2 == 'success' &&
+                    c3 == 'success' &&
+                    c4 == 'success'
+                ? (1 + 2 + 3 + 4).right()
+                : exceptionLeft,
+          );
+          await broadcastRule(build(), false);
+          await cancelRule(build());
+        });
+      }
+    });
   });
 
   group('RxSingles.using', () {
