@@ -153,12 +153,58 @@ void main() {
             await singleRule(
               build(),
               c1 == 'success' && c2 == 'success' && c3 == 'success'
-                  ? 6.right()
+                  ? (1 + 2 + 3).right()
                   : exceptionLeft,
             );
             await broadcastRule(build(), false);
             await cancelRule(build());
           });
+        }
+      }
+    }
+  });
+
+  group('RxSingles.forkJoin4', () {
+    for (final c1 in cases) {
+      for (final c2 in cases) {
+        for (final c3 in cases) {
+          for (final c4 in cases) {
+            test('$c1 + $c2 + $c3 + $c4', () async {
+              final s1 = () => c1 == 'success'
+                  ? Single.value(1)
+                  : Single<int>.error(Exception());
+
+              final s2 = () => (c2 == 'success'
+                      ? Single.value(2)
+                      : Single<int>.error(Exception()))
+                  .delay(const Duration(milliseconds: 10));
+
+              final s3 = () => (c3 == 'success'
+                      ? Single.value(3)
+                      : Single<int>.error(Exception()))
+                  .delay(const Duration(milliseconds: 20));
+
+              final s4 = () => (c4 == 'success'
+                      ? Single.value(4)
+                      : Single<int>.error(Exception()))
+                  .delay(const Duration(milliseconds: 30));
+
+              final build = () => RxSingles.forkJoin4(s1(), s2(), s3(), s4(),
+                  (int a, int b, int c, int d) => a + b + c + d);
+
+              await singleRule(
+                build(),
+                c1 == 'success' &&
+                        c2 == 'success' &&
+                        c3 == 'success' &&
+                        c4 == 'success'
+                    ? (1 + 2 + 3 + 4).right()
+                    : exceptionLeft,
+              );
+              await broadcastRule(build(), false);
+              await cancelRule(build());
+            });
+          }
         }
       }
     }
