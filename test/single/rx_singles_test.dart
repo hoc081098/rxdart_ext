@@ -96,15 +96,25 @@ void main() {
 
     final getSingle2 = (String c2) =>
         (c2 == 'success' ? Single.value(2) : Single<int>.error(Exception()))
-            .delay(const Duration(milliseconds: 10));
+            .delay(const Duration(milliseconds: 5));
 
     final getSingle3 = (String c3) =>
         (c3 == 'success' ? Single.value(3) : Single<int>.error(Exception()))
-            .delay(const Duration(milliseconds: 20));
+            .delay(const Duration(milliseconds: 10));
 
     final getSingle4 = (String c4) =>
         (c4 == 'success' ? Single.value(4) : Single<int>.error(Exception()))
-            .delay(const Duration(milliseconds: 30));
+            .delay(const Duration(milliseconds: 15));
+
+    final getSingle5 = (String c5) =>
+        (c5 == 'success' ? Single.value(5) : Single<int>.error(Exception()))
+            .delay(const Duration(milliseconds: 20));
+
+    final getSingle6 = (String c6) =>
+        (c6 == 'success' ? Single.value(6) : Single<int>.error(Exception()))
+            .delay(const Duration(milliseconds: 25));
+
+    bool isAllSuccess(List<String> cases) => cases.every((c) => c == 'success');
 
     group('forkJoin2', () {
       test('success + success', () async {
@@ -173,9 +183,7 @@ void main() {
 
           await singleRule(
             build(),
-            c1 == 'success' && c2 == 'success' && c3 == 'success'
-                ? (1 + 2 + 3).right()
-                : exceptionLeft,
+            isAllSuccess(e) ? (1 + 2 + 3).right() : exceptionLeft,
           );
           await broadcastRule(build(), false);
           await cancelRule(build());
@@ -201,12 +209,66 @@ void main() {
 
           await singleRule(
             build(),
-            c1 == 'success' &&
-                    c2 == 'success' &&
-                    c3 == 'success' &&
-                    c4 == 'success'
-                ? (1 + 2 + 3 + 4).right()
-                : exceptionLeft,
+            isAllSuccess(e) ? (1 + 2 + 3 + 4).right() : exceptionLeft,
+          );
+          await broadcastRule(build(), false);
+          await cancelRule(build());
+        });
+      }
+    });
+
+    group('forkJoin5', () {
+      for (final e in generateAllCasesWithLength(5)) {
+        final c1 = e[0];
+        final c2 = e[1];
+        final c3 = e[2];
+        final c4 = e[3];
+        final c5 = e[4];
+
+        test('$c1 + $c2 + $c3 + $c4 + $c5', () async {
+          final build = () => RxSingles.forkJoin5(
+                getSingle1(c1),
+                getSingle2(c2),
+                getSingle3(c3),
+                getSingle4(c4),
+                getSingle5(c5),
+                (int a, int b, int c, int d, int e) => a + b + c + d + e,
+              );
+
+          await singleRule(
+            build(),
+            isAllSuccess(e) ? (1 + 2 + 3 + 4 + 5).right() : exceptionLeft,
+          );
+          await broadcastRule(build(), false);
+          await cancelRule(build());
+        });
+      }
+    });
+
+    group('forkJoin6', () {
+      for (final e in generateAllCasesWithLength(6)) {
+        final c1 = e[0];
+        final c2 = e[1];
+        final c3 = e[2];
+        final c4 = e[3];
+        final c5 = e[4];
+        final c6 = e[5];
+
+        test('$c1 + $c2 + $c3 + $c4 + $c5 + $c6', () async {
+          final build = () => RxSingles.forkJoin6(
+                getSingle1(c1),
+                getSingle2(c2),
+                getSingle3(c3),
+                getSingle4(c4),
+                getSingle5(c5),
+                getSingle6(c6),
+                (int a, int b, int c, int d, int e, int f) =>
+                    a + b + c + d + e + f,
+              );
+
+          await singleRule(
+            build(),
+            isAllSuccess(e) ? (1 + 2 + 3 + 4 + 5 + 6).right() : exceptionLeft,
           );
           await broadcastRule(build(), false);
           await cancelRule(build());
