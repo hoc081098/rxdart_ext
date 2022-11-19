@@ -222,6 +222,45 @@ abstract class RxSingles {
       Rx.forkJoin5(singleA, singleB, singleC, singleD, singleE, combiner)
           .takeFirstDataOrFirstErrorAndClose();
 
+  /// Merges the given [Single]s into a single [Single] sequence by using the
+  /// [combiner] function when all of the [Single] sequences emits their
+  /// last item.
+  ///
+  /// When the first data event or error event is emitted,
+  /// the returned [Single] will emit that event and then close with a done-event.
+  /// The returned [Single] is single-subscription Stream.
+  ///
+  /// ## Marble
+  ///
+  /// ```text
+  /// singleA: ----------a|
+  /// singleB: ---------------b|
+  /// singleC: ---------------------c|
+  /// singleD: --------------------------d|
+  /// singleE: -------------------------------e|
+  /// singleF: ------------------------------------f|
+  /// result : ------------------------------------abcdef|
+  ///
+  /// singleA: ----------x|
+  /// singleB: ---------------b|
+  /// singleC: ---------------------c|
+  /// singleD: --------------------------d|
+  /// singleE: -------------------------------e|
+  /// singleF: ------------------------------------f|
+  /// result : ----------x|
+  ///
+  /// singleA: ----------x|
+  /// singleB: ---------------x|
+  /// singleC: ---------------------x|
+  /// singleD: --------------------------x|
+  /// singleE: --------------------------------x|
+  /// singleF: ------------------------------------x|
+  /// result : ----------x|
+  ///
+  /// NOTE: x is error event
+  /// ```
+  ///
+  /// See [Rx.forkJoin6] and [ForkJoinStream].
   static Single<T> forkJoin6<A, B, C, D, E, F, T>(
     Single<A> singleA,
     Single<B> singleB,
@@ -235,6 +274,48 @@ abstract class RxSingles {
               singleA, singleB, singleC, singleD, singleE, singleF, combiner)
           .takeFirstDataOrFirstErrorAndClose();
 
+  /// Merges the given [Single]s into a single [Single] sequence by using the
+  /// [combiner] function when all of the [Single] sequences emits their
+  /// last item.
+  ///
+  /// When the first data event or error event is emitted,
+  /// the returned [Single] will emit that event and then close with a done-event.
+  /// The returned [Single] is single-subscription Stream.
+  ///
+  /// ## Marble
+  ///
+  /// ```text
+  /// singleA: ----------a|
+  /// singleB: ---------------b|
+  /// singleC: ---------------------c|
+  /// singleD: --------------------------d|
+  /// singleE: -------------------------------e|
+  /// singleF: ------------------------------------f|
+  /// singleG: ---------------------------------------g|
+  /// result : ---------------------------------------abcdefg|
+  ///
+  /// singleA: ----------x|
+  /// singleB: ---------------b|
+  /// singleC: ---------------------c|
+  /// singleD: --------------------------d|
+  /// singleE: -------------------------------e|
+  /// singleF: -----------------------------------f|
+  /// singleG: ---------------------------------------g|
+  /// result : ----------x|
+  ///
+  /// singleA: ----------x|
+  /// singleB: ---------------x|
+  /// singleC: ---------------------x|
+  /// singleD: --------------------------x|
+  /// singleE: --------------------------------x|
+  /// singleF: ------------------------------------x|
+  /// singleG: ---------------------------------------x|
+  /// result : ----------x|
+  ///
+  /// NOTE: x is error event
+  /// ```
+  ///
+  /// See [Rx.forkJoin7] and [ForkJoinStream].
   static Single<T> forkJoin7<A, B, C, D, E, F, G, T>(
     Single<A> singleA,
     Single<B> singleB,
@@ -249,6 +330,51 @@ abstract class RxSingles {
               singleG, combiner)
           .takeFirstDataOrFirstErrorAndClose();
 
+  /// Merges the given [Single]s into a single [Single] sequence by using the
+  /// [combiner] function when all of the [Single] sequences emits their
+  /// last item.
+  ///
+  /// When the first data event or error event is emitted,
+  /// the returned [Single] will emit that event and then close with a done-event.
+  /// The returned [Single] is single-subscription Stream.
+  ///
+  /// ## Marble
+  ///
+  /// ```text
+  /// singleA: ----------a|
+  /// singleB: ---------------b|
+  /// singleC: ---------------------c|
+  /// singleD: --------------------------d|
+  /// singleE: -------------------------------e|
+  /// singleF: ------------------------------------f|
+  /// singleG: ---------------------------------------g|
+  /// singleH: ------------------------------------------h|
+  /// result : ------------------------------------------abcdefgh|
+  ///
+  /// singleA: ----------x|
+  /// singleB: ---------------b|
+  /// singleC: ---------------------c|
+  /// singleD: --------------------------d|
+  /// singleE: -------------------------------e|
+  /// singleF: -----------------------------------f|
+  /// singleG: ---------------------------------------g|
+  /// singleH: ------------------------------------------h|
+  /// result : ----------x|
+  ///
+  /// singleA: ----------x|
+  /// singleB: ---------------x|
+  /// singleC: ---------------------x|
+  /// singleD: --------------------------x|
+  /// singleE: --------------------------------x|
+  /// singleF: ------------------------------------x|
+  /// singleG: ---------------------------------------x|
+  /// singleH: ------------------------------------------x|
+  /// result : ----------x|
+  ///
+  /// NOTE: x is error event
+  /// ```
+  ///
+  /// See [Rx.forkJoin8] and [ForkJoinStream].
   static Single<T> forkJoin8<A, B, C, D, E, F, G, H, T>(
     Single<A> singleA,
     Single<B> singleB,
@@ -264,6 +390,54 @@ abstract class RxSingles {
               singleG, singleH, combiner)
           .takeFirstDataOrFirstErrorAndClose();
 
+  /// Merges the given [Single]s into a single [Single] sequence by using the
+  /// [combiner] function when all of the [Single] sequences emits their
+  /// last item.
+  ///
+  /// When the first data event or error event is emitted,
+  /// the returned [Single] will emit that event and then close with a done-event.
+  /// The returned [Single] is single-subscription Stream.
+  ///
+  /// ## Marble
+  ///
+  /// ```text
+  /// singleA: ----------a|
+  /// singleB: ---------------b|
+  /// singleC: ---------------------c|
+  /// singleD: --------------------------d|
+  /// singleE: -------------------------------e|
+  /// singleF: ------------------------------------f|
+  /// singleG: ---------------------------------------g|
+  /// singleH: ------------------------------------------h|
+  /// singleI: ---------------------------------------------i|
+  /// result : ---------------------------------------------abcdefghi|
+  ///
+  /// singleA: ----------x|
+  /// singleB: ---------------b|
+  /// singleC: ---------------------c|
+  /// singleD: --------------------------d|
+  /// singleE: -------------------------------e|
+  /// singleF: -----------------------------------f|
+  /// singleG: ---------------------------------------g|
+  /// singleH: ------------------------------------------h|
+  /// singleI: ---------------------------------------------i|
+  /// result : ----------x|
+  ///
+  /// singleA: ----------x|
+  /// singleB: ---------------x|
+  /// singleC: ---------------------x|
+  /// singleD: --------------------------x|
+  /// singleE: -------------------------------x|
+  /// singleF: ------------------------------------x|
+  /// singleG: ---------------------------------------x|
+  /// singleH: ------------------------------------------x|
+  /// singleI: ---------------------------------------------x|
+  /// result : ----------x|
+  ///
+  /// NOTE: x is error event
+  /// ```
+  ///
+  /// See [Rx.forkJoin9] and [ForkJoinStream].
   static Single<T> forkJoin9<A, B, C, D, E, F, G, H, I, T>(
     Single<A> singleA,
     Single<B> singleB,
@@ -280,6 +454,15 @@ abstract class RxSingles {
               singleG, singleH, singleI, combiner)
           .takeFirstDataOrFirstErrorAndClose();
 
+  /// Merges the given [Single]s into a single [Single] sequence by using the
+  /// [combiner] function when all of the [Single] sequences emits their
+  /// last item.
+  ///
+  /// When the first data event or error event is emitted,
+  /// the returned [Single] will emit that event and then close with a done-event.
+  /// The returned [Single] is single-subscription Stream.
+  ///
+  /// See [Rx.forkJoinList] and [ForkJoinStream].
   static Single<List<T>> forkJoinList<T>(Iterable<Single<T>> singles) =>
       Rx.forkJoinList(singles).takeFirstDataOrFirstErrorAndClose();
 
