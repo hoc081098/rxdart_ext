@@ -21,6 +21,8 @@ class TestResource {
   bool get isClosed => _isClosed;
 }
 
+const cases = ['success', 'failure'];
+
 void main() {
   group('RxSingles.zip2', () {
     test('success + success', () async {
@@ -124,6 +126,42 @@ void main() {
       await broadcastRule(build(), false);
       await cancelRule(build());
     });
+  });
+
+  group('RxSingles.forkJoin3', () {
+    for (final c1 in cases) {
+      for (final c2 in cases) {
+        for (final c3 in cases) {
+          test('$c1 + $c2 + $c3', () async {
+            final s1 = () => c1 == 'success'
+                ? Single.value(1)
+                : Single<int>.error(Exception());
+
+            final s2 = () => (c2 == 'success'
+                    ? Single.value(2)
+                    : Single<int>.error(Exception()))
+                .delay(const Duration(milliseconds: 10));
+
+            final s3 = () => (c3 == 'success'
+                    ? Single.value(3)
+                    : Single<int>.error(Exception()))
+                .delay(const Duration(milliseconds: 20));
+
+            final build = () => RxSingles.forkJoin3(
+                s1(), s2(), s3(), (int a, int b, int c) => a + b + c);
+
+            await singleRule(
+              build(),
+              c1 == 'success' && c2 == 'success' && c3 == 'success'
+                  ? 6.right()
+                  : exceptionLeft,
+            );
+            await broadcastRule(build(), false);
+            await cancelRule(build());
+          });
+        }
+      }
+    }
   });
 
   group('RxSingles.using', () {
