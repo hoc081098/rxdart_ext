@@ -60,12 +60,17 @@ class MyResource {
   }
 
   Future<int> work() async {
+    _checkDisposed('~1');
     await delay(200);
+    _checkDisposed('~2');
+    return 42;
+  }
+
+  void _checkDisposed([Object? tag]) {
     if (_disposed) {
-      print('[using] MyResource.work() - disposed');
+      print('[using] MyResource#$tag was already disposed');
       throw Exception('MyResource is disposed');
     }
-    return 42;
   }
 }
 
