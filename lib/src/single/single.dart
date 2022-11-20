@@ -35,15 +35,18 @@ class Single<T> extends StreamView<T> {
         assert(source is! Single<T>),
         super(source);
 
-  /// Create a [Single] from a [Stream].
+  /// Converts source [Stream] into a [Single].
+  /// If the source [Stream] is already a [Single], it will be returned as-is.
   ///
-  /// If the source [Stream] does not emit exactly **ONE** data event or **ONE** error event before successfully completing,
-  /// the returned [Single] will emit a [APIContractViolationError]
+  /// If the source [Stream] does **NOT** emit exactly **ONE** data event
+  /// or **ONE** error event before successfully completing,
+  /// the returned [Single] will emit an [APIContractViolationError].
   ///
-  /// **NOTE**: Consider using `take(1).doneOnError()` before using this operator to create a [Single] safety.
-  /// Otherwise, it emits single event, either data or error, and then close with a done-event.
+  /// **NOTE**: Because of that, consider using `take(1).doneOnError()` to the
+  /// source [Stream] before using this constructor to create a [Single] safety.
   ///
   /// ### Example
+  ///
   /// ```dart
   /// Single.fromStream(Stream.value(1)); // Single of 1
   ///
@@ -60,10 +63,17 @@ class Single<T> extends StreamView<T> {
   ///      .doneOnError()
   /// ); // Single of 1
   /// ```
-  factory Single.fromStream(Stream<T> source) => source is Single<T>
+  factory Single.unsafeFromStream(Stream<T> source) => source is Single<T>
       ? source
       : Single.safe(Stream<T>.eventTransformed(
           source, (sink) => _SingleOrErrorStreamSink<T>(sink)));
+
+  /// This is an alias of [Single.unsafeFromStream].
+  /// See [Single.unsafeFromStream].
+  @Deprecated(
+      'Use Single.unsafeFromStream instead. This will be removed in v0.3.0')
+  factory Single.fromStream(Stream<T> source) =>
+      Single.unsafeFromStream(source);
 
   /// Creates a [Single] which emits a single data event of [value] before completing.
   ///
