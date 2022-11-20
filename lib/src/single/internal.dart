@@ -18,14 +18,15 @@ extension TakeFirstDataOrFirstErrorExtension<T> on Stream<T> {
     controller.onListen = () {
       subscription = listen(
         (v) {
-          subscription!.cancel();
-          subscription = null;
-
           controller.add(v);
+
+          // Closing also unsubscribes all subscribers, which unsubscribes
+          // this from source.
           controller.close();
         },
         onError: (Object e, StackTrace s) {
-          subscription!.cancel();
+          // cancelOnError=true cause the subscription to be canceled before
+          // the error event is delivered to the listener.
           subscription = null;
 
           controller.addError(e, s);
@@ -35,6 +36,7 @@ extension TakeFirstDataOrFirstErrorExtension<T> on Stream<T> {
           throw APIContractViolationError(
               'Internal API error! Please file a bug at: https://github.com/hoc081098/rxdart_ext/issues/new');
         },
+        cancelOnError: true,
       );
 
       if (!isBroadcast) {
