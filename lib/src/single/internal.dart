@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 
-import '../../single.dart';
+import 'api_contract_violation_error.dart';
+import 'single.dart';
 
 /// DO NOT USE this extension.
-@internal
 extension TakeFirstDataOrFirstErrorExtension<T> on Stream<T> {
   /// DO NOT USE this extension.
   @internal
