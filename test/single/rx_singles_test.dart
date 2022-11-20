@@ -96,39 +96,60 @@ void main() {
 
     final getSingle2 = (String c2) =>
         (c2 == 'success' ? Single.value(2) : Single<int>.error(Exception()))
-            .delay(const Duration(milliseconds: 5));
+            .delay(const Duration(milliseconds: 1));
 
     final getSingle3 = (String c3) =>
         (c3 == 'success' ? Single.value(3) : Single<int>.error(Exception()))
-            .delay(const Duration(milliseconds: 10));
+            .delay(const Duration(milliseconds: 2));
 
     final getSingle4 = (String c4) =>
         (c4 == 'success' ? Single.value(4) : Single<int>.error(Exception()))
-            .delay(const Duration(milliseconds: 15));
+            .delay(const Duration(milliseconds: 3));
 
     final getSingle5 = (String c5) =>
         (c5 == 'success' ? Single.value(5) : Single<int>.error(Exception()))
-            .delay(const Duration(milliseconds: 20));
+            .delay(const Duration(milliseconds: 4));
 
     final getSingle6 = (String c6) =>
         (c6 == 'success' ? Single.value(6) : Single<int>.error(Exception()))
-            .delay(const Duration(milliseconds: 25));
+            .delay(const Duration(milliseconds: 5));
 
     final getSingle7 = (String c7) =>
         (c7 == 'success' ? Single.value(7) : Single<int>.error(Exception()))
-            .delay(const Duration(milliseconds: 30));
+            .delay(const Duration(milliseconds: 6));
 
-    int sum([int? a, int? b, int? c, int? d, int? e, int? f, int? g]) =>
+    final getSingle8 = (String c8) =>
+        (c8 == 'success' ? Single.value(8) : Single<int>.error(Exception()))
+            .delay(const Duration(milliseconds: 7));
+
+    final getSingle9 = (String c9) =>
+        (c9 == 'success' ? Single.value(9) : Single<int>.error(Exception()))
+            .delay(const Duration(milliseconds: 8));
+
+    int sum(
+            [int? a,
+            int? b,
+            int? c,
+            int? d,
+            int? e,
+            int? f,
+            int? g,
+            int? h,
+            int? i]) =>
         (a ?? 0) +
         (b ?? 0) +
         (c ?? 0) +
         (d ?? 0) +
         (e ?? 0) +
         (f ?? 0) +
-        (g ?? 0);
+        (g ?? 0) +
+        (h ?? 0) +
+        (i ?? 0);
+
+    bool isAllSuccess(List<String> cases) => cases.every((c) => c == 'success');
 
     Either<Object, Object> expectedValue(List<String> cases) =>
-        cases.every((c) => c == 'success')
+        isAllSuccess(cases)
             ? (cases.length * (cases.length + 1) ~/ 2).right<Object>()
             : exceptionLeft;
 
@@ -299,6 +320,93 @@ void main() {
               );
 
           await singleRule(build(), expectedValue(e));
+          await broadcastRule(build(), false);
+          await cancelRule(build());
+        });
+      }
+    });
+
+    group('forkJoin8', () {
+      for (final e in generateAllCasesWithLength(8)) {
+        final c1 = e[0];
+        final c2 = e[1];
+        final c3 = e[2];
+        final c4 = e[3];
+        final c5 = e[4];
+        final c6 = e[5];
+        final c7 = e[6];
+        final c8 = e[7];
+
+        test('$c1 + $c2 + $c3 + $c4 + $c5 + $c6 + $c7 + $c8', () async {
+          final build = () => RxSingles.forkJoin8(
+                getSingle1(c1),
+                getSingle2(c2),
+                getSingle3(c3),
+                getSingle4(c4),
+                getSingle5(c5),
+                getSingle6(c6),
+                getSingle7(c7),
+                getSingle8(c8),
+                sum,
+              );
+
+          await singleRule(build(), expectedValue(e));
+          await broadcastRule(build(), false);
+          await cancelRule(build());
+        });
+      }
+    });
+
+    group('forkJoin9', () {
+      for (final e in generateAllCasesWithLength(9)) {
+        final c1 = e[0];
+        final c2 = e[1];
+        final c3 = e[2];
+        final c4 = e[3];
+        final c5 = e[4];
+        final c6 = e[5];
+        final c7 = e[6];
+        final c8 = e[7];
+        final c9 = e[8];
+
+        test('$c1 + $c2 + $c3 + $c4 + $c5 + $c6 + $c7 + $c8 + $c9', () async {
+          final build = () => RxSingles.forkJoin9(
+                getSingle1(c1),
+                getSingle2(c2),
+                getSingle3(c3),
+                getSingle4(c4),
+                getSingle5(c5),
+                getSingle6(c6),
+                getSingle7(c7),
+                getSingle8(c8),
+                getSingle9(c9),
+                sum,
+              );
+
+          await singleRule(build(), expectedValue(e));
+          await broadcastRule(build(), false);
+          await cancelRule(build());
+        });
+      }
+    });
+
+    group('forkJoinList', () {
+      for (final e in generateAllCasesWithLength(3)) {
+        final c1 = e[0];
+        final c2 = e[1];
+        final c3 = e[2];
+
+        test('$c1 + $c2 + $c3', () async {
+          final build = () => RxSingles.forkJoinList<int>([
+                getSingle1(c1),
+                getSingle2(c2),
+                getSingle3(c3),
+              ]);
+
+          await singleRule(
+            build(),
+            isAllSuccess(e) ? [1, 2, 3].right() : exceptionLeft,
+          );
           await broadcastRule(build(), false);
           await cancelRule(build());
         });
