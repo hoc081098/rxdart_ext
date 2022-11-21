@@ -1,3 +1,4 @@
+import 'api_contract_violation_error.dart';
 import 'single.dart';
 
 /// Provides [singleOrError] extension for [Stream].
