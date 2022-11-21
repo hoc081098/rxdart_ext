@@ -68,7 +68,7 @@ Single<User> fetchUser(String id) {
 
 -   Create Single
     -   Factory constructors.
-        -   [Single.fromStream](https://pub.dev/documentation/rxdart_ext/latest/single/Single/Single.fromStream.html)
+        -   [Single.unsafeFromStream](https://pub.dev/documentation/rxdart_ext/latest/single/Single/Single.unsafeFromStream.html)
         -   [Single.value](https://pub.dev/documentation/rxdart_ext/latest/single/Single/Single.value.html)
         -   [Single.error](https://pub.dev/documentation/rxdart_ext/latest/single/Single/Single.error.html)
         -   [Single.fromFuture](https://pub.dev/documentation/rxdart_ext/latest/single/Single/Single.fromFuture.html)
