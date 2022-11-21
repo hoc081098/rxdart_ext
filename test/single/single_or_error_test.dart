@@ -6,22 +6,32 @@ import 'package:dart_either/dart_either.dart';
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
 
-import 'utils.dart';
 import '../utils.dart';
+import 'utils.dart';
 
 void main() {
   group('singleOrError', () {
     test('returns itself', () async {
       await singleRule(
-        SingleOrErrorStreamExtension(Single.value(1)).singleOrError(),
+        // ignore: unnecessary_cast
+        (Single.value(1) as Stream<int>).singleOrError(),
+        Either.right(1),
+      );
+
+      await singleRule(
+        // ignore: deprecated_member_use_from_same_package
+        Single.value(1).singleOrError(),
         Either.right(1),
       );
 
       final s = Single.value(1);
       expect(
-          identical(s, SingleOrErrorStreamExtension(s).singleOrError()), true);
-      await broadcastRule(
-          SingleOrErrorStreamExtension(s).singleOrError(), false);
+        // ignore: unnecessary_cast
+        identical(s, (s as Stream<int>).singleOrError()),
+        true,
+      );
+      // ignore: unnecessary_cast
+      await broadcastRule((s as Stream<int>).singleOrError(), false);
     });
 
     test('from Stream of Controller', () async {
