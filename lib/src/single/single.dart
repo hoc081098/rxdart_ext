@@ -52,6 +52,22 @@ class Single<T> extends StreamView<T> {
   ///
   /// Single.fromStream(Stream<int>.error(Exception())); // Single of Exception()
   ///
+  /// Single.unsafeFromStream(Stream.fromIterable([1, 2])); // Single of APIContractViolationError
+  ///
+  /// Single.unsafeFromStream(
+  ///   Rx.concat<int>([
+  ///     Stream.value(1),
+  ///     Stream.error(Exception())
+  ///   ])
+  /// ); // Single of APIContractViolationError
+  ///
+  /// Single.unsafeFromStream(
+  ///   Rx.concat<int>([
+  ///     Stream.error(Exception()),
+  ///     Stream.error(Exception())
+  ///   ])
+  /// ) // Single of APIContractViolationError
+  ///
   /// Single.fromStream(
   ///     Rx.concat<int>([
   ///       Stream.fromIterable([1, 2, 3, 4]),

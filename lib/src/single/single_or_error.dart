@@ -1,3 +1,4 @@
+import '../../rxdart_ext.dart';
 import 'api_contract_violation_error.dart';
 import 'single.dart';
 
@@ -20,11 +21,23 @@ extension SingleOrErrorStreamExtension<T> on Stream<T> {
   ///     Stream.value(1).singleOrError(); // Single of 1
   ///     Stream<int>.error(Exception()).singleOrError(); // Single of Exception()
   ///
+  ///     Stream.fromIterable([1, 2]).singleOrError(); // Single of APIContractViolationError
+  ///
+  ///     Rx.concat<int>([
+  ///       Stream.value(1),
+  ///       Stream.error(Exception())
+  ///     ]).singleOrError(); // Single of APIContractViolationError
+  ///
+  ///     Rx.concat<int>([
+  ///       Stream.error(Exception()),
+  ///       Stream.error(Exception())
+  ///     ]).singleOrError(); // Single of APIContractViolationError
+  ///
   ///     Rx.concat<int>([
   ///       Stream.fromIterable([1, 2, 3, 4]),
-  ///       Stream<int>.error(Exception()),
+  ///       Stream.error(Exception()),
   ///       Stream.value(1),
-  ///       Stream<int>.error(Exception()),
+  ///       Stream.error(Exception()),
   ///     ]).take(1)
   ///       .doneOnError()
   ///       .singleOrError(); // Single of 1
