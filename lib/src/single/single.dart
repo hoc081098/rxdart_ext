@@ -48,9 +48,9 @@ class Single<T> extends StreamView<T> {
   /// ### Example
   ///
   /// ```dart
-  /// Single.fromStream(Stream.value(1)); // Single of 1
+  /// Single.unsafeFromStream(Stream.value(1)); // Single of 1
   ///
-  /// Single.fromStream(Stream<int>.error(Exception())); // Single of Exception()
+  /// Single.unsafeFromStream(Stream<int>.error(Exception())); // Single of Exception()
   ///
   /// Single.unsafeFromStream(Stream.fromIterable([1, 2])); // Single of APIContractViolationError
   ///
@@ -68,7 +68,7 @@ class Single<T> extends StreamView<T> {
   ///   ])
   /// ) // Single of APIContractViolationError
   ///
-  /// Single.fromStream(
+  /// Single.unsafeFromStream(
   ///     Rx.concat<int>([
   ///       Stream.fromIterable([1, 2, 3, 4]),
   ///       Stream<int>.error(Exception()),
