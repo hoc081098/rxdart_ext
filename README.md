@@ -80,6 +80,8 @@ Single<User> fetchUser(String id) {
     -   Static methods provided by [RxSingles]() class
         -   [RxSingles.zip2](https://pub.dev/documentation/rxdart_ext/latest/single/RxSingles/zip2.html)
         -   [RxSingles.forkJoin2](https://pub.dev/documentation/rxdart_ext/latest/single/RxSingles/forkJoin2.html)
+            ..[RxSingles.forkJoin9](https://pub.dev/documentation/rxdart_ext/latest/single/RxSingles/forkJoin9.html)
+            and [RxSingles.forkJoinList](https://pub.dev/documentation/rxdart_ext/latest/single/RxSingles/forkJoinList.html)
         -   [RxSingles.using](https://pub.dev/documentation/rxdart_ext/latest/single/RxSingles/using.html)
         
     -   Convert others to Single via extensions.

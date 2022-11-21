@@ -2,6 +2,18 @@
 
 - **single**:
     - Add `RxSingles.using`.
+    - Add `RxSingles.forkJoin3..forkJoin9` and `RxSingles.forkJoinList`.
+    - Deprecate `Single.fromStream`, introduce `Single.unsafeFromStream`.
+
+- **state_stream**:
+    - Internal refactoring of `StateSubject`, fix `StateSubject.addStream`.
+    - `ValueStreamController.sink` now process events correctly.
+
+- `Subject.stream` now returns a **read-only** `Stream`.
+  Previously, `Subject.stream` was identical to the `Subject`, so we could add events to it, for example: `(subject.stream as Sink<T>).add(event)`.
+  This behavior is now disallowed, and will throw a `TypeError` if attempted. Use `Subject.sink`/`Subject` itself for adding events.
+
+- Several docs and example improvements.
 
 ## 0.2.6 - Oct 26, 2022
 
