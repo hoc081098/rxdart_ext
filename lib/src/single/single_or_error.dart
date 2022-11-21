@@ -34,7 +34,8 @@ extension SingleOrErrorStreamExtension<T> on Stream<T> {
 /// Return this [Single].
 extension SingleOrErrorSingleExtension<T> on Single<T> {
   /// Return this [Single].
-  @Deprecated('Returns itself. Use it directly instead')
+  @Deprecated('Applying singleOnError() to a Single has no effect. '
+      'Use this Single directly instead.')
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
   Single<T> singleOrError() => this;
