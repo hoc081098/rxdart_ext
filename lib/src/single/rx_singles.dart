@@ -476,7 +476,7 @@ abstract class RxSingles {
   /// is cancelled (call [StreamSubscription.cancel] or `Single.listen(cancelOnError: true)`),
   /// call the disposer function on resource object.
   ///
-  /// This method is a way you can instruct an Single to create
+  /// This method is a way you can instruct a Single to create
   /// a resource that exists only during the lifespan of the Single
   /// and is disposed of when the Single terminates.
   ///
