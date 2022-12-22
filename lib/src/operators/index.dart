@@ -5,5 +5,6 @@ export 'do_on.dart';
 export 'done_on_error.dart';
 export 'flat_map_batches.dart';
 export 'ignore.dart';
+export 'start_with_future.dart';
 export 'to_single_subscription.dart';
 export 'void.dart';
