@@ -52,7 +52,7 @@ import 'state_stream_mixin.dart';
 @sealed
 class StateSubject<T> extends Subject<T>
     with StateStreamMixin<T>
-    implements StateStream<T> {
+    implements StateStream<T>, MutableStateStream<T> {
   T _value;
   bool _isAddingStreamItems = false;
   final StreamController<T> _controller;
@@ -159,6 +159,7 @@ class StateSubject<T> extends Subject<T>
   @override
   T get value => _value;
 
+  @override
   set value(T newValue) => add(newValue);
 }
 

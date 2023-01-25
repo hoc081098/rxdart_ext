@@ -400,6 +400,42 @@ void main() {
         expect(subject.stream == subject.stream, isTrue);
       });
 
+      test('update', () {
+        final s = StateSubject(0);
+        s.update((value) => value + 1);
+        _expect(s, 1);
+
+        s.update((value) => value);
+        _expect(s, 1);
+
+        s.update((value) => value + 3);
+        _expect(s, 4);
+      });
+
+      test('updateAndGet', () {
+        final s = StateSubject(0);
+        expect(s.updateAndGet((value) => value + 1), 1);
+        _expect(s, 1);
+
+        expect(s.updateAndGet((value) => value), 1);
+        _expect(s, 1);
+
+        expect(s.updateAndGet((value) => value + 3), 4);
+        _expect(s, 4);
+      });
+
+      test('getAndUpdate', () {
+        final s = StateSubject(0);
+        expect(s.getAndUpdate((value) => value + 1), 0);
+        _expect(s, 1);
+
+        expect(s.getAndUpdate((value) => value), 1);
+        _expect(s, 1);
+
+        expect(s.getAndUpdate((value) => value + 3), 1);
+        _expect(s, 4);
+      });
+
       test('Rx', () {
         {
           final s = StateSubject(0);

@@ -2,10 +2,12 @@
 
 import 'dart:async';
 
+import 'package:rxdart/streams.dart' show ValueStreamError;
+
 import '../not_replay_value_stream/not_replay_value_stream.dart';
 import '../utils/equality.dart';
+
 export '../utils/equality.dart';
-import 'package:rxdart/streams.dart' show ValueStreamError;
 
 /// A [Stream] that provides synchronous access to the last emitted item,
 /// and two consecutive values are not equal.
@@ -47,4 +49,36 @@ abstract class StateStream<T> extends NotReplayValueStream<T> {
   /// Always returns **`null`**.
   @override
   Null get stackTrace;
+}
+
+/// A mutable [StateStream] that provides a setter for [value].
+abstract class MutableStateStream<T> implements StateStream<T> {
+  /// Set the [value] of this [MutableStateStream].
+  /// Also emits the [newValue] to all listeners
+  /// if it is not equal to the current value.
+  set value(T newValue);
+}
+
+/// Provides `update` extension methods on [MutableStateStream].
+extension UpdateMutableStateStreamExtensions<T> on MutableStateStream<T> {
+  /// Updates the [value] using the specified function of its value.
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  void update(T Function(T value) transform) => value = transform(value);
+
+  /// Updates the [value] using the specified function of its value,
+  /// and returns the new value.
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  T updateAndGet(T Function(T value) transform) => value = transform(value);
+
+  /// Updates the [value] using the specified function of its value,
+  /// and returns its prior value.
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  T getAndUpdate(T Function(T value) transform) {
+    final prevValue = value;
+    value = transform(value);
+    return prevValue;
+  }
 }

@@ -1,3 +1,17 @@
+## 0.2.8 - TODO
+
+- **single**:
+    - Fix `Single.unsafeFromStream` docs
+
+- **state_stream**:
+    - Introduce `MutableStateStream<T>`.
+    - Introduce extension methods on `MutableStateStream<T>`:
+        - `update()`.
+        - `getAndUpdate()`.
+        - `updateAndGet()`.
+
+- Several docs and example improvements.
+
 ## 0.2.7 - Nov 21, 2022
 
 - **single**:
