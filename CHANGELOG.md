@@ -1,10 +1,11 @@
-## 0.2.8 - TODO
+## 0.2.8 - Jan 26, 2023
 
 - **single**:
     - Fix `Single.unsafeFromStream` docs
 
 - **state_stream**:
     - Introduce `MutableStateStream<T>`.
+    - `StateSubject<T>` now implements `MutableStateStream<T>`.
     - Introduce extension methods on `MutableStateStream<T>`:
         - `update()`.
         - `getAndUpdate()`.
