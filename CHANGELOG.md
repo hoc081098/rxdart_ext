@@ -1,3 +1,8 @@
+## 0.2.9 - Apr 20, 2023
+
+- **operators**:
+    - Fix `doOn` operator. Related issue: [rxdart#683](https://github.com/ReactiveX/rxdart/issues/683).
+
 ## 0.2.8 - Jan 26, 2023
 
 - **single**:
