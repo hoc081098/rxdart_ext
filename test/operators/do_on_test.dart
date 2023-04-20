@@ -1,6 +1,8 @@
 import 'package:rxdart_ext/rxdart_ext.dart';
 import 'package:test/test.dart';
 
+import '../utils.dart';
+
 void main() {
   group('doOn', () {
     test('works', () async {
@@ -32,6 +34,21 @@ void main() {
         ..resume();
 
       await delay(10000);
+    });
+
+    test('nullable', () {
+      nullableTest<String?>(
+        (s) => s.doOn(
+          listen: () {},
+          cancel: () {},
+          pause: () {},
+          resume: () {},
+          data: (v) {},
+          error: (e, s) {},
+          done: () {},
+          each: (n) {},
+        ),
+      );
     });
   });
 }

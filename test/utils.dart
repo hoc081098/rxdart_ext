@@ -1,5 +1,8 @@
 void unawaited(Future<void> future) {}
 
+void nullableTest<R>(Stream<R> Function(Stream<String?> s) transform) =>
+    transform(Stream<String>.fromIterable(['1', '2', '3']));
+
 /// Generates a hash code for multiple [objects].
 int hashObjects(Iterable<int> objects) =>
     _finish(objects.fold(0, (h, i) => _combine(h, i.hashCode)));

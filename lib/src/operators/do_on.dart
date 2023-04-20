@@ -19,16 +19,14 @@ extension DoOnStreamExtensions<T> on Stream<T> {
     void Function()? done,
     void Function(Notification<T> notification)? each,
   }) =>
-      transform(
-        DoStreamTransformer(
-          onListen: listen,
-          onCancel: cancel,
-          onPause: pause,
-          onResume: resume,
-          onData: data,
-          onError: error,
-          onDone: done,
-          onEach: each,
-        ),
-      );
+      DoStreamTransformer(
+        onListen: listen,
+        onCancel: cancel,
+        onPause: pause,
+        onResume: resume,
+        onData: data,
+        onError: error,
+        onDone: done,
+        onEach: each,
+      ).bind(this);
 }
