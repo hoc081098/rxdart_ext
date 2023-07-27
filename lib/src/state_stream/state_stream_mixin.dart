@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_void_to_null
 
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart' show ValueStreamError;
+import 'package:rxdart/rxdart.dart' show DataNotification, ValueStreamError;
 
 import 'state_stream.dart';
 
@@ -31,4 +31,7 @@ mixin StateStreamMixin<T> implements StateStream<T> {
   @nonVirtual
   @override
   T get valueOrNull => value;
+
+  @override
+  DataNotification<T> get lastEventOrNull => DataNotification(value);
 }

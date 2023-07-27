@@ -1,5 +1,10 @@
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart' show ValueStreamError;
+import 'package:rxdart/rxdart.dart'
+    show
+        DataNotification,
+        ErrorNotification,
+        StreamNotification,
+        ValueStreamError;
 
 import 'not_replay_value_stream.dart';
 import 'stream_event.dart';
@@ -46,4 +51,22 @@ mixin NotReplayValueStreamMixin<T> implements NotReplayValueStream<T> {
   @nonVirtual
   @override
   bool get hasValue => true;
+
+  @nonVirtual
+  @override
+  StreamNotification<T>? get lastEventOrNull {
+    // data event
+    if (event.lastEventIsData) {
+      return DataNotification(value);
+    }
+
+    // error event
+    final errorAndSt = event.errorAndStackTrace;
+    if (errorAndSt != null) {
+      return ErrorNotification(errorAndSt);
+    }
+
+    // no event
+    return null;
+  }
 }

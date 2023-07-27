@@ -97,8 +97,7 @@ extension SelectorsStateStreamExtensions<State> on StateStream<State> {
       SubState2 subState2,
       SubState3 subState3,
       SubState4 subState4,
-    )
-        projector, {
+    ) projector, {
     Equality<SubState1>? equals1,
     Equality<SubState2>? equals2,
     Equality<SubState3>? equals3,
@@ -135,8 +134,7 @@ extension SelectorsStateStreamExtensions<State> on StateStream<State> {
       SubState3 subState3,
       SubState4 subState4,
       SubState5 subState5,
-    )
-        projector, {
+    ) projector, {
     Equality<SubState1>? equals1,
     Equality<SubState2>? equals2,
     Equality<SubState3>? equals3,
@@ -188,8 +186,7 @@ extension SelectorsStateStreamExtensions<State> on StateStream<State> {
       SubState4 subState4,
       SubState5 subState5,
       SubState6 subState6,
-    )
-        projector, {
+    ) projector, {
     Equality<SubState1>? equals1,
     Equality<SubState2>? equals2,
     Equality<SubState3>? equals3,
@@ -247,8 +244,7 @@ extension SelectorsStateStreamExtensions<State> on StateStream<State> {
       SubState5 subState5,
       SubState6 subState6,
       SubState7 subState7,
-    )
-        projector, {
+    ) projector, {
     Equality<SubState1>? equals1,
     Equality<SubState2>? equals2,
     Equality<SubState3>? equals3,
@@ -312,8 +308,7 @@ extension SelectorsStateStreamExtensions<State> on StateStream<State> {
       SubState6 subState6,
       SubState7 subState7,
       SubState8 subState8,
-    )
-        projector, {
+    ) projector, {
     Equality<SubState1>? equals1,
     Equality<SubState2>? equals2,
     Equality<SubState3>? equals3,
@@ -383,8 +378,7 @@ extension SelectorsStateStreamExtensions<State> on StateStream<State> {
       SubState7 subState7,
       SubState8 subState8,
       SubState9 subState9,
-    )
-        projector, {
+    ) projector, {
     Equality<SubState1>? equals1,
     Equality<SubState2>? equals2,
     Equality<SubState3>? equals3,
@@ -651,8 +645,7 @@ StateStream<Result>
     SubState2 subState2,
     SubState3 subState3,
     SubState4 subState4,
-  )
-      projector,
+  ) projector,
   Equality<SubState1>? equals1,
   Equality<SubState2>? equals2,
   Equality<SubState3>? equals3,

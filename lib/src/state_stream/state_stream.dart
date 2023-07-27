@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:rxdart/streams.dart' show ValueStreamError;
+import 'package:rxdart/utils.dart' show DataNotification;
 
 import '../not_replay_value_stream/not_replay_value_stream.dart';
 import '../utils/equality.dart';
@@ -49,6 +50,9 @@ abstract class StateStream<T> extends NotReplayValueStream<T> {
   /// Always returns **`null`**.
   @override
   Null get stackTrace;
+
+  @override
+  DataNotification<T> get lastEventOrNull;
 }
 
 /// A mutable [StateStream] that provides a setter for [value].

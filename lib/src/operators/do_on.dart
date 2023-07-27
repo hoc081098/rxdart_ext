@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:rxdart/rxdart.dart' show DoStreamTransformer, Notification;
+import 'package:rxdart/rxdart.dart'
+    show DoStreamTransformer, StreamNotification;
 
 /// Invokes the given callback at the corresponding point the the stream
 /// lifecycle. For example, if you pass in an onDone callback, it will
@@ -17,7 +18,7 @@ extension DoOnStreamExtensions<T> on Stream<T> {
     void Function(T data)? data,
     void Function(Object error, StackTrace stackTrace)? error,
     void Function()? done,
-    void Function(Notification<T> notification)? each,
+    void Function(StreamNotification<T> notification)? each,
   }) =>
       DoStreamTransformer(
         onListen: listen,
