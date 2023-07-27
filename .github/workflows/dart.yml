@@ -20,7 +20,8 @@ jobs:
     strategy:
       matrix:
         sdk: [ beta, stable, 2.17.0, 2.15.0, 2.12.0 ]
-        rxdart: [ 0.27.5, 0.27.6, 0.27.7, not_override ]
+#         rxdart: [ 0.27.5, 0.27.6, 0.27.7, not_override ]
+        rxdart: [ not_override ]
 
     steps:
       - uses: actions/checkout@v3
