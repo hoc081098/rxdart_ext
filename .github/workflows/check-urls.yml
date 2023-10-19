@@ -19,7 +19,7 @@ jobs:
         working-directory: ./check_urls
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Dart
         uses: dart-lang/setup-dart@v1.4
@@ -41,7 +41,7 @@ jobs:
       run:
         working-directory: ./example
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Dart
         uses: dart-lang/setup-dart@v1.4
