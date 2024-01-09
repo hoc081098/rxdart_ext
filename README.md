@@ -21,7 +21,7 @@ Liked some of my work? Buy me a coffee (or more likely a beer)
 ## RxDart compatibility
 
 | **rxdart** | **rxdart_ext**  |
-|:----------:|:---------------:|
+| :--------: | :-------------: |
 | `^0.27.2`  |     `0.1.2`     |
 | `^0.27.3`  | `0.1.3 → 0.2.0` |
 | `^0.27.4`  | `0.2.1 → 0.2.2` |
@@ -38,7 +38,7 @@ Liked some of my work? Buy me a coffee (or more likely a beer)
 
 ## API - [Documentation](https://pub.dev/documentation/rxdart_ext/latest/)
 
-### 1. [Single](https://pub.dev/documentation/rxdart_ext/latest/single/Single-class.html)
+### 1. [Single](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single-class.html)
 
 A Stream which emits single event, either data or error, and then close with a done-event.
 
@@ -66,87 +66,88 @@ Single<User> fetchUser(String id) {
 }
 ```
 
--   Create Single
-    -   Factory constructors.
-        -   [Single.unsafeFromStream](https://pub.dev/documentation/rxdart_ext/latest/single/Single/Single.unsafeFromStream.html)
-        -   [Single.value](https://pub.dev/documentation/rxdart_ext/latest/single/Single/Single.value.html)
-        -   [Single.error](https://pub.dev/documentation/rxdart_ext/latest/single/Single/Single.error.html)
-        -   [Single.fromFuture](https://pub.dev/documentation/rxdart_ext/latest/single/Single/Single.fromFuture.html)
-        -   [Single.fromCallable](https://pub.dev/documentation/rxdart_ext/latest/single/Single/Single.fromCallable.html)
-        -   [Single.timer](https://pub.dev/documentation/rxdart_ext/latest/single/Single/Single.timer.html)
-        -   [Single.defer](https://pub.dev/documentation/rxdart_ext/latest/single/Single/Single.defer.html)
-        -   [Single.retry](https://pub.dev/documentation/rxdart_ext/latest/single/Single/Single.retry.html)
+- Create Single
 
-    -   Static methods provided by [RxSingles]() class
-        -   [RxSingles.zip2](https://pub.dev/documentation/rxdart_ext/latest/single/RxSingles/zip2.html)
-        -   [RxSingles.forkJoin2](https://pub.dev/documentation/rxdart_ext/latest/single/RxSingles/forkJoin2.html)
-            ..[RxSingles.forkJoin9](https://pub.dev/documentation/rxdart_ext/latest/single/RxSingles/forkJoin9.html)
-            and [RxSingles.forkJoinList](https://pub.dev/documentation/rxdart_ext/latest/single/RxSingles/forkJoinList.html)
-        -   [RxSingles.using](https://pub.dev/documentation/rxdart_ext/latest/single/RxSingles/using.html)
-        
-    -   Convert others to Single via extensions.
-        -   [Stream.singleOrError](https://pub.dev/documentation/rxdart_ext/latest/single/SingleOrErrorStreamExtension/singleOrError.html)
-        -   [Future.asSingle](https://pub.dev/documentation/rxdart_ext/latest/single/AsSingleFutureExtension/asSingle.html)
-        -   [`(FutureOr<T> Function())`.asSingle](https://pub.dev/documentation/rxdart_ext/latest/single/AsSingleFunctionExtension/asSingle.html)
+  - Factory constructors.
 
--   Operators for Single (returns a Single instead of Stream)
-    -   [flatMapSingle](https://pub.dev/documentation/rxdart_ext/latest/single/FlatMapSingleExtension/flatMapSingle.html)
-    -   [flatMapEitherSingle](https://pub.dev/documentation/rxdart_ext/latest/single/FlatMapEitherSingleExtension/flatMapEitherSingle.html)
-    -   [asyncExpandSingle](https://pub.dev/documentation/rxdart_ext/latest/single/AsyncExpandSingleExtension/asyncExpandSingle.html)
-    -   [switchMapSingle](https://pub.dev/documentation/rxdart_ext/latest/single/SwitchMapSingleExtension/switchMapSingle.html)
-    -   [exhaustMapSingle](https://pub.dev/documentation/rxdart_ext/latest/single/ExhaustMapSingleExtension/exhaustMapSingle.html)
-    -   [debug](https://pub.dev/documentation/rxdart_ext/latest/single/DebugSingleExtension/debug.html)
-    -   [delay](https://pub.dev/documentation/rxdart_ext/latest/single/DelaySingleExtension/delay.html)
-    -   [doOnCancel](https://pub.dev/documentation/rxdart_ext/latest/single/DoSingleExtensions/doOnCancel.html)
-    -   [doOnData](https://pub.dev/documentation/rxdart_ext/latest/single/DoSingleExtensions/doOnData.html)
-    -   [doOnError](https://pub.dev/documentation/rxdart_ext/latest/single/DoSingleExtensions/doOnError.html)
-    -   [doOnListen](https://pub.dev/documentation/rxdart_ext/latest/single/DoSingleExtensions/doOnListen.html)
-    -   [onErrorReturn](https://pub.dev/documentation/rxdart_ext/latest/single/OnErrorResumeSingleExtensions/onErrorReturn.html)
-    -   [onErrorReturnWith](https://pub.dev/documentation/rxdart_ext/latest/single/OnErrorResumeSingleExtensions/onErrorReturnWith.html)
-    -   [onErrorResumeSingle](https://pub.dev/documentation/rxdart_ext/latest/single/OnErrorResumeSingleExtensions/onErrorResumeSingle.html)
-    -   [onErrorResumeNextSingle](https://pub.dev/documentation/rxdart_ext/latest/single/OnErrorResumeSingleExtensions/onErrorResumeNextSingle.html)
-    -   [mapTo](https://pub.dev/documentation/rxdart_ext/latest/single/MapToSingleExtension/mapTo.html)
-    -   [toEitherSingle](https://pub.dev/documentation/rxdart_ext/latest/single/ToEitherSingleExtension/toEitherSingle.html)
-    -   [asVoid](https://pub.dev/documentation/rxdart_ext/latest/single/AsVoidSingleExtension/asVoid.html)
+    - [Single.unsafeFromStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single/Single.unsafeFromStream.html)
+    - [Single.value](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single/Single.value.html)
+    - [Single.error](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single/Single.error.html)
+    - [Single.fromFuture](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single/Single.fromFuture.html)
+    - [Single.fromCallable](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single/Single.fromCallable.html)
+    - [Single.timer](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single/Single.timer.html)
+    - [Single.defer](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single/Single.defer.html)
+    - [Single.retry](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single/Single.retry.html)
+
+  - Static methods provided by [RxSingles]() class
+    - [RxSingles.zip2](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/RxSingles/zip2.html)
+    - [RxSingles.forkJoin2](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/RxSingles/forkJoin2.html)
+      ..[RxSingles.forkJoin9](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/RxSingles/forkJoin9.html)
+      and [RxSingles.forkJoinList](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/RxSingles/forkJoinList.html)
+    - [RxSingles.using](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/RxSingles/using.html)
+  - Convert others to Single via extensions.
+    - [Stream.singleOrError](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/SingleOrErrorStreamExtension/singleOrError.html)
+    - [Future.asSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsSingleFutureExtension/asSingle.html)
+    - [`(FutureOr<T> Function())`.asSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsSingleFunctionExtension/asSingle.html)
+
+- Operators for Single (returns a Single instead of Stream)
+  - [flatMapSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/FlatMapSingleExtension/flatMapSingle.html)
+  - [flatMapEitherSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/FlatMapEitherSingleExtension/flatMapEitherSingle.html)
+  - [asyncExpandSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsyncExpandSingleExtension/asyncExpandSingle.html)
+  - [switchMapSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/SwitchMapSingleExtension/switchMapSingle.html)
+  - [exhaustMapSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ExhaustMapSingleExtension/exhaustMapSingle.html)
+  - [debug](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DebugSingleExtension/debug.html)
+  - [delay](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DelaySingleExtension/delay.html)
+  - [doOnCancel](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DoSingleExtensions/doOnCancel.html)
+  - [doOnData](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DoSingleExtensions/doOnData.html)
+  - [doOnError](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DoSingleExtensions/doOnError.html)
+  - [doOnListen](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DoSingleExtensions/doOnListen.html)
+  - [onErrorReturn](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/OnErrorResumeSingleExtensions/onErrorReturn.html)
+  - [onErrorReturnWith](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/OnErrorResumeSingleExtensions/onErrorReturnWith.html)
+  - [onErrorResumeSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/OnErrorResumeSingleExtensions/onErrorResumeSingle.html)
+  - [onErrorResumeNextSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/OnErrorResumeSingleExtensions/onErrorResumeNextSingle.html)
+  - [mapTo](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/MapToSingleExtension/mapTo.html)
+  - [toEitherSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ToEitherSingleExtension/toEitherSingle.html)
+  - [asVoid](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsVoidSingleExtension/asVoid.html)
 
 ### 2. Operators for Stream
 
-- [debug](https://pub.dev/documentation/rxdart_ext/latest/operators/DebugStreamExtension/debug.html), [collect](https://pub.dev/documentation/rxdart_ext/latest/operators/CollectStreamExtension/collect.html)
-- [distinctUniqueBy](https://pub.dev/documentation/rxdart_ext/latest/operators/DistinctUniqueByStreamExtension/distinctUniqueBy.html)
-- [distinctBy](https://pub.dev/documentation/rxdart_ext/latest/operators/DistinctByExtension/distinctBy.html)
-- [doOn](https://pub.dev/documentation/rxdart_ext/latest/operators/DoOnStreamExtensions/doOn.html)
-- [doneOnError](https://pub.dev/documentation/rxdart_ext/latest/operators/DoneOnErrorStreamExtension/doneOnError.html)
-- [flatMapBatches](https://pub.dev/documentation/rxdart_ext/latest/operators/FlatMapBatchesStreamExtension/flatMapBatches.html)
-- [flatMapBatchesSingle](https://pub.dev/documentation/rxdart_ext/latest/operators/FlatMapBatchesStreamExtension/flatMapBatchesSingle.html)
-- [ignoreErrors](https://pub.dev/documentation/rxdart_ext/latest/operators/IgnoreErrorsStreamExtension/ignoreErrors.html)
+- [debug](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DebugStreamExtension/debug.html), [collect](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/CollectStreamExtension/collect.html)
+- [distinctUniqueBy](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DistinctUniqueByStreamExtension/distinctUniqueBy.html)
+- [distinctBy](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DistinctByExtension/distinctBy.html)
+- [doOn](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DoOnStreamExtensions/doOn.html)
+- [doneOnError](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DoneOnErrorStreamExtension/doneOnError.html)
+- [flatMapBatches](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/FlatMapBatchesStreamExtension/flatMapBatches.html)
+- [flatMapBatchesSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/FlatMapBatchesStreamExtension/flatMapBatchesSingle.html)
+- [ignoreErrors](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/IgnoreErrorsStreamExtension/ignoreErrors.html)
 - `mapNotNull` (moved to `rxdart 0.27.4` as standard operator: [mapNotNull](https://pub.dev/documentation/rxdart/latest/rx/MapNotNullExtension/mapNotNull.html))
-- [toSingleSubscription](https://pub.dev/documentation/rxdart_ext/latest/operators/ToSingleSubscriptionStreamExtension/toSingleSubscriptionStream.html)
-- [asVoid](https://pub.dev/documentation/rxdart_ext/latest/operators/AsVoidStreamExtension/asVoid.html)
+- [toSingleSubscription](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ToSingleSubscriptionStreamExtension/toSingleSubscriptionStream.html)
+- [asVoid](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsVoidStreamExtension/asVoid.html)
 - `whereNotNull` (moved to `rxdart 0.27.4` as standard operator: [whereNotNull](https://pub.dev/documentation/rxdart/latest/rx/WhereNotNullExtension/whereNotNull.html))
 
-### 3. [StateStream](https://pub.dev/documentation/rxdart_ext/latest/state_stream/StateStream-class.html)
+### 3. [StateStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateStream-class.html)
 
 A Stream that provides synchronous access to the last emitted item,
 and two consecutive values are not equal.
-The equality between previous data event and current data event is determined by [StateStream.equals]((https://pub.dev/documentation/rxdart_ext/latest/state_stream/StateStream/equals.html)).
+The equality between previous data event and current data event is determined by [StateStream.equals](<(https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateStream/equals.html)>).
 This Stream always has no error.
 
--   Broadcast
-    - [StateSubject](https://pub.dev/documentation/rxdart_ext/latest/state_stream/StateSubject-class.html)
-    - [StateConnectableStream](https://pub.dev/documentation/rxdart_ext/latest/state_stream/StateConnectableStream-class.html)
-        - [publishState](https://pub.dev/documentation/rxdart_ext/latest/state_stream/StateConnectableExtensions/publishState.html)
-        - [shareState](https://pub.dev/documentation/rxdart_ext/latest/state_stream/StateConnectableExtensions/shareState.html)
--   Single-subscription
-    -   [toStateStream](https://pub.dev/documentation/rxdart_ext/latest/state_stream/ToStateStreamExtension/toStateStream.html)
+- Broadcast
+  - [StateSubject](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateSubject-class.html)
+  - [StateConnectableStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateConnectableStream-class.html)
+    - [publishState](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateConnectableExtensions/publishState.html)
+    - [shareState](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateConnectableExtensions/shareState.html)
+- Single-subscription
+  - [toStateStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ToStateStreamExtension/toStateStream.html)
 
 #### Example
 
 Useful for `Flutter BLoC pattern` - `StreamBuilder`, expose broadcast state stream to UI, can synchronous access to the last emitted item, and distinct until changed
 
--   [x] `Distinct`: distinct until changed.
--   [x] `Value`: can synchronous access to the last emitted item.
--   [x] `NotReplay`: not replay the latest value.
--   [x] `Connectable`: broadcast stream - can be listened to multiple time.
+- [x] `Distinct`: distinct until changed.
+- [x] `Value`: can synchronous access to the last emitted item.
+- [x] `NotReplay`: not replay the latest value.
+- [x] `Connectable`: broadcast stream - can be listened to multiple time.
 
 ```
                                 Stream (dart:core)
@@ -186,7 +187,7 @@ StreamBuilder<UiState>(
   stream: state$,
   builder: (context, snapshot) {
     final UiState state = snapshot.requireData;
-    
+
     return ...;
   },
 );
@@ -207,18 +208,18 @@ RxStreamBuilder<UiState>(
 );
 ```
 
-### 4. [NotReplayValueStream](https://pub.dev/documentation/rxdart_ext/latest/not_replay_value_stream/NotReplayValueStream-class.html)
+### 4. [NotReplayValueStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/NotReplayValueStream-class.html)
 
 A Stream that provides synchronous access to the last emitted item, but not replay the latest value.
 
--   Broadcast
-    - [ValueSubject](https://pub.dev/documentation/rxdart_ext/latest/not_replay_value_stream/ValueSubject-class.html)
-    - [NotReplayValueConnectableStream](https://pub.dev/documentation/rxdart_ext/latest/not_replay_value_stream/NotReplayValueConnectableStream-class.html)
-        - [publishValueNotReplay](https://pub.dev/documentation/rxdart_ext/latest/not_replay_value_stream/ValueConnectableNotReplayStreamExtensions/publishValueNotReplay.html)
-        - [shareValueNotReplay](https://pub.dev/documentation/rxdart_ext/latest/not_replay_value_stream/ValueConnectableNotReplayStreamExtensions/shareValueNotReplay.html)
--   Single-subscription
-    -   [ValueStreamController](https://pub.dev/documentation/rxdart_ext/latest/not_replay_value_stream/ValueStreamController-class.html)
-    -   [toNotReplayValueStream](https://pub.dev/documentation/rxdart_ext/latest/not_replay_value_stream/ToNotReplayValueStreamExtension/toNotReplayValueStream.html)
+- Broadcast
+  - [ValueSubject](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ValueSubject-class.html)
+  - [NotReplayValueConnectableStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/NotReplayValueConnectableStream-class.html)
+    - [publishValueNotReplay](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ValueConnectableNotReplayStreamExtensions/publishValueNotReplay.html)
+    - [shareValueNotReplay](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ValueConnectableNotReplayStreamExtensions/shareValueNotReplay.html)
+- Single-subscription
+  - [ValueStreamController](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ValueStreamController-class.html)
+  - [toNotReplayValueStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ToNotReplayValueStreamExtension/toNotReplayValueStream.html)
 
 ### 5. Utils
 
