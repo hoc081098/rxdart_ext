@@ -16,7 +16,7 @@ Liked some of my work? Buy me a coffee (or more likely a beer)
 
 <a href="https://www.buymeacoffee.com/hoc081098" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" height=64></a>
 
-## Supported Dart SDK version: `>=2.12.0 <3.0.0`
+## Supported Dart SDK version: `>=2.12.0 <4.0.0`
 
 ## RxDart compatibility
 
@@ -26,15 +26,18 @@ Liked some of my work? Buy me a coffee (or more likely a beer)
 | `^0.27.3`  | `0.1.3 → 0.2.0` |
 | `^0.27.4`  | `0.2.1 → 0.2.2` |
 | `^0.27.5`  | `0.2.3 → 0.2.9` |
+| `^0.28.0`  |    `^0.3.0`     |
 
-- For example: when using `rxdart: ^0.27.4` → we can use `rxdart_ext: ^v` where `v` in `0.2.1 → 0.2.9`
+**The latest version of `rxdart_ext` always works fine with the latest version of `rxdart`.**
+
+> [!TIP]
+> 
+> For example: when using `rxdart: ^0.27.4` → we can use `rxdart_ext: ^v` where `v` in `0.2.1 → 0.2.9`
   (i.e. all rows since `^0.27.4` row in the above table).
-
-- But in some cases there is any **conflict** between `rxdart` version and `rxdart_ext` version,
+> 
+> But in some cases there is any **conflict** between `rxdart` version and `rxdart_ext` version,
   you must use **stricter version**, e.g. `rxdart: ^0.27.4` → `rxdart_ext: ^v` where `v` in `0.2.1 → 0.2.2`
   (**same row** in the above table)
-
-- **The latest version of `rxdart_ext` always works fine with the latest version of `rxdart`.**
 
 ## API - [Documentation](https://pub.dev/documentation/rxdart_ext/latest/)
 

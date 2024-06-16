@@ -1,3 +1,18 @@
+## 0.3.0 - Jun 16, 2024
+
+- Accept Dart SDK versions above 3.0 (`sdk: '>=2.12.0 <4.0.0'`).
+- Only support `rxdart: ^0.28.0`.
+
+- **state_stream** and **not_replay_value_stream**:
+    - Implement `lastEventOrNull` for `NotReplayValueStream` and `StateStream`.
+
+- **single**:
+    - Breaking: `RxSingles.using`
+        - Convert all _required positional parameters_ to _required named parameters_.
+        - The `disposer` is now called after the future returned from `StreamSubscription.cancel` completes.
+
+- Docs: update broken doc link (thanks to [@dungngminh](https://github.com/dungngminh)).
+
 ## 0.2.9 - Apr 20, 2023
 
 - **operators**:
@@ -30,8 +45,10 @@
     - `ValueStreamController.sink` now processes events correctly.
 
 - `Subject.stream` now returns a **read-only** `Stream`.
-  Previously, `Subject.stream` was identical to the `Subject`, so we could add events to it, for example: `(subject.stream as Sink<T>).add(event)`.
-  This behavior is now disallowed, and will throw a `TypeError` if attempted. Use `Subject.sink`/`Subject` itself for adding events.
+  Previously, `Subject.stream` was identical to the `Subject`, so we could add events to it, for
+  example: `(subject.stream as Sink<T>).add(event)`.
+  This behavior is now disallowed, and will throw a `TypeError` if attempted. Use `Subject.sink`/`Subject` itself for
+  adding events.
 
 - Several docs and example improvements.
 
