@@ -12,7 +12,7 @@
 Some extension methods and classes built on top of [`RxDart`](https://pub.dev/packages/rxdart) - [`RxDart`](https://pub.dev/packages/rxdart) extension.
 
 <p align="center">
-<img src="https://github.com/hoc081098/rxdart_ext/blob/master/assets/logo.png?raw=true" height="200" alt="RxDart" />
+<img src="https://github.com/hoc081098/rxdart_ext/blob/master/screenshots/logo.png?raw=true" height="200" alt="RxDart" />
 </p>
 
 Liked some of my work? Buy me a coffee (or more likely a beer)
