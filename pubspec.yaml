@@ -8,7 +8,7 @@ funding:
   - https://www.buymeacoffee.com/hoc081098
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.12.0 <4.0.0'
 
 dependencies:
   rxdart: ^0.28.0

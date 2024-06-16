@@ -417,9 +417,9 @@ void main() {
   group('RxSingles.using', () {
     test('resourceFactory throws', () async {
       final build = () => RxSingles.using<int, TestResource>(
-            () => throw Exception(),
-            (r) => fail('should not be called'),
-            (r) => fail('should not be called'),
+            resourceFactory: () => throw Exception(),
+            singleFactory: (r) => fail('should not be called'),
+            disposer: (r) => fail('should not be called'),
           );
 
       await singleRule(build(), exceptionLeft);
@@ -439,9 +439,9 @@ void main() {
           throw StateError('Resource already created');
         }
         return RxSingles.using<TestResource, TestResource>(
-          () => resource = TestResource(),
-          (r) => Single.value(r),
-          (r) => r.close(),
+          resourceFactory: () => resource = TestResource(),
+          singleFactory: (r) => Single.value(r),
+          disposer: (r) => r.close(),
         );
       };
 
@@ -472,9 +472,9 @@ void main() {
           throw StateError('Resource already created');
         }
         return RxSingles.using<TestResource, TestResource>(
-          () => resource = TestResource(),
-          (r) => Single.error(Exception()),
-          (r) => r.close(),
+          resourceFactory: () => resource = TestResource(),
+          singleFactory: (r) => Single.error(Exception()),
+          disposer: (r) => r.close(),
         );
       };
 
@@ -495,9 +495,9 @@ void main() {
 
     test('disposer throws', () async {
       final build = () => RxSingles.using<TestResource, TestResource>(
-            () => TestResource(),
-            (r) => Single.value(r),
-            (r) => throw Exception('Disposer'),
+            resourceFactory: () => TestResource(),
+            singleFactory: (r) => Single.value(r),
+            disposer: (r) => throw Exception('Disposer'),
           );
 
       final onError = (Object error, StackTrace stack) {

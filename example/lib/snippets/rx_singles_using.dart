@@ -30,9 +30,9 @@ class MyResource {
 
 Future<void> runRxSinglesUsingExample() async {
   final subscription = RxSingles.using<int, MyResource>(
-    () => MyResource(),
-    (r) => r.work().asSingle(),
-    (r) => r.dispose(),
+    resourceFactory: () => MyResource(),
+    singleFactory: (r) => r.work().asSingle(),
+    disposer: (r) => r.dispose(),
   ).debug(identifier: '[using]').collect();
 
   await delay(100);

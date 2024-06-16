@@ -492,22 +492,22 @@ abstract class RxSingles {
   ///     }
   ///
   ///     RxSingles.using<int, Resource>(
-  ///       () => Resource(),
-  ///       (r) => Single.value(r.value),
-  ///       (r) => r.close(),
+  ///       resourceFactory: () => Resource(),
+  ///       singleFactory: (r) => Single.value(r.value),
+  ///       disposer: (r) => r.close(),
   ///     ).listen(print); // prints 0, Closed
   ///
   /// See [Rx.using] and [UsingStream].
-  static Single<T> using<T, R>(
-    R Function() resourceFactory,
-    Single<T> Function(R) singleFactory,
-    FutureOr<void> Function(R) disposer,
-  ) =>
+  static Single<T> using<T, R>({
+    required R Function() resourceFactory,
+    required Single<T> Function(R) singleFactory,
+    required FutureOr<void> Function(R) disposer,
+  }) =>
       Single.safe(
         Rx.using(
-          resourceFactory,
-          singleFactory,
-          disposer,
+          resourceFactory: resourceFactory,
+          streamFactory: singleFactory,
+          disposer: disposer,
         ),
       );
 }
