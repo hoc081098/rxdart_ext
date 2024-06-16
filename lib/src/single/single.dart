@@ -118,6 +118,9 @@ class Single<T> extends StreamView<T> {
   ///
   /// NOTE: x is error event
   /// ```
+  ///
+  /// See also [Single.fromCallable] and [Single.defer]. These methods are useful
+  /// for creating [Single]s that don't instantiate [Future]s until they are listened to.
   factory Single.fromFuture(Future<T> future) =>
       Single.safe(Stream.fromFuture(future));
 

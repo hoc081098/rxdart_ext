@@ -4,9 +4,10 @@ import 'single.dart';
 
 /// Provides [asSingle] extension for [Future].
 extension AsSingleFutureExtension<T> on Future<T> {
-  /// Converts this [Future] into a [Single].
+  /// Converts this [Future] into a [Single]. It is a shorthand for [Single.fromFuture].
   ///
-  /// See [Single.fromFuture].
+  /// See also [Single.fromCallable] and [Single.defer]. These methods are useful
+  /// or creating [Single]s that don't instantiate [Future]s until they are listened to.
   Single<T> asSingle() => Single.fromFuture(this);
 }
 
