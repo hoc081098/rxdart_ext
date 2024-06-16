@@ -84,13 +84,6 @@ class Single<T> extends StreamView<T> {
       : Single.safe(Stream<T>.eventTransformed(
           source, (sink) => _SingleOrErrorStreamSink<T>(sink)));
 
-  /// This is an alias of [Single.unsafeFromStream].
-  /// See [Single.unsafeFromStream].
-  @Deprecated(
-      'Use Single.unsafeFromStream instead. This will be removed in v0.3.0')
-  factory Single.fromStream(Stream<T> source) =>
-      Single.unsafeFromStream(source);
-
   /// Creates a [Single] which emits a single data event of [value] before completing.
   ///
   /// See [Stream.value].

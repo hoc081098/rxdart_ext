@@ -7,9 +7,10 @@
     - Implement `lastEventOrNull` for `NotReplayValueStream` and `StateStream`.
 
 - **single**:
-    - Breaking: `RxSingles.using`
+    - `RxSingles.using`
         - Convert all _required positional parameters_ to _required named parameters_.
         - The `disposer` is now called after the future returned from `StreamSubscription.cancel` completes.
+    - Remove `Single.fromStream` constructor, use `Single.unsafeFromStream` instead.
 
 - Docs: update broken doc link (thanks to [@dungngminh](https://github.com/dungngminh)).
 
