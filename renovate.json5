@@ -8,9 +8,6 @@
   labels: ["dependencies"],
   assignees: ["hoc081098"],
   reviewers: ["hoc081098"],
-  automerge: true,
-  platformAutomerge: true,
   platformCommit: true,
-  assignAutomerge: true,
   rebaseWhen: "conflicted",
 }
