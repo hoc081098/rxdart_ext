@@ -9,7 +9,7 @@ environment:
 dependencies:
   rxdart_ext: any
   rxdart: ^0.28.0
-  dart_either: ^1.0.0
+  dart_either: ^2.0.0
   http: ^1.0.0
 
 dev_dependencies:
