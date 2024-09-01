@@ -5,7 +5,7 @@ import '../utils/default_sink.dart';
 class _DoneOnErrorSink<T> extends BaseEventSink<T, T> {
   final bool Function(Object e, StackTrace s) predicate;
 
-  _DoneOnErrorSink(EventSink<T> sink, this.predicate) : super(sink);
+  _DoneOnErrorSink(super.sink, this.predicate);
 
   @override
   void add(T event) => sink.add(event);

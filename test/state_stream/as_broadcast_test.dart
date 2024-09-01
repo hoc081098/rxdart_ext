@@ -6,6 +6,7 @@ void main() {
     final elements = [0, 1, 1, 2, 3, 4, 4];
     final expected = <Object>[1, 2, 3, 4, emitsDone];
 
+    // ignore: no_leading_underscores_for_local_identifiers
     Future<void> _test(StateStream<int> stream, StateStream<int> source) async {
       expect(identical(stream.equals, source.equals), true);
       expect(stream.errorOrNull, null);

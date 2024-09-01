@@ -30,10 +30,9 @@ class Single<T> extends StreamView<T> {
   ///  @internal
   ///  **DO NOT USE** this constructor.
   @internal
-  Single.safe(Stream<T> source)
+  Single.safe(super.source)
       : _stream = source,
-        assert(source is! Single<T>),
-        super(source);
+        assert(source is! Single<T>);
 
   /// Converts source [Stream] into a [Single].
   /// If the source [Stream] is already a [Single], it will be returned as-is.
@@ -184,7 +183,7 @@ class _SingleOrErrorStreamSink<T> extends BaseEventSink<T, T> {
   var value = _null;
   ErrorAndStackTrace? error;
 
-  _SingleOrErrorStreamSink(EventSink<T> sink) : super(sink);
+  _SingleOrErrorStreamSink(super.sink);
 
   @override
   void add(T data) {
@@ -242,6 +241,7 @@ class _SingleOrErrorStreamSink<T> extends BaseEventSink<T, T> {
   }
 }
 
+// ignore: unnecessary_nullable_for_final_variable_declarations
 const Object? _null = _NULL();
 
 class _NULL {
