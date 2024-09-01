@@ -1,3 +1,8 @@
+## TBD
+
+- **operators**:
+    - Add `Stream.asNullable()` operator.
+
 ## 0.3.0 - Jun 16, 2024
 
 - Accept Dart SDK versions above 3.0 (`sdk: '>=2.12.0 <4.0.0'`).
