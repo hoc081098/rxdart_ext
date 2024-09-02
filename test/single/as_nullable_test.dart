@@ -8,7 +8,7 @@ void main() {
   group('Single.asNullable', () {
     test('works', () {
       final single = Single.value(1);
-      final asNullable = single.asNullable();
+      final Single<int?> asNullable = single.asNullable();
 
       expect(asNullable, isA<Single<int?>>());
       expect(asNullable, same(single));
