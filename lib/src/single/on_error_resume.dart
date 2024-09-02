@@ -3,7 +3,7 @@ import 'dart:async';
 import '../utils/default_sink.dart';
 import 'single.dart';
 
-class _OnErrorReturnSingleSink<T> extends BaseEventSink<T, T> {
+final class _OnErrorReturnSingleSink<T> extends BaseEventSink<T, T> {
   final T returnValue;
 
   _OnErrorReturnSingleSink(super.sink, this.returnValue);
@@ -16,7 +16,7 @@ class _OnErrorReturnSingleSink<T> extends BaseEventSink<T, T> {
       sink.add(returnValue);
 }
 
-class _OnErrorReturnWithSingleSink<T> extends BaseEventSink<T, T> {
+final class _OnErrorReturnWithSingleSink<T> extends BaseEventSink<T, T> {
   final T Function(Object error, StackTrace stackTrace) itemSupplier;
 
   _OnErrorReturnWithSingleSink(super.sink, this.itemSupplier);

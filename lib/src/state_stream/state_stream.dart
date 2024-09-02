@@ -17,7 +17,7 @@ export '../utils/equality.dart';
 ///
 /// This [Stream] do **not replay** the latest value, see [NotReplayValueStream].
 /// This [Stream] always has **no error**.
-abstract class StateStream<T> extends NotReplayValueStream<T> {
+abstract interface class StateStream<T> implements NotReplayValueStream<T> {
   /// Determined equality between previous data event and current data event.
   Equality<T> get equals;
 
@@ -56,7 +56,7 @@ abstract class StateStream<T> extends NotReplayValueStream<T> {
 }
 
 /// A mutable [StateStream] that provides a setter for [value].
-abstract class MutableStateStream<T> implements StateStream<T> {
+abstract interface class MutableStateStream<T> implements StateStream<T> {
   /// Set the [value] of this [MutableStateStream].
   /// Also emits the [newValue] to all listeners
   /// if it is not equal to the current value.

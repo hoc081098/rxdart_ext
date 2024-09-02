@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 
 /// A class that exposes only the [StreamSink] interface of an object.
 @internal
-class StreamSinkWrapper<T> implements StreamSink<T> {
+final class StreamSinkWrapper<T> implements StreamSink<T> {
   final StreamSink<T> _target;
 
   /// Creates a [StreamSinkWrapper] that wraps [target].
