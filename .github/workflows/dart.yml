@@ -41,14 +41,12 @@ jobs:
         env:
           RXDART_VERSION: ${{ matrix.rxdart }}
 
+      - name: Changes frontend_server_client to ^4.0.0
+        if: ${{ matrix.sdk == 'beta' }}
+        run: sh tool/override_frontend_server_client_version.sh
+
       - name: Install dependencies
         run: dart pub get
-
-      - name: Upgrade dependencies
-        if: ${{ matrix.sdk == 'beta' }}
-        run: |
-          dart pub upgrade
-          dart pub get
 
       - name: Analyze
         if: ${{ matrix.sdk == 'stable' && matrix.rxdart == 'not_override' }}
