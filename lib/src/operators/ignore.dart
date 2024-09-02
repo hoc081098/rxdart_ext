@@ -2,7 +2,7 @@ import 'dart:async';
 
 import '../utils/default_sink.dart';
 
-class _IgnoreErrorsEventSink<T> extends BaseEventSink<T, T> {
+final class _IgnoreErrorsEventSink<T> extends BaseEventSink<T, T> {
   _IgnoreErrorsEventSink(super.sink);
 
   @override

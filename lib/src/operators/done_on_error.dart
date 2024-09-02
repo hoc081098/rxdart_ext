@@ -2,7 +2,7 @@ import 'dart:async';
 
 import '../utils/default_sink.dart';
 
-class _DoneOnErrorSink<T> extends BaseEventSink<T, T> {
+final class _DoneOnErrorSink<T> extends BaseEventSink<T, T> {
   final bool Function(Object e, StackTrace s) predicate;
 
   _DoneOnErrorSink(super.sink, this.predicate);

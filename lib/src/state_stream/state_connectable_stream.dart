@@ -12,7 +12,7 @@ import 'state_subject.dart';
 ///
 /// This is a combination of [ConnectableStream], [ValueStream], [ValueSubject] and [Stream.distinct].
 @sealed
-abstract class StateConnectableStream<T> extends ConnectableStream<T>
+sealed class StateConnectableStream<T> extends ConnectableStream<T>
     implements StateStream<T> {
   /// Constructs a [Stream] which only begins emitting events when
   /// the [connect] method is called, this [Stream] acts like a
@@ -44,7 +44,7 @@ abstract class StateConnectableStream<T> extends ConnectableStream<T>
   StateStream<T> refCount();
 }
 
-class _StateConnectableStream<T>
+final class _StateConnectableStream<T>
     extends AbstractConnectableStream<T, StateSubject<T>, StateStream<T>>
     with StateStreamMixin<T>
     implements StateConnectableStream<T> {

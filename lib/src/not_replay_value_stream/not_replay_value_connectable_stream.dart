@@ -13,8 +13,9 @@ import 'value_subject.dart';
 /// a broadcast [Stream], and provides synchronous access to the latest emitted value.
 ///
 /// See [NotReplayValueStream].
-class NotReplayValueConnectableStream<T> extends AbstractConnectableStream<T,
-        ValueSubject<T>, NotReplayValueStream<T>>
+final class NotReplayValueConnectableStream<T>
+    extends AbstractConnectableStream<T, ValueSubject<T>,
+        NotReplayValueStream<T>>
     with NotReplayValueStreamMixin<T>
     implements NotReplayValueStream<T> {
   final ValueSubject<T> _subject;

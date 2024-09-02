@@ -3,7 +3,7 @@ import 'package:rxdart/rxdart.dart' show ErrorAndStackTrace;
 
 /// Class that holds latest value and lasted error emitted from Stream.
 @internal
-class StreamEvent<T> {
+final class StreamEvent<T> {
   T _value;
   ErrorAndStackTrace? _errorAndStacktrace;
   var _lastEventIsData = false;

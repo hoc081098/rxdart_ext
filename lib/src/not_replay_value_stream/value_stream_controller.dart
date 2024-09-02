@@ -21,7 +21,7 @@ import 'stream_event.dart';
 /// it has subscribers or not, as well as getting a callback when either of
 /// these change.
 @sealed
-class ValueStreamController<T> implements StreamController<T> {
+final class ValueStreamController<T> implements StreamController<T> {
   final StreamController<T> _delegate;
   final StreamEvent<T> _dataOrError;
 

@@ -18,7 +18,7 @@ import 'internal.dart';
 ///                         error done
 /// ```
 @sealed
-class Single<T> extends StreamView<T> {
+final class Single<T> extends StreamView<T> {
   /// Underline source Stream.
   final Stream<T> _stream;
 
@@ -179,7 +179,7 @@ class Single<T> extends StreamView<T> {
       Single.safe(_stream.asyncMap(convert));
 }
 
-class _SingleOrErrorStreamSink<T> extends BaseEventSink<T, T> {
+final class _SingleOrErrorStreamSink<T> extends BaseEventSink<T, T> {
   var value = _null;
   ErrorAndStackTrace? error;
 

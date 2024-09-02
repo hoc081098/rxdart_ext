@@ -21,7 +21,7 @@ mixin ForwardingSinkMixin<T, R> implements ForwardingSink<T, R> {
 }
 
 /// This [EventSink] class implements all [EventSink] members except [add].
-abstract class BaseEventSink<T, R> implements EventSink<T> {
+abstract base class BaseEventSink<T, R> implements EventSink<T> {
   /// The output sink.
   @protected
   final EventSink<R> sink;

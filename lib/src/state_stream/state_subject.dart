@@ -50,7 +50,7 @@ import 'state_stream_mixin.dart';
 ///     subject.add(3);
 ///     subject.close();
 @sealed
-class StateSubject<T> extends Subject<T>
+final class StateSubject<T> extends Subject<T>
     with StateStreamMixin<T>
     implements StateStream<T>, MutableStateStream<T> {
   T _value;
