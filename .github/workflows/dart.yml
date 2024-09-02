@@ -44,6 +44,10 @@ jobs:
       - name: Install dependencies
         run: dart pub get
 
+      - name: Upgrade dependencies
+        if: ${{ matrix.sdk == 'beta' }}
+        run: dart pub upgrade
+
       - name: Analyze
         if: ${{ matrix.sdk == 'stable' && matrix.rxdart == 'not_override' }}
         run: dart analyze lib --fatal-infos --fatal-warnings
