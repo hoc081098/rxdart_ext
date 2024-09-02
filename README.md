@@ -19,17 +19,16 @@ Liked some of my work? Buy me a coffee (or more likely a beer)
 
 <a href="https://www.buymeacoffee.com/hoc081098" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" height=64></a>
 
-## Supported Dart SDK version: `>=2.12.0 <4.0.0`
+## RxDart and Dart SDK compatibility
 
-## RxDart compatibility
-
-| **rxdart** | **rxdart_ext**  |
-|:----------:|:---------------:|
-| `^0.27.2`  |     `0.1.2`     |
-| `^0.27.3`  | `0.1.3 → 0.2.0` |
-| `^0.27.4`  | `0.2.1 → 0.2.2` |
-| `^0.27.5`  | `0.2.3 → 0.2.9` |
-| `^0.28.0`  |    `^0.3.0`     |
+| **rxdart_ext**  | **rxdart** |   **Dart SDK**    |
+|:---------------:|:----------:|:-----------------:|
+|     `0.1.2`     | `^0.27.2`  | `>=2.12.0 <4.0.0` |
+| `0.1.3 → 0.2.0` | `^0.27.3`  | `>=2.12.0 <4.0.0` |
+| `0.2.1 → 0.2.2` | `^0.27.4`  | `>=2.12.0 <4.0.0` |
+| `0.2.3 → 0.2.9` | `^0.27.5`  | `>=2.12.0 <4.0.0` |
+|    `^0.3.0`     | `^0.28.0`  | `>=2.12.0 <4.0.0` |
+|    `^0.4.0`     | `^0.28.0`  |     `^3.0.0`      |
 
 **The latest version of `rxdart_ext` always works fine with the latest version of `rxdart`.**
 

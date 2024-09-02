@@ -1,7 +1,7 @@
 name: rxdart_ext_example
 description: rxdart_ext_example
 publish_to: none
-version: 0.2.9
+version: 0.4.0
 
 environment:
   sdk: ^3.0.0

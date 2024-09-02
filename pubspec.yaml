@@ -1,6 +1,6 @@
 name: rxdart_ext
 description: Some extension methods and classes built on top of RxDart - RxDart extension.
-version: 0.3.0
+version: 0.4.0
 homepage: https://github.com/hoc081098/rxdart_ext.git
 repository: https://github.com/hoc081098/rxdart_ext.git
 issue_tracker: https://github.com/hoc081098/rxdart_ext/issues
