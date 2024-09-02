@@ -87,6 +87,7 @@ Single<User> fetchUser(String id) {
     - [`(FutureOr<T> Function())`.asSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsSingleFunctionExtension/asSingle.html)
 
 - Operators for Single (returns a Single instead of Stream)
+  - [asNullable](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsNullableSingleExtension/asNullable.html)
   - [flatMapSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/FlatMapSingleExtension/flatMapSingle.html)
   - [flatMapEitherSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/FlatMapEitherSingleExtension/flatMapEitherSingle.html)
   - [asyncExpandSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsyncExpandSingleExtension/asyncExpandSingle.html)
@@ -108,6 +109,7 @@ Single<User> fetchUser(String id) {
 
 ### 2. Operators for Stream
 
+- [asNullable](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsNullableStreamExtension/asNullable.html)
 - [debug](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DebugStreamExtension/debug.html), [collect](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/CollectStreamExtension/collect.html)
 - [distinctUniqueBy](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DistinctUniqueByStreamExtension/distinctUniqueBy.html)
 - [distinctBy](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/DistinctByExtension/distinctBy.html)
