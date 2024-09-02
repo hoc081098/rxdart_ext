@@ -19,4 +19,9 @@ void main() {
 
     verify(c.add(null)).called(1);
   });
+
+  test('Sink<void> failed', () {
+    final StreamController<void> c = StreamController<int>();
+    expect(() => c.addNull(), throwsA(isA<TypeError>()));
+  });
 }
