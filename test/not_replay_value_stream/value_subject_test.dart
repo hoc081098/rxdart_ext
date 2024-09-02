@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_function_declarations_over_variables
+// ignore_for_file: prefer_function_declarations_over_variables, no_leading_underscores_for_local_identifiers
 
 import 'dart:async';
 

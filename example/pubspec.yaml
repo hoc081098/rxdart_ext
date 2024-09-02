@@ -4,16 +4,16 @@ publish_to: none
 version: 0.2.9
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ^3.0.0
 
 dependencies:
   rxdart_ext: any
   rxdart: ^0.28.0
-  dart_either: ^1.0.0
-  http: ^1.0.0
+  dart_either: ^2.0.0
+  http: ^1.1.0
 
 dev_dependencies:
-  lints: ^4.0.0
+  lints: ^3.0.0
 
 dependency_overrides:
   rxdart_ext:

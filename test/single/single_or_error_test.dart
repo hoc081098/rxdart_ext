@@ -84,6 +84,7 @@ void main() {
           cb.close();
         });
       };
+      // ignore: no_leading_underscores_for_local_identifiers
       final _s = cb.stream.singleOrError();
       await singleRule(_s, Either.right(1));
       await broadcastRule(_s, true);

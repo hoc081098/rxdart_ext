@@ -19,8 +19,9 @@ jobs:
     
     strategy:
       matrix:
-        sdk: [ beta, stable, 2.17.0, 2.15.0, 2.12.0 ]
+#         sdk: [ beta, stable, 2.17.0, 2.15.0, 2.12.0 ]
 #         rxdart: [ 0.27.5, 0.27.6, 0.27.7, not_override ]
+        sdk: [ beta, stable, 3.0.0 ]
         rxdart: [ not_override ]
 
     steps:
@@ -39,6 +40,10 @@ jobs:
         run: sh tool/override_rxdart_version.sh
         env:
           RXDART_VERSION: ${{ matrix.rxdart }}
+
+      - name: Changes frontend_server_client to ^4.0.0
+        if: ${{ matrix.sdk == 'stable' || matrix.sdk == 'beta' }}
+        run: sh tool/override_frontend_server_client_version.sh
 
       - name: Install dependencies
         run: dart pub get

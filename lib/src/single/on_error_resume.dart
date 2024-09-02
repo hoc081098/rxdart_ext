@@ -6,7 +6,7 @@ import 'single.dart';
 class _OnErrorReturnSingleSink<T> extends BaseEventSink<T, T> {
   final T returnValue;
 
-  _OnErrorReturnSingleSink(EventSink<T> sink, this.returnValue) : super(sink);
+  _OnErrorReturnSingleSink(super.sink, this.returnValue);
 
   @override
   void add(T data) => sink.add(data);
@@ -19,8 +19,7 @@ class _OnErrorReturnSingleSink<T> extends BaseEventSink<T, T> {
 class _OnErrorReturnWithSingleSink<T> extends BaseEventSink<T, T> {
   final T Function(Object error, StackTrace stackTrace) itemSupplier;
 
-  _OnErrorReturnWithSingleSink(EventSink<T> sink, this.itemSupplier)
-      : super(sink);
+  _OnErrorReturnWithSingleSink(super.sink, this.itemSupplier);
 
   @override
   void add(T data) => sink.add(data);
