@@ -75,7 +75,7 @@ jobs:
         if: ${{ matrix.sdk == 'stable' && matrix.rxdart == 'not_override' }}
         run: dart pub global run coverage:format_coverage --lcov --in=coverage.json --out=lcov.info --report-on=lib
 
-      - uses: codecov/codecov-action@v4.5.0
+      - uses: codecov/codecov-action@v4.6.0
         if: ${{ matrix.sdk == 'stable' && matrix.rxdart == 'not_override' }}
         with:
           fail_ci_if_error: true # optional (default = false)
