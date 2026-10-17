@@ -1,0 +1,96 @@
+name: Publish GitHub Release
+
+on:
+  push:
+    tags:
+      - '[0-9]*.[0-9]*.[0-9]*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing version tag to release (for example, 0.4.0)'
+        required: true
+        type: string
+
+concurrency:
+  group: publish-release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  create-gh-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v7
+        with:
+          ref: refs/tags/${{ inputs.tag || github.ref_name }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      # Extract the exact tag's section; this changelog uses unbracketed headings.
+      - name: Prepare release notes
+        id: notes
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const { execFileSync } = require('node:child_process');
+
+          const tag = process.env.RELEASE_TAG;
+          const versionPattern = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
+          if (!versionPattern.test(tag)) throw new Error(`Invalid version tag: ${tag}`);
+
+          const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
+          if (git('rev-parse', `refs/tags/${tag}^{commit}`) !== git('rev-parse', 'HEAD')) {
+            throw new Error(`Checkout does not match tag ${tag}`);
+          }
+
+          const pubspec = fs.readFileSync('pubspec.yaml', 'utf8');
+          const version = pubspec.match(/^version:\s*['"]?([^'"\s]+)['"]?\s*$/m)?.[1];
+          if (version !== tag) throw new Error(`Tag ${tag} does not match pubspec version ${version}`);
+
+          const changelog = fs.readFileSync('CHANGELOG.md', 'utf8').replace(/\r\n/g, '\n');
+          const headings = [...changelog.matchAll(/^## (.+)$/gm)];
+          const versionOf = (heading) => heading[1].split(' - ')[0];
+          const index = headings.findIndex((heading) => versionOf(heading) === tag);
+          if (index < 0) throw new Error(`No changelog section for ${tag}`);
+
+          const heading = headings[index];
+          const notes = changelog.slice(
+            heading.index + heading[0].length,
+            headings[index + 1]?.index ?? changelog.length,
+          ).trim();
+          if (!notes) throw new Error(`Empty changelog section for ${tag}`);
+
+          let body = `## https://pub.dev/packages/rxdart_ext/versions/${tag}\n\n${notes}\n`;
+          const previous = headings.slice(index + 1).map(versionOf).find((value) => versionPattern.test(value));
+          if (previous) {
+            git('rev-parse', '--verify', `refs/tags/${previous}^{commit}`);
+            const repositoryUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}`;
+            body += `\n----\n\n## What's Changed\n\n**Full Changelog**: ${repositoryUrl}/compare/${previous}...${tag}\n`;
+          }
+
+          const bodyPath = path.join(process.env.RUNNER_TEMP, 'release-notes.md');
+          fs.writeFileSync(bodyPath, body);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, [
+            `name=${heading[1]}`,
+            `body_path=${bodyPath}`,
+            `prerelease=${tag.split('+')[0].includes('-')}`,
+            '',
+          ].join('\n'));
+          NODE
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: ${{ steps.notes.outputs.name }}
+          body_path: ${{ steps.notes.outputs.body_path }}
+          prerelease: ${{ steps.notes.outputs.prerelease }}
+          generate_release_notes: false
+          make_latest: legacy
