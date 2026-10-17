@@ -28,8 +28,10 @@ typedef Eff<T> = Single<Result<T>>;
 Eff<R> Function(T) just<T, R>(Result<R> Function(T) f) =>
     (t) => Single.value(f(t));
 
-Result<Uri> parseUri(String uri) =>
-    Either.catchError(toAppError('parseUri: $uri'), () => Uri.parse(uri));
+Result<Uri> parseUri(String uri) => Either.tryCatch(
+      action: () => Uri.parse(uri),
+      errorMapper: toAppError('parseUri: $uri'),
+    );
 
 Eff<http.Response> httpGet(Uri uri) => Single.fromCallable(() => http.get(uri))
     .toEitherSingle(toAppError('httpGet: $uri'));
@@ -48,8 +50,10 @@ Result<String> checkStatusCode(http.Response response) {
         ).left();
 }
 
-Result<Object?> parseJson(String body) =>
-    Either.catchError(toAppError('parseJson: $body'), () => jsonDecode(body));
+Result<Object?> parseJson(String body) => Either.tryCatch(
+      action: () => jsonDecode(body),
+      errorMapper: toAppError('parseJson: $body'),
+    );
 
 Eff<Object?> httpGetEither(String uri) =>
     Single.fromCallable(() => parseUri(uri))

@@ -21,8 +21,8 @@ dependencies:
   rxdart: ^0.28.0
   meta: ^1.7.0
   stack_trace: ^1.11.1
-  path: ^1.8.0
-  dart_either: ^2.0.0
+  path: ^1.9.0
+  dart_either: ^2.5.0
 
 dev_dependencies:
   lints: ^3.0.0

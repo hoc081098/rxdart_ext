@@ -1,4 +1,12 @@
-## TBD
+## 0.4.0 - TBD
+
+- Require **Dart 3.0.0 or higher** (`^3.0.0`).
+- Update dependencies:
+  - `dart_either: ^2.5.0`.
+  - `stack_trace: ^1.11.1`.
+  - `path: ^1.9.0`
+- Add modifiers (`final class`, `abstract interface class`, `abstract base class`, ...)
+  to the code base.
 
 - **operators**:
     - Add `Stream.asNullable()` operator.
