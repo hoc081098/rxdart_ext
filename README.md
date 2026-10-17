@@ -30,13 +30,26 @@ Liked some of my work? Buy me a coffee (or more likely a beer)
 |    `^0.3.0`     | `^0.28.0`  | `>=2.12.0 <4.0.0` |
 |    `^0.4.0`     | `^0.28.0`  |     `^3.0.0`      |
 
-**The latest version of `rxdart_ext` always works fine with the latest version of `rxdart`.**
+**`rxdart_ext 0.4.x` supports `rxdart ^0.28.0` and requires Dart `^3.0.0`.**
+
+> NOTE: `0.4.0` introduces Dart 3 class modifiers. `NotReplayValueStream`, `StateStream` and `MutableStateStream`
+> can be implemented, but cannot be extended outside their defining libraries. See [CHANGELOG.md](CHANGELOG.md)
+> for all inheritance restrictions and migration notes.
+
+Add the package with `dart pub add rxdart_ext` (or `flutter pub add rxdart_ext` for Flutter projects), then import:
+
+```dart
+import 'package:rxdart_ext/rxdart_ext.dart';
+```
+
+The main library also exports RxDart. You can import individual libraries such as `package:rxdart_ext/single.dart`
+or `package:rxdart_ext/state_stream.dart` when you only need part of the package.
 
 ## API - [Documentation](https://pub.dev/documentation/rxdart_ext/latest/)
 
 ### 1. [Single](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single-class.html)
 
-A Stream which emits single event, either data or error, and then close with a done-event.
+A Stream which emits a single event, either data or error, and then closes with a done-event.
 
 ```text
 Success case: ------------(*)|------
@@ -48,17 +61,35 @@ Failure case: ------------(x)|------
 
 > NOTE: Single extends Stream, so all operators and transformers for Stream are available for Single as well.
 
-`Single` is suitable for one-shot operations (likes `Future` but **lazy** - executes when listening), eg. making API request, reading local storage, ...
+`Single` is suitable for one-shot operations (like `Future`), eg. making an API request, reading local storage, ...
+
+`Single` can also model a **deferred/lazy computation**. Use `Single.fromCallable` or `Single.defer`
+to start the computation only when listening.
+`Single.fromFuture` wraps a future that has already been created.
+
+The computation's lifetime can be managed through its `StreamSubscription`.
+Calling [`cancel()`](https://api.dart.dev/dart-async/StreamSubscription/cancel.html) stops listening and propagates cancellation upstream,
+so the source can stop pending work and release its resources. This makes it easier to manage the computation,
+eg. when a BLoC or widget is disposed. Use `await subscription.cancel()` to wait for the source's cleanup.
+
+Cancellation of the underlying work depends on the source. When wrapping a plain `Future`, including one returned by
+`Single.fromCallable`, cancelling the subscription stops result delivery but does not abort the future's work.
+
+For example, assuming your app defines `baseUrl` and `User.fromJson`:
 
 ```dart
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
+import 'package:rxdart_ext/rxdart_ext.dart';
 
 Single<User> fetchUser(String id) {
   return Single.fromCallable(() => http.get(Uri.parse('$baseUrl/users/$id')))
-      .flatMapSingle((res) => res.statusCode == HttpStatus.ok
+      .flatMapSingle<String>((res) => res.statusCode == HttpStatus.ok
           ? Single.value(res.body)
           : Single.error(Exception('Cannot fetch user with id=$id')))
-      .map((body) => User.fromJson(jsonEncode(body)));
+      .map((body) => User.fromJson(jsonDecode(body) as Map<String, dynamic>));
 }
 ```
 
@@ -75,7 +106,7 @@ Single<User> fetchUser(String id) {
     - [Single.defer](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single/Single.defer.html)
     - [Single.retry](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/Single/Single.retry.html)
 
-  - Static methods provided by [RxSingles]() class
+  - Static methods provided by [RxSingles](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/RxSingles-class.html) class
     - [RxSingles.zip2](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/RxSingles/zip2.html)
     - [RxSingles.forkJoin2](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/RxSingles/forkJoin2.html)
       ..[RxSingles.forkJoin9](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/RxSingles/forkJoin9.html)
@@ -86,7 +117,7 @@ Single<User> fetchUser(String id) {
     - [Future.asSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsSingleFutureExtension/asSingle.html)
     - [`(FutureOr<T> Function())`.asSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsSingleFunctionExtension/asSingle.html)
 
-- Operators for Single (returns a Single instead of Stream)
+- Operators for Single (return a Single instead of Stream)
   - [asNullable](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsNullableSingleExtension/asNullable.html)
   - [flatMapSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/FlatMapSingleExtension/flatMapSingle.html)
   - [flatMapEitherSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/FlatMapEitherSingleExtension/flatMapEitherSingle.html)
@@ -119,16 +150,27 @@ Single<User> fetchUser(String id) {
 - [flatMapBatchesSingle](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/FlatMapBatchesStreamExtension/flatMapBatchesSingle.html)
 - [ignoreErrors](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/IgnoreErrorsStreamExtension/ignoreErrors.html)
 - `mapNotNull` (moved to `rxdart 0.27.4` as standard operator: [mapNotNull](https://pub.dev/documentation/rxdart/latest/rx/MapNotNullExtension/mapNotNull.html))
-- [toSingleSubscription](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ToSingleSubscriptionStreamExtension/toSingleSubscriptionStream.html)
+- [toSingleSubscriptionStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ToSingleSubscriptionStreamExtension/toSingleSubscriptionStream.html)
 - [asVoid](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/AsVoidStreamExtension/asVoid.html)
 - `whereNotNull` (moved to `rxdart 0.27.4` as standard operator: [whereNotNull](https://pub.dev/documentation/rxdart/latest/rx/WhereNotNullExtension/whereNotNull.html))
 
+`asNullable()` adapts a `Stream<T>` to `Stream<T?>` without wrapping the source stream.
+Useful when an operator needs a nullable seed value:
+
+```dart
+final source$ = Stream.fromIterable([1, 2, 3]);
+final StateConnectableStream<int?> state$ = source$.asNullable().publishState(null);
+
+// The Single version preserves the Single type and the original instance.
+final Single<int?> single = Single.value(1).asNullable();
+```
+
 ### 3. [StateStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateStream-class.html)
 
-A Stream that provides synchronous access to the last emitted item,
-and two consecutive values are not equal.
-The equality between previous data event and current data event is determined by [StateStream.equals](<(https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateStream/equals.html)>).
-This Stream always has no error.
+A Stream that provides synchronous access to the latest value,
+and skips consecutive equal values.
+The equality between the previous value and the current value is determined by [StateStream.equals](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateStream/equals.html), using `==` by default.
+This Stream always has no error and **does not replay** the latest value to new listeners.
 
 - Broadcast
   - [StateSubject](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/StateSubject-class.html)
@@ -138,17 +180,24 @@ This Stream always has no error.
 - Single-subscription
   - [toStateStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ToStateStreamExtension/toStateStream.html)
 
+`StateSubject` also implements [MutableStateStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/MutableStateStream-class.html),
+so you can assign `value` directly or use `update`, `getAndUpdate` and `updateAndGet`.
+`getAndUpdate` returns the previous value; `updateAndGet` returns the new value.
+
 #### Example
 
-Useful for `Flutter BLoC pattern` - `StreamBuilder`, expose broadcast state stream to UI, can synchronous access to the last emitted item, and distinct until changed
+Useful for `Flutter BLoC pattern` - `StreamBuilder`: expose a broadcast state stream to the UI,
+with synchronous access to the latest value and distinct until changed behavior.
 
 - [x] `Distinct`: distinct until changed.
-- [x] `Value`: can synchronous access to the last emitted item.
-- [x] `NotReplay`: not replay the latest value.
-- [x] `Connectable`: broadcast stream - can be listened to multiple time.
+- [x] `Value`: synchronous access to the latest value.
+- [x] `NotReplay`: does not replay the latest value to new listeners.
+- [x] `Connectable`: `publishState` creates a broadcast stream that starts when `connect()` is called.
 
-```
-                                Stream (dart:core)
+The arrows below show subtype relationships:
+
+```text
+                                Stream (dart:async)
                                    ^
                                    |
                                    |
@@ -172,43 +221,77 @@ Useful for `Flutter BLoC pattern` - `StreamBuilder`, expose broadcast state stre
                      StateConnectableStream (rxdart_ext)
 ```
 
+In a Flutter `State<ExamplePage>`, keep the stream and its connection as fields:
+
 ```dart
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
+import 'package:rxdart_ext/rxdart_ext.dart';
+
 class UiState { ... }
 
-final Stream<UiState> state$ = ...;
+class _ExamplePageState extends State<ExamplePage> {
+  late final StateConnectableStream<UiState> state$;
+  late final StreamSubscription<UiState> connection;
 
-final StateConnectableStream<UiState> state$ = state$.publishState(UiState.initial());
-final connection = state$.connect();
+  @override
+  void initState() {
+    super.initState();
+    final Stream<UiState> source$ = ...;
+    state$ = source$.publishState(UiState.initial());
+    connection = state$.connect();
+  }
 
-StreamBuilder<UiState>(
-  initialData: state$.value,
-  stream: state$,
-  builder: (context, snapshot) {
-    final UiState state = snapshot.requireData;
+  @override
+  void dispose() {
+    unawaited(connection.cancel());
+    super.dispose();
+  }
 
-    return ...;
-  },
-);
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<UiState>(
+      initialData: state$.value,
+      stream: state$,
+      builder: (context, snapshot) {
+        final UiState state = snapshot.requireData;
+
+        return ...;
+      },
+    );
+  }
+}
 ```
 
+Create the connectable stream once in `initState()` and cancel `connection` in `dispose()`.
+`State.dispose()` is synchronous, so use `unawaited` for the cleanup future returned by `connection.cancel()`.
+Pass `state$.value` as `initialData` because the stream does not replay it.
+This avoids a duplicate initial event that could trigger an unnecessary rebuild.
+Use `shareState` when you want the stream to connect automatically on the first listener and disconnect when the last listener cancels.
+
 See also [flutter_bloc_pattern/RxStreamBuilder](https://pub.dev/documentation/flutter_bloc_pattern/latest/flutter_bloc_pattern/RxStreamBuilder-class.html),
-it can be used with `StateStream` perfectly and more easily (don't require `initialData` and don't need to call `snapshot.requireData`).
+it can be used with the same `StateStream` more easily (no need for `initialData` or `snapshot.requireData`).
+
+> NOTE: `flutter_bloc_pattern 3.0.0` depends on `rxdart_ext ^0.3.0`. With `rxdart_ext 0.4.x`,
+> the example below requires a compatible `flutter_bloc_pattern` release.
 
 ```dart
-final StateStream<UiState> state$;
+// Inside build(), using the state$ field from the example above:
 
 RxStreamBuilder<UiState>(
   stream: state$,
   builder: (context, UiState state) {
     // use state directly
     return ...;
-  }
+  },
 );
 ```
 
 ### 4. [NotReplayValueStream](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/NotReplayValueStream-class.html)
 
-A Stream that provides synchronous access to the last emitted item, but not replay the latest value.
+A Stream that provides synchronous access to the latest value, but does not replay it to new listeners.
+`ValueSubject` and `ValueStreamController` require a seed value, so their streams have a value even before the first event.
 
 - Broadcast
   - [ValueSubject](https://pub.dev/documentation/rxdart_ext/latest/rxdart_ext/ValueSubject-class.html)
@@ -223,7 +306,7 @@ A Stream that provides synchronous access to the last emitted item, but not repl
 
 #### DisposableMixin
 
-A mixin that makes it easy to dispose streams without having to store and close a `StreamSubscription` variable.
+A mixin that makes it easy to cancel stream subscriptions without having to store a `StreamSubscription` variable.
 
 Typical usage is as follows:
 
@@ -236,6 +319,39 @@ class DisposableExample with DisposableMixin {
           (value) => print('Disposable example: $value'),
         );
   }
+}
+```
+
+Call `dispose()` when the owner is no longer needed. This emits on `dispose$`, so `takeUntil(dispose$)`
+cancels the subscription. If you override `dispose()`, call `super.dispose()`.
+
+For example, in the `State` of a Flutter `DisposablePage` widget:
+
+```dart
+import 'package:flutter/widgets.dart';
+
+class _DisposablePageState extends State<DisposablePage> {
+  late final DisposableExample _disposableExample;
+
+  @override
+  void initState() {
+    super.initState();
+    _disposableExample = DisposableExample(
+      dateTimeStream: Stream<DateTime>.periodic(
+        const Duration(seconds: 1),
+        (_) => DateTime.now(),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _disposableExample.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => const SizedBox.shrink();
 }
 ```
 
