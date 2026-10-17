@@ -61,7 +61,7 @@ jobs:
         run: dart pub global activate coverage
 
       - name: Run tests
-        run: dart pub run test test/rxdart_ext_test.dart --chain-stack-traces
+        run: dart run test test/rxdart_ext_test.dart --chain-stack-traces
 
       - name: Start Observatory
         if: ${{ matrix.sdk == 'stable' && matrix.rxdart == 'not_override' }}
