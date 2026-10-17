@@ -11,4 +11,3 @@ EOM
 cat >> "$pubspec" <<EOM
   frontend_server_client: ^4.0.0
 EOM
-  

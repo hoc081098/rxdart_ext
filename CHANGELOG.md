@@ -1,4 +1,4 @@
-## 0.4.0 - TBD
+## 0.4.0 - Oct 17, 2026
 
 - Require **Dart 3.0.0 or higher** (`^3.0.0`).
 - Update dependencies:
