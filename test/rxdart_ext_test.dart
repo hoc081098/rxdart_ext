@@ -5,6 +5,7 @@ import 'not_replay_value_stream/value_controller_test.dart'
 import 'not_replay_value_stream/value_subject_test.dart' as value_subject_test;
 
 //
+import 'operators/as_nullable_test.dart' as as_nullable_test;
 import 'operators/debug_test.dart' as debug_test;
 import 'operators/distinct_by_test.dart' as distinct_by_test;
 import 'operators/distinct_unique_by_test.dart' as distinct_unique_by_test;
@@ -19,6 +20,7 @@ import 'operators/void_test.dart' as void_test;
 import 'operators/where_not_null_test.dart' as where_not_null_test;
 
 //
+import 'single/as_nullable_test.dart' as single_as_nullable_test;
 import 'single/as_single_test.dart' as as_single_test;
 import 'single/as_void_test.dart' as as_void_test;
 import 'single/async_expand_test.dart' as async_expand_test;
@@ -48,6 +50,7 @@ import 'utils/add_null_test.dart' as add_null_test;
 import 'utils/disposable_test.dart' as disposable_test;
 
 void main() {
+  as_nullable_test.main();
   debug_test.main();
   distinct_by_test.main();
   distinct_unique_by_test.main();
@@ -64,6 +67,7 @@ void main() {
   value_controller_test.main();
   value_subject_test.main();
 
+  single_as_nullable_test.main();
   as_single_test.main();
   as_void_test.main();
   async_expand_test.main();

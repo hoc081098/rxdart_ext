@@ -2,17 +2,30 @@
 
 - Require **Dart 3.0.0 or higher** (`^3.0.0`).
 - Update dependencies:
-  - `dart_either: ^2.5.0`.
-  - `stack_trace: ^1.11.1`.
-  - `path: ^1.9.0`
-- Add modifiers (`final class`, `abstract interface class`, `abstract base class`, ...)
-  to the code base.
+    - `dart_either` to `^2.5.0`.
+    - `stack_trace` to `^1.11.1`.
+    - `path` to `^1.9.0`.
+- **Breaking**: enforce inheritance and implementation restrictions with Dart 3 class modifiers.
+    - `Single`, `StateSubject`, `ValueSubject`, `ValueStreamController` and
+      `NotReplayValueConnectableStream` are now `final`: they cannot be extended or implemented
+      outside their defining libraries.
+    - `StateConnectableStream` is now `sealed`: it cannot be extended or implemented outside
+      its defining library. Its factory constructor remains available.
+    - `NotReplayValueStream`, `StateStream` and `MutableStateStream` are now
+      `abstract interface` classes: they can be implemented, but cannot be extended outside
+      their defining libraries. Custom implementations should extend `Stream` or `StreamView`
+      and implement the corresponding interface.
 
 - **operators**:
-    - Add `Stream.asNullable()` operator.
+    - Add `Stream.asNullable()` operator: adapt `Stream<T>` to `Stream<T?>` without wrapping
+      or copying the source stream.
 
 - **single**:
-    - Add `Single.asNullable()` operator.
+    - Add `Single.asNullable()` operator: adapt `Single<T>` to `Single<T?>`, preserving
+      the original `Single` instance.
+
+- Internal: use `abstract base class` for the shared event sink and `final` for its concrete implementations.
+- Update docs, examples and development dependencies.
 
 ## 0.3.0 - Jun 16, 2024
 
