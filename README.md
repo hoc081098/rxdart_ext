@@ -33,7 +33,7 @@ Liked some of my work? Buy me a coffee (or more likely a beer)
 **`rxdart_ext 0.4.x` supports `rxdart ^0.28.0` and requires Dart `^3.0.0`.**
 
 > NOTE: `0.4.0` introduces Dart 3 class modifiers. `NotReplayValueStream`, `StateStream` and `MutableStateStream`
-> can be implemented, but cannot be extended outside their defining libraries. See [CHANGELOG.md](CHANGELOG.md)
+> can be implemented, but cannot be extended outside their defining libraries. See [CHANGELOG.md](https://github.com/hoc081098/rxdart_ext/blob/master/CHANGELOG.md)
 > for all inheritance restrictions and migration notes.
 
 Add the package with `dart pub add rxdart_ext` (or `flutter pub add rxdart_ext` for Flutter projects), then import:
@@ -189,10 +189,10 @@ so you can assign `value` directly or use `update`, `getAndUpdate` and `updateAn
 Useful for `Flutter BLoC pattern` - `StreamBuilder`: expose a broadcast state stream to the UI,
 with synchronous access to the latest value and distinct until changed behavior.
 
-- [x] `Distinct`: distinct until changed.
-- [x] `Value`: synchronous access to the latest value.
-- [x] `NotReplay`: does not replay the latest value to new listeners.
-- [x] `Connectable`: `publishState` creates a broadcast stream that starts when `connect()` is called.
+- ✅ `Distinct`: distinct until changed.
+- ✅ `Value`: synchronous access to the latest value.
+- ✅ `NotReplay`: does not replay the latest value to new listeners.
+- ✅ `Connectable`: `publishState` creates a broadcast stream that starts when `connect()` is called.
 
 The arrows below show subtype relationships:
 

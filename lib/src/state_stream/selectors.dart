@@ -6,7 +6,9 @@ import 'state_stream_impl.dart';
 /// Inspirited by [NgRx memoized selector](https://ngrx.io/guide/store/selectors)
 /// - Selectors can compute derived data, to store the minimal possible state.
 /// - Selectors are efficient. A selector is not recomputed unless one of its arguments changes.
-/// - When using the [select], [select2] to [select9], [selectMany] functions,
+/// - When using [SelectorsStateStreamExtensions.select],
+///   [SelectorsStateStreamExtensions.select2] to [SelectorsStateStreamExtensions.select9],
+///   or [SelectorsStateStreamExtensions.selectMany],
 ///   keeps track of the latest arguments in which your selector function was invoked.
 ///   Because selectors are pure functions, the last result can be returned
 ///   when the arguments match without re-invoking your selector function.

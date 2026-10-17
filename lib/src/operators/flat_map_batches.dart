@@ -5,12 +5,12 @@ import '../single/single_or_error.dart';
 import 'done_on_error.dart';
 
 /// Extends the Stream class with the ability to convert each element to a [Stream],
-/// then listen to at most `size` [Stream](s) at a time
+/// then listen to at most `size` [Stream]s at a time
 /// and outputs their results in `size`-sized batches, while maintaining
 /// order within each batch — subsequent batches of [Stream]s are only
 /// listened to when the batch before it successfully completes.
 extension FlatMapBatchesStreamExtension<T> on Stream<T> {
-  /// Convert each element to a [Stream], then listen to at most `size` [Stream](s)
+  /// Convert each element to a [Stream], then listen to at most `size` [Stream]s
   /// at a time and outputs their results in `size`-sized batches, while maintaining
   /// order within each batch — subsequent batches of [Stream]s are only
   /// listened to when the batch before it successfully completes.
