@@ -135,3 +135,6 @@ fabric.properties
 
 # .DS_Store
 .DS_Store
+
+# Local Codex configuration
+/.codex/config.toml
